@@ -6,7 +6,7 @@ function SellandBidNavbar() {
     return (
         <Navbar bg="dark" variant="dark">
             <Container>
-                <Navbar.Brand >Join Us</Navbar.Brand>
+                <Navbar.Brand >Kady for Business</Navbar.Brand>
             </Container>
         </Navbar>
     )

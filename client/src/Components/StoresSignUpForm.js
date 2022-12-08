@@ -4,12 +4,13 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import '../CSS/StoresSignUpForm.css'
 
 
 function StoresSignUpForm() {
     return (
         <Fragment>
-            <Container className="mt-3">
+            <Container className="mt-3 vh-100">
                 <Row>
                     <Col>
                         <h1>Unlock a new revenue stream</h1>
