@@ -1,0 +1,176 @@
+.HomePage img {
+  height: 800px;
+  width: 1552px;
+  position: fixed;
+  left: -1%;
+}
+
+.HomePage .Log_In_btn {
+  position: absolute;
+  top: 5%;
+  left: 85%;
+  transform: translate(-40%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  background-color: white;
+  color: black;
+  font-size: 15px;
+  padding: 12.5px 30px;
+  border: none;
+  cursor: pointer;
+  border-radius: 120px;
+}
+
+.HomePage .Sign_Up_btn {
+  position: absolute;
+  top: 5%;
+  left: 93%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  background-color: black;
+  color: white;
+  font-size: 15px;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  border-radius: 120px;
+}
+
+.HomePage .mainheader {
+  position: absolute;
+  top: 4%;
+  left: 8%;
+  text-align: center;
+  color: rgb(9, 4, 4);
+  font-size: 40px;
+  font-style: bold;
+}
+
+.HomePage .text {
+  position: absolute;
+  top: 35%;
+  left: 8.5%;
+  text-align: center;
+  color: rgb(9, 4, 4);
+  font-size: 50px;
+  font-style: bold;
+}
+
+.HomePage .leftmenu {
+  position: absolute;
+  top: 3%;
+  left: 2%;
+  text-align: center;
+  color: black;
+  font-size: 30px;
+  font-style: bold;
+  background-color: transparent;
+  border: 2px solid transparent;
+}
+
+.HomePage .locationbar {
+  width: 38%;
+  position: absolute;
+  text-align: center;
+  top: 45%;
+  left: 8%;
+  position: absolute;
+  background-color: transparent;
+  border: transparent;
+}
+
+.HomePage .dropdown {
+  width: 28%;
+  position: absolute;
+  text-align: center;
+  top: 46%;
+  left: 36%;
+  position: absolute;
+  background-color: transparent;
+  color: white;
+  border: transparent;
+}
+
+.HomePage .findbookbtn {
+  position: absolute;
+  top: 46%;
+  left: 54.8%;
+  background-color: rgb(35, 136, 87);
+  color: white;
+  font-size: 15px;
+  padding: 8px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.menu {
+  position: absolute;
+  background-color: rgb(204, 216, 217);
+}
+
+.menu .leftmenubtn1 {
+  position: absolute;
+  background-color: white;
+  color: black;
+  font-size: 30px;
+  padding: 7px 125px;
+  border: none;
+  cursor: pointer;
+  border-radius: 120px;
+}
+
+.menu .leftmenubtn2 {
+  position: absolute;
+  background-color: black;
+  color: white;
+  top: 22%;
+  font-size: 30px;
+  padding: 7px 112px;
+  border: none;
+  cursor: pointer;
+  border-radius: 120px;
+}
+
+.menu .leftmenubtn3 {
+  top: 82%;
+  position: absolute;
+  background-color: transparent;
+  color: black;
+  font-size: 25px;
+  border: none;
+  cursor: pointer;
+  border-radius: 120px;
+}
+
+.menu .leftmenubtn4 {
+  top: 87%;
+  position: absolute;
+  background-color: transparent;
+  color: black;
+  font-size: 25px;
+  border: none;
+  cursor: pointer;
+  border-radius: 120px;
+}
+
+.menu .leftmenubtn5 {
+  top: 92%;
+  position: absolute;
+  background-color: transparent;
+  color: black;
+  font-size: 25px;
+  border: none;
+  cursor: pointer;
+  border-radius: 120px;
+}
+
+.HomePage .sellbooks {
+  height: 0px;
+  width: 100px;
+  position: fixed;
+  left: -1%;
+}
+
+/**********************************************************CustomerHome*************************************************************/
+.navbar {
+  font-style: italic;
+}

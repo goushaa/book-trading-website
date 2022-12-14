@@ -1,0 +1,83 @@
+import React, { Fragment } from "react";
+import { useState } from "react";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Button from "react-bootstrap/Button";
+import HomePageBackground from "../Images/HomePageBackground.jpg";
+import Offcanvas from "react-bootstrap/Offcanvas";
+import Dropdown from "react-bootstrap/Dropdown";
+import "../CSS/Style.css";
+// import blog4 from "../Images/blog4.jpg";
+
+function HomeLogInBackground() {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  return (
+    <Fragment>
+      <Container className="HomePage">
+        <img class="HomePageBackground" src={HomePageBackground} alt="..." />
+        <h1 className="mainheader">Online Book Store</h1>
+        <p className="text">Order books to your door</p>
+        <Button className="Log_In_btn" href="http://localhost:3000/LogIn">
+          Log In
+        </Button>{" "}
+        <Button className="Sign_Up_btn" href="http://localhost:3000/SignUp">
+          Sign Up
+        </Button>{" "}
+        <Button className="leftmenu" onClick={handleShow}>
+          ≡
+        </Button>
+        <Offcanvas className="menu" show={show} onHide={handleClose}>
+          <Offcanvas.Header closeButton>
+            <Offcanvas.Title></Offcanvas.Title>
+          </Offcanvas.Header>
+          <Offcanvas.Body>
+            <Button className="leftmenubtn1" href="http://localhost:3000/LogIn">
+              Log In
+            </Button>{" "}
+            <Button
+              className="leftmenubtn2"
+              href="http://localhost:3000/SignUp"
+            >
+              Sign Up
+            </Button>{" "}
+            <Button className="leftmenubtn3">Create a business account</Button>{" "}
+            <Button className="leftmenubtn4">Add your store</Button>{" "}
+            <Button className="leftmenubtn5">Sign up to deliver</Button>{" "}
+          </Offcanvas.Body>
+        </Offcanvas>
+        <Row>
+          <div class="col-md-12" className="locationbar">
+            <h6 class="text-center"></h6>
+
+            <input
+              type="search"
+              id="address"
+              class="form-control"
+              placeholder="Enter delivery address"
+            />
+          </div>
+        </Row>
+        <Dropdown>
+          <Dropdown.Toggle variant="success" id="dropdown-basic">
+            Delivery time
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu>
+            <Dropdown.Item href="#/action-1">Deliver now</Dropdown.Item>
+            <Dropdown.Item href="#/action-2">Schedule for later</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+        <Button className="findbookbtn">Find book</Button> <Row></Row>
+        {/* <Row>
+          <img class="sellbooks" src={blog4} alt="..." />
+        </Row> */}
+      </Container>
+    </Fragment>
+  );
+}
+
+export default HomeLogInBackground;

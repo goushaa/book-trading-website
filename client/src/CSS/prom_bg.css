@@ -1,0 +1,24 @@
+
+.CouponForm {
+    position:absolute;
+    background-size:cover;
+    margin-left: auto;
+    margin-right: auto;
+    width: 996px;
+    left:15%;
+    top: 8%;
+  }
+
+  .signup {
+    background-size:cover;
+    height: 100%;
+    background-position: center;
+
+  }
+
+  .login {
+    background-size:cover;
+    height: 100%;
+    background-position: center;
+   
+  }
