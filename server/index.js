@@ -29,6 +29,12 @@ app.post("/signup", async (req, res) => {
     }
 })
 
+//type
+//0 =>superadmin
+//1 =>admin
+//2 =>user
+//3 =>store
+//4 =>driver
 
 //retrieve all books app.get
 
@@ -152,10 +158,33 @@ app.delete("/deleteWishlist/:id", async (req, res) => {
 
 /////////////////////////////ADMIN/////////////////////////////
 
+//superadmin views admins
+app.get("/admins", async (req, res) => {
+    try {
+        const viewAdmins = await pool.query("SELECT * FROM user WHERE type = 1;");
+        res.json(viewAdmins.rows);
+        //front end should loop on all admins and display their info
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+//superadmin views admin
+app.get("/admins/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const viewAdmin = await pool.query("SELECT * FROM user WHERE type = 1 AND id = $1;", [id]);
+        res.json(viewAdmin.rows[0]);
+        //front end should display one admin when click on him
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
 //admin views drivers
 app.get("/drivers", async (req, res) => {
     try {
-        const viewDrivers = await pool.query("SELECT * FROM driver, user WHERE user.type = 3;");
+        const viewDrivers = await pool.query("SELECT * FROM driver, user WHERE user.type = 4;");
         res.json(viewDrivers.rows);
         //front end should loop on all drivers and display them
     } catch (err) {
@@ -167,7 +196,7 @@ app.get("/drivers", async (req, res) => {
 app.get("/drivers/:id", async (req, res) => {
     try {
         const { ssn } = req.params;
-        const viewDriver = await pool.query("SELECT * FROM driver WHERE ssn = $1;", [ssn]);
+        const viewDriver = await pool.query("SELECT * FROM driver, user WHERE driver.ssn = $1;", [ssn]);
         res.json(viewDriver.rows[0]);
         //front end should display one driver when click on him
     } catch (err) {
@@ -178,7 +207,7 @@ app.get("/drivers/:id", async (req, res) => {
 //admin views stores
 app.get("/stores", async (req, res) => {
     try {
-        const viewStores = await pool.query("SELECT * FROM user WHERE type = 1;");
+        const viewStores = await pool.query("SELECT * FROM user WHERE type = 3;");
         res.json(viewStores.rows);
         //front end should loop on all stores and display them
     } catch (err) {
@@ -190,7 +219,7 @@ app.get("/stores", async (req, res) => {
 app.get("/stores/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const viewStore = await pool.query("SELECT * FROM user WHERE type = 1 AND id = $1;", [id]);
+        const viewStore = await pool.query("SELECT * FROM user WHERE type = 3 AND id = $1;", [id]);
         res.json(viewStore.rows[0]);
         //front end should display one store when click on it
     } catch (err) {
@@ -201,7 +230,7 @@ app.get("/stores/:id", async (req, res) => {
 //admin views users
 app.get("/users", async (req, res) => {
     try {
-        const viewUsers = await pool.query("SELECT * FROM user WHERE type = 0;");
+        const viewUsers = await pool.query("SELECT * FROM user WHERE type = 2;");
         res.json(viewUsers.rows);
         //front end should loop on all users and display them
     } catch (err) {
@@ -213,7 +242,7 @@ app.get("/users", async (req, res) => {
 app.get("/users/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const viewUser = await pool.query("SELECT * FROM user WHERE type = 0 AND id = $1;", [id]);
+        const viewUser = await pool.query("SELECT * FROM user WHERE type = 2 AND id = $1;", [id]);
         res.json(viewUser.rows[0]);
         //front end should display one user when click on it
     } catch (err) {
@@ -239,6 +268,17 @@ app.get("/orders/:id", async (req, res) => {
         const viewOrder = await pool.query("SELECT * FROM order WHERE id = $1;", [id]);
         res.json(viewOrder.rows[0]);
         //front end should display one order when click on it
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+//admin views all users feedback
+app.get("/feedback", async (req, res) => {
+    try {
+        const viewfeedbacks = await pool.query("SELECT * FROM feedback;");
+        res.json(viewfeedbacks.rows);
+        //front end should loop on all feedbacks and display them
     } catch (err) {
         console.error(err.message);
     }
