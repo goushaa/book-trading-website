@@ -15,21 +15,10 @@ app.listen(5000, () => {
 
 //signup & login
 
-// signup
-app.post("/signup",async(req,res)=>{
-    try {
-        
-    } catch (err) {
-        console.log(err.message);
-    }
-})
-
 //create app.post (validation if exist) sign up
-
 //if driver open other page
 //update extra info app.put
 //create app.post (validation if exist & send type) sign in
-
 
 // signup
 app.post("/signup", async (req, res) => {
@@ -65,6 +54,9 @@ app.post("/signup", async (req, res) => {
 //admin views all drivers info app.get 
 //admin views all users info app.get
 //admin views all stores info app.get
+//admin views all orders
+
+/////////////////////////////COUPONS/////////////////////////////
 
 //coupons
 app.post("/addCoupon", async (req, res) => {
@@ -78,7 +70,7 @@ app.post("/addCoupon", async (req, res) => {
             //discount positive 
             //maximum positive  
             //isRelative 0,1
-            const newCoupon = await pool.query("INSERT INTO coupons (code,discount,maximum_use,is_relative) VALUES ($1,$2,$3,$4) RETURNING *"
+            const newCoupon = await pool.query("INSERT INTO coupons (code,discount,maximum_use,is_relative) VALUES ($1,$2,$3,$4) RETURNING *;"
                 , [code, discount, maximum_use, is_relative]);
             res.json(newCoupon.rows[0]);
             console.log(`SUCCESSFUL INSERTION`);
@@ -111,15 +103,17 @@ app.delete("/deleteCoupon", async (req, res) => {
     }
 });
 
-app.get("/getCoupons", async (req, res) => {
+app.get("/coupons", async (req, res) => {
     try {
-        const getCoupon = await pool.query("SELECT * FROM Coupons");
+        const getCoupon = await pool.query("SELECT * FROM Coupons;");
         res.json(getCoupon.rows);
         //front end should loop on all coupons and display them
     } catch (err) {
         console.error(err.message);
     }
 });
+
+/////////////////////////////COUPONS/////////////////////////////
 
 //wishlist
 
@@ -128,7 +122,7 @@ app.post("/addWishlist/:id", async (req, res) => {
         const { user_id } = req.params;
         const { book_id } = req.body; //why did we do this
         //NEEDS VALIDATION AND REVISION
-        const addWishlist = await pool.query("INSERT INTO wish_list_item VALUES ($1,$2)", [user_id, book_id]);
+        const addWishlist = await pool.query("INSERT INTO wish_list_item VALUES ($1,$2);", [user_id, book_id]);
         res.json(addWishlist);
 
     } catch (err) {
@@ -136,10 +130,32 @@ app.post("/addWishlist/:id", async (req, res) => {
     }
 });
 
+app.delete("/deleteWishlist/:id", async (req, res) => {
+    try {
+        const { user_id } = req.params;
+        const { book_id } = req.body;
+        //NEEDS VALIDATION AND REVISION
+        const deleteWishlist = await pool.query("DELETE FROM wish_list_item  WHERE user_id = $1 AND book_id = $2 RETURNING *;", [user_id, book_id]);
+        if (deleteWishlist.rowCount == 0) {
+            res.send(`WISHLIST ALREADY ISN'T IN THE SYSTEM`);
+            console.log(`WISHLIST ALREADY ISN'T IN THE SYSTEM`);
+        }
+        else {
+            res.json(deleteWishlist.rows[0]);
+            console.log(`SUCCESSFUL DELETION`);
+        }
+
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+/////////////////////////////ADMIN/////////////////////////////
+
 //admin views drivers
 app.get("/drivers", async (req, res) => {
     try {
-        const viewDrivers = await pool.query("SELECT * FROM driver, user WHERE user.type = 3");
+        const viewDrivers = await pool.query("SELECT * FROM driver, user WHERE user.type = 3;");
         res.json(viewDrivers.rows);
         //front end should loop on all drivers and display them
     } catch (err) {
@@ -151,7 +167,7 @@ app.get("/drivers", async (req, res) => {
 app.get("/drivers/:id", async (req, res) => {
     try {
         const { ssn } = req.params;
-        const viewDriver = await pool.query("SELECT * FROM driver WHERE ssn = $1", [ssn]);
+        const viewDriver = await pool.query("SELECT * FROM driver WHERE ssn = $1;", [ssn]);
         res.json(viewDriver.rows[0]);
         //front end should display one driver when click on him
     } catch (err) {
@@ -174,7 +190,7 @@ app.get("/stores", async (req, res) => {
 app.get("/stores/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const viewStore = await pool.query("SELECT * FROM user WHERE type = 1 AND id = $1", [id]);
+        const viewStore = await pool.query("SELECT * FROM user WHERE type = 1 AND id = $1;", [id]);
         res.json(viewStore.rows[0]);
         //front end should display one store when click on it
     } catch (err) {
@@ -197,7 +213,7 @@ app.get("/users", async (req, res) => {
 app.get("/users/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const viewUser = await pool.query("SELECT * FROM user WHERE type = 0 AND id = $1", [id]);
+        const viewUser = await pool.query("SELECT * FROM user WHERE type = 0 AND id = $1;", [id]);
         res.json(viewUser.rows[0]);
         //front end should display one user when click on it
     } catch (err) {
@@ -205,4 +221,27 @@ app.get("/users/:id", async (req, res) => {
     }
 });
 
+//admin views orders
+app.get("/orders", async (req, res) => {
+    try {
+        const viewOrders = await pool.query("SELECT * FROM order;");
+        res.json(viewOrders.rows);
+        //front end should loop on all orders and display them
+    } catch (err) {
+        console.error(err.message);
+    }
+});
 
+//admin views order
+app.get("/orders/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const viewOrder = await pool.query("SELECT * FROM order WHERE id = $1;", [id]);
+        res.json(viewOrder.rows[0]);
+        //front end should display one order when click on it
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+/////////////////////////////ADMIN/////////////////////////////
