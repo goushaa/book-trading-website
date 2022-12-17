@@ -23,13 +23,9 @@ app.listen(5000, () => {
 // signup
 app.post("/signup", async (req, res) => {
     try {
-<<<<<<< HEAD
        
 
         const {first,last,address,city_id,user_name,password,email,type}=req.body;
-=======
-
->>>>>>> origin
     } catch (err) {
         console.log(err.message);
     }
@@ -61,9 +57,6 @@ app.get("/city",async(req,res)=>{
     }
     });
 
-<<<<<<< HEAD
-    
-=======
 //admin adds coupon app.post (DONE)
 //admin sees user's wishlist app.get (NEEDS REVISION)
 //admin assigns orders to drivers app.post
@@ -76,7 +69,6 @@ app.get("/city",async(req,res)=>{
 
 /////////////////////////////COUPONS/////////////////////////////
 
->>>>>>> origin
 //coupons
 app.post("/addCoupon", async (req, res) => {
     try {
