@@ -78,10 +78,28 @@ app.post("/signup", async (req, res) => {
 //driver views pending assigned order app.get
 //driver finishes order app.post
 //get cities
-app.get("/city", async (req, res) => {
+app.get("/cities", async (req, res) => {
     try {
         const cities = await pool.query("select * from city");
         res.json(cities.rows);
+    } catch (err) {
+        console.log(err.message);
+    }
+});
+
+app.get("/genres", async (req, res) => {
+    try {
+        const genres = await pool.query("SELECT * FROM genre");
+        res.json(genres.rows);
+    } catch (err) {
+        console.log(err.message);
+    }
+});
+
+app.get("/languages", async (req, res) => {
+    try {
+        const languages = await pool.query("SELECT * FROM language");
+        res.json(languages.rows);
     } catch (err) {
         console.log(err.message);
     }
