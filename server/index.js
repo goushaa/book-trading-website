@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const pool = require("./db")
 
 //middleware
 app.use(cors());
@@ -15,7 +16,7 @@ app.listen(5000, () => {
 //signup & login
 //create app.post (validation if exist) sign up
 //if driver open other page
-//update extra info app.post
+//update extra info app.put
 //create app.post (validation if exist & send type) sign in
 
 //retrieve all books app.get

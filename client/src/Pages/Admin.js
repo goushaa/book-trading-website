@@ -1,11 +1,11 @@
-import React from 'react'
-import AdminUi from '../Components/AdminUi'
+import React,{Fragment} from 'react'
+import AdminForm from '../Components/AdminForm'
 function Admin() {
-    return (
-        <div>
-            <AdminUi />
-        </div>
-    )
+  return (
+    <Fragment>
+            <AdminForm/>
+        </Fragment>
+  )
 }
 
 export default Admin
