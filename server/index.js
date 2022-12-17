@@ -46,9 +46,24 @@ app.listen(5000, () => {
 app.post("/addCoupon", async (req, res) => {
     try {
         const { code, discount, maximumUse, isRelative } = req.body;
+        //code not repeated
+        //discount positive
+        //maximum positive  
+        //isRelative 0,1
         const newCoupon = await pool.query("INSERT INTO coupons (code,discount,maximum_use,is_relative) VALUES ($1,$2,$3,$4) RETURNING *"
             , [code, discount, maximumUse, isRelative]);
-        res.json(newCoupon);
+        res.json(newCoupon.rows[0]);
+        //front end should have 4 things for add code
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+app.get("/getCoupons", async (req, res) => {
+    try {
+        const getCoupon = await pool.query("SELECT * FROM Coupons");
+        res.json(getCoupon.rows);
+        //front end should loop on all coupons and display them
     } catch (err) {
         console.error(err.message);
     }
