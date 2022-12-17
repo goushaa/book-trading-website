@@ -14,7 +14,18 @@ app.listen(5000, () => {
 //routes
 
 //signup & login
+
+// signup
+app.post("/signup",async(req,res)=>{
+    try {
+        
+    } catch (err) {
+        console.log(err.message);
+    }
+})
+
 //create app.post (validation if exist) sign up
+
 //if driver open other page
 //update extra info app.put
 //create app.post (validation if exist & send type) sign in
