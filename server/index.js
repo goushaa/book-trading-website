@@ -41,5 +41,17 @@ app.listen(5000, () => {
 //driver views pending assigned order app.get
 //driver finishes order app.post
 
+//coupons
+
+app.post("/addCoupon", async (req, res) => {
+    try {
+        const { code, discount, maximumUse, isRelative } = req.body;
+        const newCoupon = await pool.query("INSERT INTO coupons (code,discount,maximum_use,is_relative) VALUES ($1,$2,$3,$4) RETURNING *"
+            , [code, discount, maximumUse, isRelative]);
+        res.json(newCoupon);
+    } catch (err) {
+        console.error(err.message);
+    }
+});
 
 
