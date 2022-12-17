@@ -1,4 +1,4 @@
-CREATE database book_trading_app
+CREATE database book_trading_app;
 
 CREATE TABLE "city" (
   "id" serial ,
@@ -24,6 +24,26 @@ CREATE TABLE "author" (
   primary key("id")
 );
 
+
+CREATE TABLE "user" (
+  "id" serial,
+  "first_name" varChar(35) NOT NULL,
+  "last_name" varChar(35) NOT NULL,
+  "address" varChar(100) NOT NULL,
+  "city_id" int,
+  "user_name" varChar(30) NOT NULL,
+  "password" varChar(40) NOT NULL,
+  "email" varChar(80) NOT NULL,
+  "type" smallint NOT NULL,
+  primary key("id"),
+  CONSTRAINT "FK_user.city_id"
+    FOREIGN KEY ("city_id")
+      REFERENCES "city"("id")
+       ON UPDATE CASCADE
+      ON DELETE SET NULL
+);
+
+
 CREATE TABLE "book" (
   "id" serial,
   "title" varChar(100) NOT NULL,
@@ -35,6 +55,7 @@ CREATE TABLE "book" (
   "version" int NOT NULL,
   "description" varChar(2000) NOT NULL,
   "image" varChar(100) NOT NULL,
+  "user_id" int NOT NULL,
   primary key("id"),
   CONSTRAINT "FK_book.genre_id"
     FOREIGN KEY ("genre_id")
@@ -53,22 +74,9 @@ CREATE TABLE "book" (
       REFERENCES "author"("id")
        ON UPDATE CASCADE
       ON DELETE SET NULL
-);
-
-CREATE TABLE "user" (
-  "id" serial,
-  "first_name" varChar(35) NOT NULL,
-  "last_name" varChar(35) NOT NULL,
-  "address" varChar(100) NOT NULL,
-  "city_id" int,
-  "user_name" varChar(30) NOT NULL,
-  "password" varChar(40) NOT NULL,
-  "email" varChar(80) NOT NULL,
-  "type" smallint NOT NULL,
-  primary key("id"),
-  CONSTRAINT "FK_user.city_id"
-    FOREIGN KEY ("city_id")
-      REFERENCES "city"("id")
+      , CONSTRAINT "FK_book.user_id"
+    FOREIGN KEY ("user_id")
+      REFERENCES "user"("id")
        ON UPDATE CASCADE
       ON DELETE SET NULL
 );
@@ -144,11 +152,10 @@ CREATE TABLE "wish_list_item" (
 
 CREATE TABLE "driver" (
   "ssn" int,
-  "user_id" int,
+  "user_id" int NOT NULL,
   "bike_license" varChar(20) NOT NULL,
   "driver_license" varChar(30) NOT NULL,
-  "expiration_date" timestamp NOT NULL,
-  "fees" float NOT NULL,
+  "expiration_date" date NOT NULL,
   primary key("ssn"),
    CONSTRAINT "FK_driver.user_id"
     FOREIGN KEY ("user_id")
@@ -241,6 +248,7 @@ CREATE TABLE "order_item" (
   "book_id" int NOT NULL,
   "order_id" int NOT NULL,
   "quantity" int NOT NULL,
+  "paid_status" int NOT NULL,
   primary key("id"),
   CONSTRAINT "FK_orderItem.order_id"
     FOREIGN KEY ("order_id")

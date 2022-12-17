@@ -7,3 +7,5 @@ INSERT INTO genre ("name") values ('Contemporary Fiction'),('Classic Fiction'),(
 
 /*language insert*/
 INSERT INTO language ("name") values ('Arabic'),('English'),('Japanese'),('Turksish'),('Spanish'),('French'),('Chinese'),('Hindi');
+/*superadmin insert*/
+INSERT INTO "user" (first_name,last_name,address,city_id,user_name,password,email,type) VALUES ('Super','Admin','',1,'superAdmin','0000','superAdmin@gmail.com',0);
