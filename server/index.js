@@ -25,32 +25,33 @@ app.listen(5000, () => {
 
 app.post("/signup", async (req, res) => {
     try {
-        const {first,last,address,city_id,user_name,password,email,type}=req.body;
-        const mail=await pool.query('select email from "user" where email=$1',[email]);
-        if(mail.rowCount!=0){
+        const { first, last, address, city_id, user_name, password, email, type } = req.body;
+        const mail = await pool.query('select email from "user" where email=$1', [email]);
+        if (mail.rowCount != 0) {
             res.json("email already in use");
             return;
         }
-        if(type==4){
-            const {ssn,bike_license,driver_license,expiration_date}=req.body;
-            isSssn=await pool.query('select ssn from driver where ssn=$1',[ssn]);
-            if(isSssn.rowCount!=0){
+        if (type == 4) {
+            const { ssn, bike_license, driver_license, expiration_date } = req.body;
+            isSssn = await pool.query('select ssn from driver where ssn=$1', [ssn]);
+            if (isSssn.rowCount != 0) {
                 res.json("ssn already in use");
                 return;
             }
-            const sign=await pool.query('INSERT INTO "user" '+"(first_name,last_name,address,city_id,user_name,password,email,type) values ($1,$2,$3,$4,$5,$6,$7,$8) returning *",[first,last,address,city_id,user_name,password,email,type]);
+            const sign = await pool.query('INSERT INTO "user" ' + "(first_name,last_name,address,city_id,user_name,password,email,type) values ($1,$2,$3,$4,$5,$6,$7,$8) returning *", [first, last, address, city_id, user_name, password, email, type]);
             console.log(sign.rows[0].id);
-            const driver=await pool.query("insert into driver(ssn,user_id,bike_license,driver_license,expiration_date) values($1,$2,$3,$4,$5) returning *",[ssn,sign.rows[0].id,bike_license,driver_license,expiration_date]);
+            const driver = await pool.query("insert into driver(ssn,user_id,bike_license,driver_license,expiration_date) values($1,$2,$3,$4,$5) returning *", [ssn, sign.rows[0].id, bike_license, driver_license, expiration_date]);
             res.json(sign.rows[0]);
-        }else{const sign=await pool.query('INSERT INTO "user" '+"(first_name,last_name,address,city_id,user_name,password,email,type) values ($1,$2,$3,$4,$5,$6,$7,$8) returning *",[first,last,address,city_id,user_name,password,email,type]);
-        res.json(sign.rows[0]);
-    }
+        } else {
+            const sign = await pool.query('INSERT INTO "user" ' + "(first_name,last_name,address,city_id,user_name,password,email,type) values ($1,$2,$3,$4,$5,$6,$7,$8) returning *", [first, last, address, city_id, user_name, password, email, type]);
+            res.json(sign.rows[0]);
+        }
     } catch (err) {
         console.log(err.message);
     }
 })
 
- 
+
 
 
 
@@ -77,14 +78,32 @@ app.post("/signup", async (req, res) => {
 //driver views pending assigned order app.get
 //driver finishes order app.post
 //get cities
-app.get("/city",async(req,res)=>{
+app.get("/cities", async (req, res) => {
     try {
-        const cities=await pool.query("select * from city");
+        const cities = await pool.query("select * from city");
         res.json(cities.rows);
     } catch (err) {
         console.log(err.message);
     }
-    });
+});
+
+app.get("/genres", async (req, res) => {
+    try {
+        const genres = await pool.query("SELECT * FROM genre");
+        res.json(genres.rows);
+    } catch (err) {
+        console.log(err.message);
+    }
+});
+
+app.get("/languages", async (req, res) => {
+    try {
+        const languages = await pool.query("SELECT * FROM language");
+        res.json(languages.rows);
+    } catch (err) {
+        console.log(err.message);
+    }
+});
 
 //admin adds coupon app.post (DONE)
 //admin sees user's wishlist app.get (NEEDS REVISION)
