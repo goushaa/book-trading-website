@@ -27,22 +27,29 @@ app.post("/signup", async (req, res) => {
     try {
         const { first, last, address, city_id, user_name, password, email, type } = req.body;
         const mail = await pool.query('select email from "user" where email=$1', [email]);
-        if (mail.rowCount != 0) {
+        if (mail.rowCount != 0)//testing if the same email is already in the database or not 
+        {
             res.json("email already in use");
             return;
         }
-        if (type == 4) {
+        if (type == 4)//in case the sign up is a driver 
+        {
             const { ssn, bike_license, driver_license, expiration_date } = req.body;
             isSssn = await pool.query('select ssn from driver where ssn=$1', [ssn]);
-            if (isSssn.rowCount != 0) {
+            if (isSssn.rowCount != 0)//checks for ssn if already in use 
+            {
                 res.json("ssn already in use");
                 return;
             }
+            //creats user to link it later to driver
             const sign = await pool.query('INSERT INTO "user" ' + "(first_name,last_name,address,city_id,user_name,password,email,type) values ($1,$2,$3,$4,$5,$6,$7,$8) returning *", [first, last, address, city_id, user_name, password, email, type]);
             console.log(sign.rows[0].id);
+            // creating driver and linkning it to user
             const driver = await pool.query("insert into driver(ssn,user_id,bike_license,driver_license,expiration_date) values($1,$2,$3,$4,$5) returning *", [ssn, sign.rows[0].id, bike_license, driver_license, expiration_date]);
             res.json(sign.rows[0]);
-        } else {
+        } else// in case of creating any other user than driver 
+        {
+            res.json("1");
             const sign = await pool.query('INSERT INTO "user" ' + "(first_name,last_name,address,city_id,user_name,password,email,type) values ($1,$2,$3,$4,$5,$6,$7,$8) returning *", [first, last, address, city_id, user_name, password, email, type]);
             res.json(sign.rows[0]);
         }
@@ -50,8 +57,19 @@ app.post("/signup", async (req, res) => {
         console.log(err.message);
     }
 })
-
-
+//login
+app.get("/login", async (req, res) => {
+    try {
+        const {email,password}=req.body;
+        const person = await pool.query('select * from "user" where email=$1 and password=$2',[email,password]);
+        if(person.rowCount!=0){
+            res.json(person.rows[0]);
+        }
+        else res.json("-1");
+    } catch (err) {
+        console.log(err.message);
+    }
+});
 
 
 
