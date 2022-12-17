@@ -18,8 +18,9 @@ app.listen(5000, () => {
 // signup
 app.post("/signup",async(req,res)=>{
     try {
+       
+
         const {first,last,address,city_id,user_name,password,email,type}=req.body;
-        
     } catch (err) {
         console.log(err.message);
     }
@@ -52,11 +53,18 @@ app.post("/signup",async(req,res)=>{
 
 //driver views pending assigned order app.get
 //driver finishes order app.post
+//get cities
+app.get("/city",async(req,res)=>{
+    try {
+        const cities=await pool.query("select * from city");
+        res.json(cities.rows);
+    } catch (err) {
+        console.log(err.message);
+    }
+    });
 
+    
 //coupons
-
-
-
 app.post("/addCoupon", async (req, res) => {
     try {
         const { code, discount, maximumUse, isRelative } = req.body;
@@ -68,13 +76,4 @@ app.post("/addCoupon", async (req, res) => {
     }
 });
 
-//get cities
-app.get("/city",async(req,res)=>{
-try {
-    const cities=await pool.query("select * from city");
-    res.json(cities.rows);
-} catch (err) {
-    console.log(err.message);
-}
-});
 
