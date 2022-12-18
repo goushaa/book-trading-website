@@ -1,7 +1,8 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const pool = require("./db")
+const pool = require("./db");
+
 
 //middleware
 app.use(cors());
@@ -49,9 +50,12 @@ app.post("/signup", async (req, res) => {
             res.json(sign.rows[0]);
         } else// in case of creating any other user than driver 
         {
-            res.json("1");
             const sign = await pool.query('INSERT INTO "user" ' + "(first_name,last_name,address,city_id,user_name,password,email,type) values ($1,$2,$3,$4,$5,$6,$7,$8) returning *", [first, last, address, city_id, user_name, password, email, type]);
             res.json(sign.rows[0]);
+            if (type == '2') {
+                const order = await pool.query(`INSERT INTO "order" (user_id,status) VALUES ($1,$2) RETURNING *`, [sign.rows[0].id, 0]);
+                console.log(order.rows[0]);
+            }
         }
     } catch (err) {
         console.log(err.message);
@@ -60,9 +64,9 @@ app.post("/signup", async (req, res) => {
 //login
 app.get("/login", async (req, res) => {
     try {
-        const {email,password}=req.body;
-        const person = await pool.query('select * from "user" where email=$1 and password=$2',[email,password]);
-        if(person.rowCount!=0){
+        const { email, password } = req.body;
+        const person = await pool.query('select * from "user" where email=$1 and password=$2', [email, password]);
+        if (person.rowCount != 0) {
             res.json(person.rows[0]);
         }
         else res.json("-1");
@@ -71,6 +75,7 @@ app.get("/login", async (req, res) => {
     }
 });
 
+//unread number
 
 
 //type
@@ -83,9 +88,167 @@ app.get("/login", async (req, res) => {
 //retrieve all books app.get
 
 //stores add books app.post
-//stores delete books app.delete
+app.post("/addbook", async (req, res) => {
+    try {
+        var { title, genre_id, isbn, author_name, language_id, purshace_price, version, description, image, user_id, count } = req.body;
+        //checking for nulls in gernre,isbn,language_id
+        //front enter enters user couut with 1 but bookstores count with anything
+        //front end will not let other users (superadmin-admin-driver) go into the my books page
+        if (genre_id == -1) genre_id = 'null';
+        if (isbn == -1) isbn = 'null';
+        if (language_id == -1) language_id = 'null';
 
-//user add book app.post
+        book = await pool.query("INSERT INTO book (title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,user_id,count,status) values($1," + genre_id + "," + isbn + ",$2," + language_id + ",$3,$4,$5,$6,$7,$8,0) RETURNING *", [title, author_name, purshace_price, version, description, image, user_id, count]);
+        res.json(book.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+//stores delete books app.delete
+app.delete("/deletebook", async (req, res) => {
+    try {
+        const { id } = req.body;
+        book = await pool.query("UPDATE BOOK SET status=1 where id=$1", [id]);
+        res.json(book.rowCount);
+    } catch (err) {
+        console.log(err.message);
+    }
+})
+
+app.get("/userbooks", async (req, res) => {
+    try {
+        var { page, id } = req.body;
+        page = (page - 1) * 10;
+        const getUserStoreBooks = await pool.query("SELECT * FROM book WHERE user_id=$1 AND status=0 LIMIT 10 offset $2 ", [id, page]);
+        res.json(getUserStoreBooks.rows);
+        //front end should loop on all books in certain user/store selling and display them
+    } catch (err) {
+        console.error(err.message);
+    }
+})
+//add book to cart
+app.post("/addToCart", async (req, res) => {
+    try {
+        const { book_id, order_id, quantity } = req.body;
+        const orderItem = await pool.query("INSERT INTO order_item (book_id,order_id,quantity,paid_status) VALUES ($1,$2,$3,0) RETURNING *", [book_id, order_id, quantity]);
+        res.json(orderItem.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+//user submits order
+app.post("/makeOrder", async (req, res) => {
+    try {
+        var { coupon_id, order_id } = req.body;
+        //status 1 means pending
+        const checkEmpty = await pool.query("SELECT COUNT(order_id) FROM order_item where order_id=$1", [order_id]);
+        if (checkEmpty.rows[0].count == 0) {
+            console.log("empty order");
+            res.json("empty order");
+            return;
+        }
+        const date = new Date;
+        console.log(date);
+        if (coupon_id == -1) coupon_id = 'null';
+        const makeOrder = await pool.query('UPDATE "order" SET status=1,order_date = $1,coupon_id =' + coupon_id + " WHERE id=$2 RETURNING *", [date, order_id]);
+        res.json(makeOrder.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+//Admin gives order to certain driver
+app.post("/AdminGiveOrderToDriver", async (req, res) => {
+    try {
+        //assuming admin only sees orders of status one here
+        const { driver_ssn, order_id, driver_user_id } = req.body;
+        //status 2 means driver starts delivering
+        const giveOrder = await pool.query('UPDATE "order" SET status=2,driver_ssn = $1 WHERE id=$2 RETURNING *', [driver_ssn, order_id]);
+        //send notification to driver 
+        const date = new Date;
+        console.log(order_id);
+        console.log(driver_user_id);
+        console.log(date);
+        const sendNotificationDriver = await pool.query("INSERT INTO notification (user_id,read,text,date) VALUES ($1,0,'You have been assigned order #" + order_id + " ',$2) RETURNING *", [driver_user_id, date]);
+        const sendNotificationUser = await pool.query("INSERT INTO notification (user_id,read,text,date) VALUES ($1,0,'Your order #" + order_id + " has been assigned to a driver',$2) RETURNING *", [giveOrder.rows[0].user_id, date]);
+        console.log(sendNotificationDriver.rows[0]);
+        console.log(sendNotificationUser.rows[0]);
+        res.json(giveOrder.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+//Delivered
+app.post("/deliverOrder", async (req, res) => {
+    try {
+        const { order_id } = req.body;
+        const date = new Date;
+        //status 3 means driver delivered it
+        const deliverOrder = await pool.query('UPDATE "order" SET status=3,delivery_date = $1 WHERE id=$2 RETURNING *', [date, order_id]);
+        res.json(deliverOrder.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+app.get("/notifications", async (req, res) => {
+    try {
+
+        // return the last 10 notifications 
+        // page returns other 10's
+        var { user_id, page } = req.body;
+        page = (page - 1) * 10;
+        console.log(user_id, page);
+        const viewNotifications = await pool.query("SELECT * FROM notification WHERE user_id = $1 ORDER BY date DESC LIMIT 10 offset $2;", [user_id, page]);
+        res.json(viewNotifications.rows);
+        //front end should loop on all feedbacks and display them
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+//read notification
+app.post("/notification/read", async (req, res) => {
+    try {
+        const { notification_id } = req.body;
+        const readNotification = await pool.query("UPDATE notification SET read=1 where id=$1 returning *", [notification_id]);
+        res.json(readNotification.rows[0]);
+    } catch (err) {
+        console.error(err);
+    }
+})
+
+//UNDER CONSTRUCTION (REAL ALL)
+app.post("/notifications/readall", async (req, res) => {
+    try {
+        const { notification_id } = req.body;
+        const realAllNotifications = await pool.query("UPDATE notification SET read=1 where id=$1 returning &", [notification_id]);
+        res.json(realAllNotifications);
+    } catch (err) {
+        console.error(err);
+    }
+})
+
+
+
+// app.post("/addImage", async (req, res) => {
+//     try {
+//         console.log(pr);
+//      const {image}=req.body;
+//      const result=await cloudinary.uploader.upload(image,{
+//     folder : books
+//     })
+
+//      console.log(result.public_id,result.secure_url);
+//     } catch (err) {
+//         console.error(err.message);
+//     }
+// });
+
+
+
 //user delete bidItem app.delete
 //user adds wishlist app.post
 //user views wishlists app.get
