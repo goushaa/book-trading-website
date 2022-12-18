@@ -174,3 +174,218 @@
 .navbar {
   font-style: italic;
 }
+.searchbar {
+  transform: translate(-115%, 50%);
+  -ms-transform: translate(50%, 50%);
+  width: 500px;
+}
+.searchbtn {
+  transform: translate(-40%, -50%);
+  -ms-transform: translate(50%, 50%);
+  color: white;
+  width: 150px;
+  background-color: rgb(107, 206, 234);
+  border: transparent;
+}
+
+.cart_btn {
+  background-color: transparent;
+  position: absolute;
+  color: white;
+  border: white;
+  fill: white;
+  transform: translate(1760%, -118%);
+  -ms-transform: translate(50%, 50%);
+  width: 70px;
+  height: 65px;
+  font-size: 40px;
+}
+
+.heart_btn {
+  background-color: transparent;
+  position: absolute;
+  color: white;
+  border: white;
+  fill: white;
+  transform: translate(1850%, -118%);
+  -ms-transform: translate(50%, 50%);
+  width: 70px;
+  height: 65px;
+  font-size: 40px;
+}
+
+.person_btn {
+  background-color: transparent;
+  position: absolute;
+  color: white;
+  border: white;
+  fill: white;
+  transform: translate(1940%, -118%);
+  -ms-transform: translate(50%, 50%);
+  width: 70px;
+  height: 65px;
+  font-size: 40px;
+}
+
+.title {
+  transform: translate(80%, 0%);
+  -ms-transform: translate(50%, 50%);
+}
+
+.leftmenu2 {
+  position: absolute;
+  top: 2%;
+  left: 2%;
+  text-align: center;
+  color: white;
+  font-size: 30px;
+  font-style: bold;
+  background-color: transparent;
+  border: 2px solid transparent;
+}
+.menu2 {
+  position: absolute;
+  background-color: rgb(204, 216, 217);
+}
+
+.menu2 .leftmenu2btn1 {
+  position: absolute;
+  transform: translate(10%, 90%);
+  background-color: transparent;
+  color: rgb(38, 63, 119);
+  width: 150px;
+  font-size: 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 90px;
+}
+
+.menu2 .leftmenu2btn2 {
+  transform: translate(-33%, 1010%);
+  width: 350px;
+  position: absolute;
+  background-color: transparent;
+  color: black;
+  font-size: 25px;
+  border: none;
+  cursor: pointer;
+  border-radius: 120px;
+}
+
+.menu2 .leftmenu2btn3 {
+  transform: translate(-50%, 1090%);
+  width: 190px;
+  position: absolute;
+  background-color: transparent;
+  color: black;
+  font-size: 25px;
+  border: none;
+  cursor: pointer;
+  border-radius: 120px;
+}
+
+.menu2 .leftmenu2btn4 {
+  transform: translate(-45%, 1170%);
+  width: 250px;
+  position: absolute;
+  background-color: transparent;
+  color: black;
+  font-size: 25px;
+  border: none;
+  cursor: pointer;
+  border-radius: 120px;
+}
+.menu2 .name {
+  position: absolute;
+  transform: translate(94%, -20%);
+  background-color: transparent;
+  color: rgb(0, 0, 0);
+  font-style: oblique;
+  width: 150px;
+  font-size: 35px;
+  border: none;
+  cursor: pointer;
+  border-radius: 90px;
+}
+
+.menu2 .order_icon {
+  transform: translate(10%, 300%);
+}
+
+.menu2 .coupon_icon {
+  transform: translate(10%, 400%);
+}
+
+.menu2 .leftmenu2btn5 {
+  position: absolute;
+  transform: translate(60%, -30%);
+  background-color: transparent;
+  font-weight: 400;
+  color: rgb(0, 0, 0);
+  width: 150px;
+  font-size: 25px;
+  border: none;
+  cursor: pointer;
+  border-radius: 90px;
+}
+
+.menu2 .leftmenu2btn6 {
+  position: absolute;
+  transform: translate(50%, 125%);
+  background-color: transparent;
+  font-weight: 400;
+  color: rgb(0, 0, 0);
+  width: 190px;
+  font-size: 25px;
+  border: none;
+  cursor: pointer;
+  border-radius: 90px;
+}
+
+.menu2 .line {
+  transform: translate(28%, -195%);
+  -ms-transform: translate(50%, 50%);
+  font-size: 80px;
+  font-weight: 100;
+  color: rgb(107, 206, 234);
+}
+
+.slideshow {
+  top: -13%;
+  left: 73%;
+  height: 500px;
+  width: 400px;
+}
+
+.salerow {
+  background-color: antiquewhite;
+}
+
+.salehead {
+  transform: translate(10%, 120%);
+  font-size: 50px;
+  font-style: bold;
+  font-weight: 700;
+  color: rgb(15, 5, 92);
+}
+
+.saledescription {
+  transform: translate(10%, 400%);
+  font-size: 20px;
+  font-style: bold;
+  font-weight: 400;
+  color: rgb(7, 9, 102);
+}
+
+.salebtn {
+  position: absolute;
+  transform: translate(75%, 400%);
+  background-color: black;
+  font-weight: 400;
+  color: white;
+  width: 230px;
+  font-size: 40px;
+  border: none;
+  cursor: pointer;
+  border-radius: 30px;
+}

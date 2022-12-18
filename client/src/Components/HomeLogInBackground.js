@@ -2,12 +2,12 @@ import React, { Fragment } from "react";
 import { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import HomePageBackground from "../Images/HomePageBackground.jpg";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Dropdown from "react-bootstrap/Dropdown";
 import "../CSS/Style.css";
-// import blog4 from "../Images/blog4.jpg";
 
 function HomeLogInBackground() {
   const [show, setShow] = useState(false);
@@ -72,9 +72,6 @@ function HomeLogInBackground() {
           </Dropdown.Menu>
         </Dropdown>
         <Button className="findbookbtn">Find book</Button> <Row></Row>
-        {/* <Row>
-          <img class="sellbooks" src={blog4} alt="..." />
-        </Row> */}
       </Container>
     </Fragment>
   );
