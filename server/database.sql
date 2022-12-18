@@ -18,11 +18,6 @@ CREATE TABLE "language" (
   primary key("id")
 );
 
-CREATE TABLE "author" (
-  "id" serial,
-  "name" varChar(100) NOT NULL,
-  primary key("id")
-);
 
 
 CREATE TABLE "user" (
@@ -49,13 +44,16 @@ CREATE TABLE "book" (
   "title" varChar(100) NOT NULL,
   "genre_id" int,
   "isbn" int,
-  "author_id" int,
+  "author_name" varChar(100) NOT NULL,
   "language_id" int,
   "purchase_price" float NOT NULL,
   "version" int NOT NULL,
   "description" varChar(2000) NOT NULL,
   "image" varChar(100) NOT NULL,
-  "user_id" int NOT NULL,
+  "user_id" int ,
+  "count" int NOT NULL,
+  "status" int NOT NULL, /*for knowing if book is deleted or not
+                           1 for delete ----- 0 for other  */
   primary key("id"),
   CONSTRAINT "FK_book.genre_id"
     FOREIGN KEY ("genre_id")
@@ -68,12 +66,6 @@ CREATE TABLE "book" (
       REFERENCES "language"("id")
        ON UPDATE CASCADE
        ON DELETE SET NULL
-      ,
-  CONSTRAINT "FK_book.author_id"
-    FOREIGN KEY ("author_id")
-      REFERENCES "author"("id")
-       ON UPDATE CASCADE
-      ON DELETE SET NULL
       , CONSTRAINT "FK_book.user_id"
     FOREIGN KEY ("user_id")
       REFERENCES "user"("id")
@@ -126,6 +118,7 @@ CREATE TABLE "notification" (
   "user_id" int NOT NULL,
   "read" smallint NOT NULL,
   "text" varChar(750) NOT NULL,
+  "date" timestamp,
   primary key("id"),
   CONSTRAINT "FK_notification.user_id"
     FOREIGN KEY ("user_id")
@@ -177,7 +170,7 @@ CREATE TABLE "order" (
   "id" serial,
   "user_id" int NOT NULL,
   "driver_ssn" int,
-  "order_date" timestamp NOT NULL,
+  "order_date" timestamp ,
   "delivery_date" timestamp,
   "status" int,
   "coupon_id" int,
