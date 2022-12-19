@@ -15,8 +15,13 @@ import Book2 from "../Images/book2.png";
 import Book3 from "../Images/book3.png";
 import Card from "react-bootstrap/Card";
 import CardGroup from "react-bootstrap/CardGroup";
+import { useLocation } from "react-router-dom";
 
 function CustomerHome() {
+
+  const { state } = useLocation();
+  const { email, user_name } = state;
+  console.log(email, user_name)
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);

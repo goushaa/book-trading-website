@@ -62,14 +62,19 @@ app.post("/signup", async (req, res) => {
     }
 })
 //login
-app.get("/login", async (req, res) => {
+app.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
-        const person = await pool.query('select * from "user" where email=$1 and password=$2', [email, password]);
+        const person = await pool.query(`SELECT * FROM "user" WHERE email=$1 AND password=$2`, [email, password]);
+
         if (person.rowCount != 0) {
             res.json(person.rows[0]);
+            console.log(person.row[0]);
         }
-        else res.json("-1");
+        else {
+            res.json("-1");
+            console.log(person.row[0]);
+        }
     } catch (err) {
         console.log(err.message);
     }
@@ -513,6 +518,7 @@ app.get("/feedback", async (req, res) => {
     try {
         const viewfeedbacks = await pool.query("SELECT * FROM feedback;");
         res.json(viewfeedbacks.rows);
+
         //front end should loop on all feedbacks and display them
     } catch (err) {
         console.error(err.message);
