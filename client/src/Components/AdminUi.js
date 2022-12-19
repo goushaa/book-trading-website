@@ -9,8 +9,8 @@ import '../CSS/prom_bg.css'
 
 function AdminUi() {
     return (
-       
-    )
+        <div></div>
+    );
 }
 
 export default AdminUi
