@@ -9,6 +9,7 @@ import SignUp from "./Pages/SignUp";
 import CustomerHomePage from "./Pages/CustomerHomePage";
 import Admin from "./Pages/Admin";
 import Promotions from "./Pages/Promotions"
+import TestAddbook from "./Components/TestAddbook";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/Home" element={<CustomerHomePage />}></Route>
         <Route path="/Admin" element={<Admin />}></Route>
         <Route path="/Promotions" element={<Promotions />}></Route>
+        <Route path="/addBook" element={<TestAddbook />}></Route>
       </Routes>
     </Fragment>
   );
