@@ -17,6 +17,7 @@ function LogInForm() {
 
   function changeEmail(e) {
     setEmail(e.target.value);
+
   }
 
   function changePassword(e) {
@@ -32,7 +33,7 @@ function LogInForm() {
 
         console.log(response.data);
         if (response.data == -1) {
-          window.location.reload();
+          //window.location.reload();
         }
         else {
           console.log(response.data);

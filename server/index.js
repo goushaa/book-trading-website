@@ -80,6 +80,26 @@ app.post("/login", async (req, res) => {
     }
 });
 
+app.post("/cityidfromcityname", async (req, res) => {
+    try {
+        const { city_name } = req.body;
+        const city_id = await pool.query(`SELECT id FROM city WHERE name = $1`, [city_name]);
+
+        if (city_id.rowCount != 0) {
+            res.json(city_id.rows[0]);
+            console.log(city_id.row[0]);
+        }
+        else {
+            res.json("-1");
+            console.log(city_id.row[0]);
+        }
+    } catch (err) {
+        console.log(err.message);
+    }
+});
+
+
+
 //unread number
 
 
@@ -277,6 +297,7 @@ app.get("/genres", async (req, res) => {
     try {
         const genres = await pool.query("SELECT * FROM genre");
         res.json(genres.rows);
+
     } catch (err) {
         console.log(err.message);
     }
