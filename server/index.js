@@ -23,7 +23,6 @@ app.listen(5000, () => {
 
 // signup
 
-
 app.post("/signup", async (req, res) => {
     try {
         const { first, last, address, city_id, user_name, password, email, type } = req.body;
@@ -36,10 +35,22 @@ app.post("/signup", async (req, res) => {
         if (type == 4)//in case the sign up is a driver 
         {
             const { ssn, bike_license, driver_license, expiration_date } = req.body;
-            isSssn = await pool.query('select ssn from driver where ssn=$1', [ssn]);
+            isSssn = await pool.query('SELECT ssn FROM driver WHERE ssn=$1', [ssn]);
             if (isSssn.rowCount != 0)//checks for ssn if already in use 
             {
                 res.json("ssn already in use");
+                return;
+            }
+            isBike = await pool.query('SELECT bike_license FROM driver WHERE bike_license=$1', [bike_license]);
+            if (isBike.rowCount != 0)//checks for bike license if already in use 
+            {
+                res.json("bike license already in use");
+                return;
+            }
+            isDriver = await pool.query('SELECT driver_license FROM driver WHERE driver_license=$1', [driver_license]);
+            if (isDriver.rowCount != 0)//checks for driver license if already in use 
+            {
+                res.json("driver license already in use");
                 return;
             }
             //creats user to link it later to driver
@@ -344,7 +355,7 @@ app.post("/addCoupon", async (req, res) => {
         }
         else {
             console.log(`${code} is already added in the system`);
-            res.json(`${code} is already added in the system`);
+            res.json(`-1`);
         }
 
     } catch (err) {
@@ -375,6 +386,28 @@ app.get("/coupons", async (req, res) => {
         const getCoupon = await pool.query("SELECT * FROM Coupons;");
         res.json(getCoupon.rows);
         //front end should loop on all coupons and display them
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+app.get("/coupons/:code", async (req, res) => {
+    try {
+        const { code } = req.params;
+        const getCoupon = await pool.query("SELECT * FROM Coupons WHERE code = $1;", [code]);
+        res.json(getCoupon.rows[0]);
+        //front end should display single coupon
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+app.delete("/coupons/:code", async (req, res) => {
+    try {
+        const { code } = req.params;
+        const getCoupon = await pool.query("DELETE FROM Coupons WHERE code = $1;", [code]);
+        res.json(getCoupon.rows[0]);
+        //front end should display single coupon
     } catch (err) {
         console.error(err.message);
     }
@@ -511,7 +544,30 @@ app.get("/users/:id", async (req, res) => {
     }
 });
 
-//admin views orders
+//admin views pending orders
+app.get("/pendingOrders", async (req, res) => {
+    try {
+        const viewPendingOrders = await pool.query("SELECT * FROM order WHERE status = 1;");
+        res.json(viewPendingOrders.rows);
+        //front end should loop on all orders and display them
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+//get driver user id given ssn
+app.get("/driveruseridgivenssn", async (req, res) => {
+    try {
+        const { driver_ssn } = req.body;
+        const getuserid = await pool.query("SELECT user_id FROM driver WHERE ssn = $1;", [driver_ssn]);
+        res.json(getuserid.rows[0]);
+        //front end should loop on all orders and display them
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+//view order
 app.get("/orders", async (req, res) => {
     try {
         const viewOrders = await pool.query("SELECT * FROM order;");

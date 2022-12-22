@@ -10,6 +10,12 @@ import CustomerHomePage from "./Pages/CustomerHomePage";
 import Admin from "./Pages/Admin";
 import Promotions from "./Pages/Promotions"
 import TestAddbook from "./Components/TestAddbook";
+import DriverSignupPage from "./Pages/DriverSignupPage";
+import SuperAdminPage from "./Pages/SuperAdminPage";
+import AdminViewUserPage from "./Pages/AdminViewUserPage";
+import AdminViewStorePage from "./Pages/AdminViewStorePage";
+import AdminViewDriverPage from "./Pages/AdminViewDriverPage";
+import AdminViewCouponPage from "./Pages/AdminViewCouponPage";
 
 function App() {
   return (
@@ -24,6 +30,13 @@ function App() {
         <Route path="/Admin" element={<Admin />}></Route>
         <Route path="/Promotions" element={<Promotions />}></Route>
         <Route path="/addBook" element={<TestAddbook />}></Route>
+        <Route path="/driversignup" element={<DriverSignupPage />}></Route>
+        <Route path="/superadmin" element={<SuperAdminPage />}></Route>
+        <Route path="/users/:id" element={<AdminViewUserPage />}></Route>
+        <Route path="/stores/:id" element={<AdminViewStorePage />}></Route>
+        <Route path="/drivers/:ssn" element={<AdminViewDriverPage />}></Route>
+        <Route path="/coupons/:code" element={<AdminViewCouponPage />}></Route>
+
       </Routes>
     </Fragment>
   );

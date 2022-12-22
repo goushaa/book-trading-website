@@ -8,6 +8,7 @@ import HomePageBackground from "../Images/HomePageBackground.jpg";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Dropdown from "react-bootstrap/Dropdown";
 import "../CSS/Style.css";
+import { Link } from 'react-router-dom'
 
 function HomeLogInBackground() {
   const [show, setShow] = useState(false);
@@ -44,9 +45,9 @@ function HomeLogInBackground() {
             >
               Sign Up
             </Button>{" "}
-            <Button className="leftmenubtn3">Create a business account</Button>{" "}
-            <Button className="leftmenubtn4">Add your store</Button>{" "}
-            <Button className="leftmenubtn5">Sign up to deliver</Button>{" "}
+            <Link to="/signup"><Button className="leftmenubtn3">Create a business account</Button>{" "}</Link>
+            <Link to="/signup"><Button className="leftmenubtn4">Add your store</Button>{" "}</Link>
+            <Link to="/driversignup"><Button className="leftmenubtn5">Sign up to deliver</Button>{" "}</Link>
           </Offcanvas.Body>
         </Offcanvas>
         <Row>
