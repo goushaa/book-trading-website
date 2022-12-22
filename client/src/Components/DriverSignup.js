@@ -8,7 +8,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import axios from 'axios'
 import '../CSS/prom_bg.css'
 
-function SignUpForm() {
+function DriverSignup() {
 
     useEffect(() => {
         axios.get('http://localhost:5000/cities').then((res) => {
@@ -20,12 +20,16 @@ function SignUpForm() {
     const [first, setFirst] = useState('');
     const [last, setLast] = useState('');
     const [address, setAddress] = useState('');
-    const [city_name, setCity] = useState('Giza');
     const [city_id, setCityID] = useState('1');
     const [user_name, setUser] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
-    const [type, setType] = useState('2');
+    const type = '4'
+    //ssn, bike_license, driver_license, expiration_date
+    const [ssn, setSSN] = useState('');
+    const [bike_license, setBikeLicense] = useState('');
+    const [driver_license, setDriverLicense] = useState('');
+    const [expiration_date, setExpDate] = useState('');
 
     function changeFirst(e) {
         setFirst(e.target.value);
@@ -36,17 +40,11 @@ function SignUpForm() {
     }
 
     function changeCity(e) {
-        console.log(e.target.value)
-        setCity(e.target.value);
+        setCityID(e.target.value);
     }
 
     function changePassword(e) {
         setPassword(e.target.value);
-    }
-
-    function changeType(e) {
-        setType(e.target.value);
-        console.log(e.target.value);
     }
 
     function changeEmail(e) {
@@ -61,29 +59,47 @@ function SignUpForm() {
         setUser(e.target.value);
     }
 
-    function SignUp(e) {
-        console.log(city_name)
+    function changeSSN(e) {
+        setSSN(e.target.value);
+    }
 
-        axios.post('http://localhost:5000/cityidfromcityname', { city_name }).then(
-            (res) => {
-                setCityID(res.data.id);
-            }
-        ).catch(err => console.log(err));
-        console.log(type);
-        axios.post('http://localhost:5000/signup', { first, last, address, city_id, user_name, password, email, type }).then(
+    function changeBikeLicense(e) {
+        setBikeLicense(e.target.value);
+    }
+
+    function changeDriverLicense(e) {
+        setDriverLicense(e.target.value);
+    }
+
+    function changeExpDate(e) {
+        setExpDate(e.target.value);
+    }
+
+    function SignUpDriver(e) {
+
+        console.log(ssn);
+        console.log(bike_license);
+        console.log(driver_license);
+        console.log(expiration_date);
+
+        axios.post('http://localhost:5000/signup', { first, last, address, city_id, user_name, password, email, type, ssn, bike_license, driver_license, expiration_date }).then(
             (res) => {
                 console.log(res.data);
                 if (res.data == 'email already in use') {
                     return;
                 }
-                else {
+                else if (res.data == 'ssn already in use') {
+                    return;
+                }
+                else if (res.data == 'bike license already in use') {
+                    return;
+                }
+                else if (res.data == 'driver license already in use') {
                     return;
                 }
             }
         ).catch(err => console.log(err));
     }
-
-
     return (
         <Fragment>
             <Navbar bg="dark" variant="dark">
@@ -122,7 +138,7 @@ function SignUpForm() {
                                 <Form.Control type="text" placeholder="Last Name" onChange={changeLast} />
 
                             </Form.Group>
-                            <Form.Group className="mb-3" controlId="address">
+                            <Form.Group className="mb-3" controlId="address" >
 
                                 <Form.Control type="text" placeholder="Address" onChange={changeAddress} />
 
@@ -132,19 +148,38 @@ function SignUpForm() {
                                 <Form.Control type="text" placeholder="User Name" onChange={changeUser} />
 
                             </Form.Group>
-                            <Form.Select className="city mt-3" aria-label="Default select example" onChange={changeCity}>
+                            <Form.Select className="city mt-3" aria-label="Default select example" onChange={changeCity} >
                                 {
                                     cities.map(city => (
-                                        <option key={city.id}>{city.name} </option>
+                                        <option value={city.id}>{city.name} </option>
                                     ))
                                 }
                             </Form.Select>
 
-                            <Form.Select className="type mt-3 mb-3" aria-label="Default select example" onChange={changeType}>
-                                <option value="2">Customer</option>
-                                <option value="3">Store</option>
-                            </Form.Select>
-                            <Button className variant="dark" onClick={SignUp}> Sign up </Button>
+                            <Form.Group className="mb-3 mt-3" controlId="user">
+
+                                <Form.Control type="text" placeholder="SSN" onChange={changeSSN} />
+
+                            </Form.Group>
+
+                            <Form.Group className="mb-3" controlId="user">
+
+                                <Form.Control type="text" placeholder="Bike License" onChange={changeBikeLicense} />
+
+                            </Form.Group>
+
+                            <Form.Group className="mb-3" controlId="user">
+
+                                <Form.Control type="text" placeholder="Driver License" onChange={changeDriverLicense} />
+
+                            </Form.Group>
+
+                            <Form.Group className="mb-3" controlId="user">
+
+                                <Form.Control type="date" placeholder="Expiration Date" onChange={changeExpDate} />
+
+                            </Form.Group>
+                            <Button className variant="dark" onClick={SignUpDriver} > Sign up </Button>
                         </Form>
                     </Col>
 
@@ -155,4 +190,4 @@ function SignUpForm() {
     )
 }
 
-export default SignUpForm
+export default DriverSignup
