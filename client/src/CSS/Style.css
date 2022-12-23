@@ -183,7 +183,7 @@
   transform: translate(-40%, -50%);
   -ms-transform: translate(50%, 50%);
   color: white;
-  width: 150px;
+  width: 30%;
   background-color: rgb(107, 206, 234);
   border: transparent;
 }
@@ -194,10 +194,10 @@
   color: white;
   border: white;
   fill: white;
-  transform: translate(1760%, -118%);
+  transform: translate(1610%, -118%);
   -ms-transform: translate(50%, 50%);
-  width: 70px;
-  height: 65px;
+  width: 5%;
+  height: 9%;
   font-size: 40px;
 }
 
@@ -207,10 +207,10 @@
   color: white;
   border: white;
   fill: white;
-  transform: translate(1850%, -118%);
+  transform: translate(1700%, -118%);
   -ms-transform: translate(50%, 50%);
-  width: 70px;
-  height: 65px;
+  width: 5%;
+  height: 9%;
   font-size: 40px;
 }
 
@@ -220,10 +220,10 @@
   color: white;
   border: white;
   fill: white;
-  transform: translate(1940%, -118%);
+  transform: translate(1790%, -118%);
   -ms-transform: translate(50%, 50%);
-  width: 70px;
-  height: 65px;
+  width: 5%;
+  height: 9%;
   font-size: 40px;
 }
 
@@ -359,6 +359,7 @@
 
 .salerow {
   background-color: antiquewhite;
+  width: 100.8%;
 }
 
 .salehead {
@@ -388,4 +389,36 @@
   border: none;
   cursor: pointer;
   border-radius: 30px;
+}
+
+.prom_text {
+  transform: translate(-2%, -15%);
+}
+
+.cardgroup {
+  transform: translate(0%, 10%);
+  width: 100%;
+}
+
+.cardgroup2 {
+  transform: translate(0%, 0%);
+  width: 100%;
+}
+
+.featuredbooks {
+  transform: translate(2.5%, 80%);
+  width: 32%;
+  height: 100%;
+  font-size: 60px;
+  font-style: italic;
+  font-weight: 1000;
+  background-color: rgba(5, 51, 51, 0.889);
+  color: white;
+  border-radius: 30px;
+}
+
+.LabelForm {
+  font-style: italic;
+  font-size: 25px;
+  font-weight: 500;
 }

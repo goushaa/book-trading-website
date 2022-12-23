@@ -22,3 +22,14 @@
     background-position: center;
    
   }
+  .course-card{
+    margin: 14px 0;
+    min-height: 300px;
+}
+.card-title{
+    text-transform: capitalize;
+}
+.card-btn{
+    background-color: var(--darkColor) !important;
+    text-transform: capitalize;
+}

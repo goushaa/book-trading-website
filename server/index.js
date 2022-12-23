@@ -151,11 +151,10 @@ app.delete("/deletebook", async (req, res) => {
     }
 })
 
-app.get("/userbooks", async (req, res) => {
+app.get("/userbooks/:id", async (req, res) => {
     try {
-        var { page, id } = req.body;
-        page = (page - 1) * 10;
-        const getUserStoreBooks = await pool.query("SELECT * FROM book WHERE user_id=$1 AND status=0 LIMIT 10 offset $2 ", [id, page]);
+        const {id } = req.params;
+        const getUserStoreBooks = await pool.query("SELECT * FROM book WHERE user_id=$1 AND status=0", [id]);
         res.json(getUserStoreBooks.rows);
         //front end should loop on all books in certain user/store selling and display them
     } catch (err) {

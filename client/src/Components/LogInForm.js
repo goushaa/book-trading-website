@@ -52,7 +52,7 @@ function LogInForm() {
           }
           else if (response.data.type == 3) {
             //stores
-            navigate("/store");
+            navigate(`/store/${response.data.id}`);
 
           }
           else if (response.data.type == 4) {
