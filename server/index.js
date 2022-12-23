@@ -153,7 +153,7 @@ app.delete("/deletebook", async (req, res) => {
 
 app.get("/userbooks/:id", async (req, res) => {
     try {
-        const {id } = req.params;
+        const { id } = req.params;
         const getUserStoreBooks = await pool.query("SELECT * FROM book WHERE user_id=$1 AND status=0", [id]);
         res.json(getUserStoreBooks.rows);
         //front end should loop on all books in certain user/store selling and display them
@@ -603,3 +603,58 @@ app.get("/feedback", async (req, res) => {
 
 /////////////////////////////ADMIN/////////////////////////////
 
+
+
+//////////////MOHAMED & MUSTAFA REQUESTS///////////////////////
+
+app.get("/wishlists", async (req, res) => {
+    try {
+        const viewWishlists = await pool.query("SELECT * FROM wish_list_item;"); //wrong query ik (tell me how to fix it)
+        res.json(viewWishlists.rows);
+
+
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+app.get("/wishlists/:id", async (req, res) => {
+    try {
+        const { user_id } = req.params;
+        const viewUserWishlists = await pool.query("SELECT * FROM wish_list_item WHERE user_id = $1;", [user_id])
+        res.json(viewUserWishlists.rows); //book_id refers to what?
+
+
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+app.get("/ordersbycertaindriver", async (req, res) => {
+    try {
+        const { ssn } = req.body
+        const viewOrders = await pool.query('SELECT * FROM driver d,"order" o WHERE o.driver_ssn = d.ssn AND d.ssn = $1 AND o.status = 2;', [ssn]); //order to be delivered by certain driver
+        res.json(viewOrders.rows);
+
+
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+app.get("/driverorderitemstodeliver", async (req, res) => {
+    try {
+        const { ssn } = req.body
+        const viewOrders = await pool.query('SELECT * FROM driver d,order_item o WHERE o.driver_ssn = d.ssn AND d.ssn = $1 ;', [ssn]); //don't know yet how to write
+        res.json(viewOrders.rows);
+
+
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+
+
+
+//////////////MOHAMED & MUSTAFA REQUESTS///////////////////////
