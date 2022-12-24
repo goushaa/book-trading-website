@@ -187,7 +187,9 @@ app.post("/makeOrder", async (req, res) => {
         console.log(date);
         if (coupon_id == -1) coupon_id = 'null';
         const makeOrder = await pool.query('UPDATE "order" SET status=1,order_date = $1,coupon_id =' + coupon_id + " WHERE id=$2 RETURNING *", [date, order_id]);
-        res.json(makeOrder.rows[0]);
+        //res.json(makeOrder.rows[0]);
+        const newOrder = await pool.query(`INSERT INTO "order" (user_id,status) VALUES ($1,$2) RETURNING *`, [makeOrder.rows[0].id, 0]);
+        res.json(newOrder.rows[0]); //we always check on the order with status 0 thus orders items in the cart
     } catch (err) {
         console.error(err.message);
     }
@@ -694,6 +696,18 @@ app.post("/bookinfo/:book_id", async (req, res) => {
         const { book_id } = req.params;
         const getBookInfo = await pool.query('SELECT * FROM book WHERE id = $1', [book_id]);
         res.json(getBookInfo.rows[0]);
+
+
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+app.get("/orderItemInfo/:book_id", async (req, res) => {
+    try {
+        const { book_id } = req.params;
+        const getOrderItemInfo = await pool.query('SELECT * FROM book b, order_item o WHERE b.id = o.book_id AND b.id = $1', [book_id]);
+        res.json(getOrderItemInfo.rows[0]);
 
 
     } catch (err) {
