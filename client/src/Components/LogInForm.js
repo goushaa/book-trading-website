@@ -48,7 +48,7 @@ function LogInForm() {
           else if (response.data.type == 2) {
             //user
             //console.log(response.data);
-            navigate("/home", { state: response.data });
+            navigate(`/home/${response.data.id}`, { state: response.data });
           }
           else if (response.data.type == 3) {
             //stores
