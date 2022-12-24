@@ -22,6 +22,7 @@ import DriverPage from "./Pages/DriverPage";
 import Wishlist from "./Components/Wishlist";
 import WishlistPage from "./Pages/WishlistPage";
 import ViewWishListItemPage from "./Pages/ViewWishListItemPage";
+import AddBooktoCartPage from "./Pages/AddBooktoCartPage";
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
         <Route path="/coupons/:code" element={<AdminViewCouponPage />}></Route>
         <Route path="/store/:id" element={<StorePage />}></Route>
         <Route path="/home/:id/ViewAccount" element={<ViewAccount />}></Route>
+        <Route path="/home/:id/book/:book_id" element={<AddBooktoCartPage />}></Route>
 
 
 
