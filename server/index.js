@@ -689,6 +689,18 @@ app.post("/bookinfo", async (req, res) => {
     }
 });
 
+app.post("/bookinfo/:book_id", async (req, res) => {
+    try {
+        const { book_id } = req.params;
+        const getBookInfo = await pool.query('SELECT * FROM book WHERE id = $1', [book_id]);
+        res.json(getBookInfo.rows[0]);
+
+
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
 
 
 //////////////MOHAMED & MUSTAFA REQUESTS///////////////////////
