@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -16,7 +16,8 @@ import Book3 from "../Images/book3.png";
 import Card from "react-bootstrap/Card";
 import CardGroup from "react-bootstrap/CardGroup";
 import Modal from "react-bootstrap/Modal";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import axios from 'axios'
 
 function MyVerticallyCenteredModal(props) {
   return (
@@ -61,9 +62,26 @@ function MyVerticallyCenteredModal(props) {
 }
 
 function CustomerHome() {
-  let {id } = useParams();
+  let { id } = useParams();
+
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/users/${id}`)
+      .then((res) => {
+        setUser(res.data);
+      })
+      .catch((err) => console.log(err));
+    axios
+      .get(`http://localhost:5000/books`)
+      .then((res) => {
+        setBooks(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+  const [user, setUser] = useState([]);
   const [show, setShow] = useState(false);
- 
+  const [books, setBooks] = useState([]);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -116,7 +134,7 @@ function CustomerHome() {
               <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
             </svg>
           </Button>
-          <Button className="heart_btn" href="">
+          <Link to={'wishlists'} ><Button className="heart_btn">
             <svg
               className="hearticon"
               xmlns="http://www.w3.org/2000/svg"
@@ -132,19 +150,22 @@ function CustomerHome() {
                 d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
               />
             </svg>
-          </Button>
-          <Button className="person_btn" href="">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="30"
-              height="60"
-              fill="currentColor"
-              class="bi bi-person"
-              viewBox="0 4 16 16"
-            >
-              <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
-            </svg>
-          </Button>
+          </Button></Link>
+
+          <Link to="ViewAccount">
+            <Button className="person_btn">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="30"
+                height="60"
+                fill="currentColor"
+                class="bi bi-person"
+                viewBox="0 4 16 16"
+              >
+                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+              </svg>
+            </Button>
+          </Link>
           <Button className="leftmenu2" onClick={handleShow}>
             ≡
           </Button>
@@ -153,7 +174,7 @@ function CustomerHome() {
               <Offcanvas.Title></Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
-              <h1 className="name">Username</h1>
+              <h1 className="name">{user.user_name}</h1>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="110"
@@ -168,10 +189,11 @@ function CustomerHome() {
                   d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
                 />
               </svg>
-              
-              <Button className="leftmenu2btn1" href={`http://localhost:3000/ViewAccount/${id}`}>
+
+              <Link to={`ViewAccount`}><Button className="leftmenu2btn1" >
                 View account
-              </Button>{" "}
+              </Button></Link>
+              {" "}
 
               <Button className="leftmenu2btn2">
                 Create a business account
@@ -267,181 +289,29 @@ function CustomerHome() {
       </Row>
 
       <Row>
-        <h1 className="featuredbooks">Featured Books</h1>
+        <h1 className="featuredbooks">Latest Books</h1>
       </Row>
 
       <Row>
-        <CardGroup className="cardgroup">
-          <Card>
-            <Card.Img variant="top" src={Book1} />
-            <Card.Body>
-              <Card.Title>Card title</Card.Title>
-              <Card.Text>
-                This is a wider card with supporting text below as a natural
-                lead-in to additional content. This content is a little bit
-                longer.
-              </Card.Text>
-            </Card.Body>
-            <Card.Footer>
-              <small className="text-muted">Last updated 3 mins ago</small>
-            </Card.Footer>
-          </Card>
-          <Card>
-            <Card.Img variant="top" src={Book2} />
-            <Card.Body>
-              <Card.Title>Card title</Card.Title>
-              <Card.Text>
-                This card has supporting text below as a natural lead-in to
-                additional content.{" "}
-              </Card.Text>
-            </Card.Body>
-            <Card.Footer>
-              <small className="text-muted">Last updated 3 mins ago</small>
-            </Card.Footer>
-          </Card>
-          <Card>
-            <Card.Img variant="top" src={Book3} />
-            <Card.Body>
-              <Card.Title>Card title</Card.Title>
-              <Card.Text>
-                This is a wider card with supporting text below as a natural
-                lead-in to additional content. This card has even longer content
-                than the first to show that equal height action.
-              </Card.Text>
-            </Card.Body>
-            <Card.Footer>
-              <small className="text-muted">Last updated 3 mins ago</small>
-            </Card.Footer>
-          </Card>
-          <Card>
-            <Card.Img variant="top" src={Book1} />
-            <Card.Body>
-              <Card.Title>Card title</Card.Title>
-              <Card.Text>
-                This is a wider card with supporting text below as a natural
-                lead-in to additional content. This content is a little bit
-                longer.
-              </Card.Text>
-            </Card.Body>
-            <Card.Footer>
-              <small className="text-muted">Last updated 3 mins ago</small>
-            </Card.Footer>
-          </Card>
-          <Card>
-            <Card.Img variant="top" src={Book2} />
-            <Card.Body>
-              <Card.Title>Card title</Card.Title>
-              <Card.Text>
-                This card has supporting text below as a natural lead-in to
-                additional content.{" "}
-              </Card.Text>
-            </Card.Body>
-            <Card.Footer>
-              <small className="text-muted">Last updated 3 mins ago</small>
-            </Card.Footer>
-          </Card>
-          <Card>
-            <Card.Img variant="top" src={Book3} />
-            <Card.Body>
-              <Card.Title>Card title</Card.Title>
-              <Card.Text>
-                This is a wider card with supporting text below as a natural
-                lead-in to additional content. This card has even longer content
-                than the first to show that equal height action.
-              </Card.Text>
-            </Card.Body>
-            <Card.Footer>
-              <small className="text-muted">Last updated 3 mins ago</small>
-            </Card.Footer>
-          </Card>
-        </CardGroup>
-      </Row>
-
-      <Row>
-        <CardGroup className="cardgroup2">
-          <Card>
-            <Card.Img variant="top" src={Book1} />
-            <Card.Body>
-              <Card.Title>Card title</Card.Title>
-              <Card.Text>
-                This is a wider card with supporting text below as a natural
-                lead-in to additional content. This content is a little bit
-                longer.
-              </Card.Text>
-            </Card.Body>
-            <Card.Footer>
-              <small className="text-muted">Last updated 3 mins ago</small>
-            </Card.Footer>
-          </Card>
-          <Card>
-            <Card.Img variant="top" src={Book2} />
-            <Card.Body>
-              <Card.Title>Card title</Card.Title>
-              <Card.Text>
-                This card has supporting text below as a natural lead-in to
-                additional content.{" "}
-              </Card.Text>
-            </Card.Body>
-            <Card.Footer>
-              <small className="text-muted">Last updated 3 mins ago</small>
-            </Card.Footer>
-          </Card>
-          <Card>
-            <Card.Img variant="top" src={Book3} />
-            <Card.Body>
-              <Card.Title>Card title</Card.Title>
-              <Card.Text>
-                This is a wider card with supporting text below as a natural
-                lead-in to additional content. This card has even longer content
-                than the first to show that equal height action.
-              </Card.Text>
-            </Card.Body>
-            <Card.Footer>
-              <small className="text-muted">Last updated 3 mins ago</small>
-            </Card.Footer>
-          </Card>
-          <Card>
-            <Card.Img variant="top" src={Book1} />
-            <Card.Body>
-              <Card.Title>Card title</Card.Title>
-              <Card.Text>
-                This is a wider card with supporting text below as a natural
-                lead-in to additional content. This content is a little bit
-                longer.
-              </Card.Text>
-            </Card.Body>
-            <Card.Footer>
-              <small className="text-muted">Last updated 3 mins ago</small>
-            </Card.Footer>
-          </Card>
-          <Card>
-            <Card.Img variant="top" src={Book2} />
-            <Card.Body>
-              <Card.Title>Card title</Card.Title>
-              <Card.Text>
-                This card has supporting text below as a natural lead-in to
-                additional content.{" "}
-              </Card.Text>
-            </Card.Body>
-            <Card.Footer>
-              <small className="text-muted">Last updated 3 mins ago</small>
-            </Card.Footer>
-          </Card>
-          <Card>
-            <Card.Img variant="top" src={Book3} />
-            <Card.Body>
-              <Card.Title>Card title</Card.Title>
-              <Card.Text>
-                This is a wider card with supporting text below as a natural
-                lead-in to additional content. This card has even longer content
-                than the first to show that equal height action.
-              </Card.Text>
-            </Card.Body>
-            <Card.Footer>
-              <small className="text-muted">Last updated 3 mins ago</small>
-            </Card.Footer>
-          </Card>
-        </CardGroup>
+        {
+          books.map(book => {
+            return (
+              <div className="cards">
+                <div className="col-2">
+                  <Card className="course-card">
+                    <Card.Img variant="top" src={/*book.image*/Book1}></Card.Img>
+                    <Card.Body>
+                      <Card.Title>{book.title}</Card.Title>
+                      <Link>
+                        <Button variant="success">View</Button>
+                      </Link>
+                    </Card.Body>
+                  </Card>
+                </div>
+              </div>
+            )
+          })
+        }
       </Row>
     </Fragment>
   );
