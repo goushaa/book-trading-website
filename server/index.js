@@ -416,27 +416,27 @@ app.delete("/coupons/:code", async (req, res) => {
 
 //wishlist
 
-app.post("/addWishlist/:id", async (req, res) => {
+app.post("/addWishlist/:user_id", async (req, res) => {
     try {
         const { user_id } = req.params;
         const { book_id } = req.body; //why did we do this
         //NEEDS VALIDATION AND REVISION
-        const addWishlist = await pool.query("INSERT INTO wish_list_item VALUES ($1,$2);", [user_id, book_id]);
-        res.json(addWishlist);
+        const addWishlist = await pool.query("INSERT INTO wish_list_item (user_id,book_id) VALUES ($1,$2) RETURNING *;", [user_id, book_id]);
+        res.json(addWishlist.rows[0]);
 
     } catch (err) {
         console.error(err.message);
     }
 });
 
-app.delete("/deleteWishlist/:id", async (req, res) => {
+app.post("/deleteWishlist/:user_id", async (req, res) => {
     try {
         const { user_id } = req.params;
         const { book_id } = req.body;
         //NEEDS VALIDATION AND REVISION
         const deleteWishlist = await pool.query("DELETE FROM wish_list_item  WHERE user_id = $1 AND book_id = $2 RETURNING *;", [user_id, book_id]);
         if (deleteWishlist.rowCount == 0) {
-            res.send(`WISHLIST ALREADY ISN'T IN THE SYSTEM`);
+            res.json(`WISHLIST ALREADY ISN'T IN THE SYSTEM`);
             console.log(`WISHLIST ALREADY ISN'T IN THE SYSTEM`);
         }
         else {
@@ -618,7 +618,7 @@ app.get("/wishlists", async (req, res) => {
     }
 });
 
-app.get("/wishlists/:id", async (req, res) => {
+app.get("/wishlists/:user_id", async (req, res) => {
     try {
         const { user_id } = req.params;
         const viewUserWishlists = await pool.query("SELECT * FROM wish_list_item WHERE user_id = $1;", [user_id])
@@ -666,6 +666,28 @@ app.post("/updateUser", async (req, res) => {
     }
 });
 
+app.get("/books", async (req, res) => {
+    try {
+        const getBooks = await pool.query('SELECT * FROM book WHERE status = 0');
+        res.json(getBooks.rows);
+
+
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+app.post("/bookinfo", async (req, res) => {
+    try {
+        const { book_id } = req.body;
+        const getBookInfo = await pool.query('SELECT * FROM book WHERE id = $1', [book_id]);
+        res.json(getBookInfo.rows[0]);
+
+
+    } catch (err) {
+        console.error(err.message);
+    }
+});
 
 
 
