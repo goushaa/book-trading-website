@@ -17,6 +17,7 @@ import AdminViewStorePage from "./Pages/AdminViewStorePage";
 import AdminViewDriverPage from "./Pages/AdminViewDriverPage";
 import AdminViewCouponPage from "./Pages/AdminViewCouponPage";
 import StorePage from "./Pages/StorePage";
+import ViewAccount from "./Pages/ViewAccount"
 
 function App() {
   return (
@@ -27,7 +28,7 @@ function App() {
         <Route path="/Sell&Bid" element={<SellandBidding />}></Route>
         <Route path="/LogIn" element={<LogIn />}></Route>
         <Route path="/SignUp" element={<SignUp />}></Route>
-        <Route path="/Home" element={<CustomerHomePage />}></Route>
+        <Route path="/Home/:id" element={<CustomerHomePage />}></Route>
         <Route path="/Admin" element={<Admin />}></Route>
         <Route path="/Promotions" element={<Promotions />}></Route>
         <Route path="/addBook" element={<TestAddbook />}></Route>
@@ -38,6 +39,7 @@ function App() {
         <Route path="/drivers/:ssn" element={<AdminViewDriverPage />}></Route>
         <Route path="/coupons/:code" element={<AdminViewCouponPage />}></Route>
         <Route path="/store/:id" element={<StorePage />}></Route>
+        <Route path="/ViewAccount/:id" element={<ViewAccount />}></Route>
       </Routes>
     </Fragment>
   );

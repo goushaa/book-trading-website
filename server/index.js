@@ -654,6 +654,18 @@ app.get("/driverorderitemstodeliver", async (req, res) => {
     }
 });
 
+app.post("/updateUser", async (req, res) => {
+    try {
+        const { first, last, address, city_id, user_name, id } = req.body
+        const updateUser = await pool.query('UPDATE "user" SET first_name = $1, last_name = $2, address = $3, city_id = $4, user_name = $5 WHERE id = $6 RETURNING *', [first, last, address, city_id, user_name, id]);
+        res.json(updateUser.rows[0]);
+
+
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
 
 
 
