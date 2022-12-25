@@ -299,7 +299,7 @@ function CustomerHome() {
               <div className="cards">
                 <div className="col-2">
                   <Card className="course-card">
-                    <Card.Img variant="top" src={/*book.image*/Book1}></Card.Img>
+                    <Card.Img variant="top" src={book.image}></Card.Img>
                     <Card.Body>
                       <Card.Title>{book.title}</Card.Title>
                       <Link>

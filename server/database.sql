@@ -168,7 +168,7 @@ CREATE TABLE "coupons" (
 
 CREATE TABLE "order" (
   "id" serial,
-  "user_id" int NOT NULL,
+  "user_id" int ,
   "driver_ssn" int,
   "order_date" timestamp ,
   "delivery_date" timestamp,
