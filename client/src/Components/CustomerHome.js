@@ -302,7 +302,7 @@ function CustomerHome() {
                     <Card.Img variant="top" src={book.image}></Card.Img>
                     <Card.Body>
                       <Card.Title>{book.title}</Card.Title>
-                      <Link>
+                      <Link to={`book/${book.id}`}>
                         <Button variant="success">View</Button>
                       </Link>
                     </Card.Body>
