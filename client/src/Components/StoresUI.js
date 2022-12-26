@@ -19,18 +19,22 @@ import Card from "react-bootstrap/Card";
 import { useParams } from "react-router-dom";
 
 function StoresUI() {
-  let {id } = useParams();
+  let { id } = useParams();
   console.log(id)
+
   useEffect(() => {
-      axios
-      .get(`http://localhost:5000/userbooks/${id}`)
-      .then((res) => {
-        setBook(res.data);
-      })
-      .catch((err) => console.log(err));
+    axios.get(`http://localhost:5000/userbooks/${id}`).then((res) => {
+      setBook(res.data);
+    }).catch((err) => console.log(err));
+
+    axios.get(`http://localhost:5000/wishlists_stats/${id}`).then((res) => {
+      console.log(res.data);
+      setWishlists(res.data);
+    }).catch((err) => console.log(err));
 
   }, []);
   const [book, setBook] = useState([])
+  const [wishlists, setWishlists] = useState([])
   return (
     <Fragment>
       <Navbar bg="dark" variant="dark" expand="lg">
@@ -61,33 +65,52 @@ function StoresUI() {
           <Tab eventKey="viewbooks" title="View Books">
             <h1>View books</h1>
             <div className="container mg-t">
-        <div className='row'>
-        {
-                book.map(book =>{
-                  return(
-                    <div className="col-lg-4 col-md-6 col-12">
-                    <div>
-                    <Card className="course-card">
-                    <Card.Img variant="top" src={book.image}></Card.Img>
-                    <Card.Body>
-                      <Card.Title>{book.title}</Card.Title>
-                       <p>{book.description}</p>
-                       
-                    </Card.Body>
-              </Card>
-                    </div>
-                  </div>
-                  )
-                })
-              }
-        </div> {/* ./row*/ }
-      </div>
-           
+              <div className='row'>
+                {
+                  book.map(book => {
+                    return (
+                      <div className="col-lg-4 col-md-6 col-12">
+                        <div>
+                          <Card className="course-card">
+                            <Card.Img variant="top" src={book.image}></Card.Img>
+                            <Card.Body>
+                              <Card.Title>{book.title}</Card.Title>
+                              <p>{book.description}</p>
+
+                            </Card.Body>
+                          </Card>
+                        </div>
+                      </div>
+                    )
+                  })
+                }
+              </div> {/* ./row*/}
+            </div>
+
           </Tab>
           <Tab eventKey="ViewWishlist" title="View Customers' Wishlists">
             <h1>View Wishlists</h1>
+            {
+              wishlists.map(wishlist => {
+                return (
+                  <div className="col-lg-4 col-md-6 col-12">
+                    <div>
+                      <Card className="course-card">
+                        <Card.Img variant="top" src={wishlist.image}></Card.Img>
+                        <Card.Body>
+                          <Card.Title>book ID: {wishlist.book_id}</Card.Title>
+                          <p>Number of users: {wishlist.countUsers}</p>
+                          <p>Availability: {wishlist.status}</p>
 
-           
+                        </Card.Body>
+                      </Card>
+                    </div>
+                  </div>
+                )
+              })
+            }
+
+
           </Tab>
         </Tabs>
       </Container>
