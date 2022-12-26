@@ -9,7 +9,6 @@ INSERT INTO genre ("name") values ('Contemporary Fiction'),('Classic Fiction'),(
 INSERT INTO language ("name") values ('Arabic'),('English'),('Japanese'),('Turksish'),('Spanish'),('French'),('Chinese'),('Hindi');
 
 /*superadmin insert*/
-INSERT INTO "user" (first_name,last_name,address,city_id,user_name,password,email,type) VALUES ('Super','Admin','',1,'superAdmin','0000','superAdmin@gmail.com',0);
 
 INSERT INTO "user" (first_name,last_name,address,city_id,user_name,password,email,type) VALUES ('Super','Admin','',1,'superAdmin','0000','superAdmin@gmail.com',0),
 ('store','store','cufe gize',3,'store','123','store1@gmail.com',3),
@@ -23,4 +22,7 @@ INSERT INTO "book" ("title","genre_id","isbn","author_name","language_id","purch
  VALUES ('Introduction to Algorithms, 3rd Edition (The MIT Press)',null,null,'Thomas H. Cormen','2','350','1','book for algo','https://m.media-amazon.com/images/P/0262033844.01._SCLZZZZZZZ_SX500_.jpg','2','50','0'),
  ('Introduction to Algorithms, 3rd Edition (The MIT Press)',null,null,'Thomas H. Cormen','2','350','1','book for algo','https://m.media-amazon.com/images/P/0262033844.01._SCLZZZZZZZ_SX500_.jpg','2','50','0'),
  ('Cracking the Coding Interview: 189 Programming Questions and Solutions',null,null,'Gayle Laakmann McDowell ','3','400','1','book for interviews','https://m.media-amazon.com/images/P/0984782850.01._SCLZZZZZZZ_SX500_.jpg','2','50','0'),
- ('Cracking the Coding Interview: 189 Programming Questions and Solutions',null,null,'Gayle Laakmann McDowell ','3','400','1','book for interviews','https://m.media-amazon.com/images/P/0984782850.01._SCLZZZZZZZ_SX500_.jpg','2','50','0'); 
+
+ ('Cracking the Coding Interview: 189 Programming Questions and Solutions',null,null,'Gayle Laakmann McDowell ','3','400','1','book for interviews','https://m.media-amazon.com/images/P/0984782850.01._SCLZZZZZZZ_SX500_.jpg','2','50','0');
+
+

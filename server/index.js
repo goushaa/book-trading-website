@@ -580,12 +580,23 @@ app.get("/orders", async (req, res) => {
 });
 
 //admin views order
-app.get("/orders/:id", async (req, res) => {
+app.get("/orders/:id", async (req, res) => { //takes order id and returns it's order items data and book related to it
     try {
         const { id } = req.params;
-        const viewOrder = await pool.query("SELECT * FROM order WHERE id = $1;", [id]);
-        res.json(viewOrder.rows[0]);
+        const viewOrder = await pool.query("select book_id,quantity,title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image from order_item,book where book_id=book.id and order_id=$1;", [id]); //return order items to user
+        res.json(viewOrder.rows);
         //front end should display one order when click on it
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+app.get("/driver/orders/:ssn", async (req, res) => { //takes ssn of driver and returns orders that he has to do 
+    try {
+        const { ssn } = req.params;
+        const {status}=req.body;//takes status to know if we want in delivery orders or orders that he has already deliverd
+        const viewOrder = await pool.query(`select * from "order" where driver_ssn =$1 and status=$2;`, [ssn,status]); 
+        res.json(viewOrder.rows);
     } catch (err) {
         console.error(err.message);
     }
@@ -608,7 +619,11 @@ app.get("/feedback", async (req, res) => {
 
 
 //////////////MOHAMED & MUSTAFA REQUESTS///////////////////////
-
+//wishlisted items for certain user done
+//count and group by wish list items for admin done
+//count and group by wish list items for store  done
+//select orders to deliver for driver done
+// select order items of a certain order line(583)
 app.get("/wishlists", async (req, res) => {
     try {
         const viewWishlists = await pool.query("SELECT * FROM wish_list_item;"); //wrong query ik (tell me how to fix it)
@@ -620,10 +635,11 @@ app.get("/wishlists", async (req, res) => {
     }
 });
 
-app.get("/wishlists/:user_id", async (req, res) => {
+
+app.get("/wishlists/:user_id", async (req, res) => {//takes user id and returns the data of the wishlisted books
     try {
         const { user_id } = req.params;
-        const viewUserWishlists = await pool.query("SELECT * FROM wish_list_item WHERE user_id = $1;", [user_id])
+            const viewUserWishlists = await pool.query("SELECT book_id,title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,count,status FROM wish_list_item,book WHERE wish_list_item.user_id = $1 and wish_list_item.book_id=book.id;", [user_id])
         res.json(viewUserWishlists.rows); //book_id refers to what?
 
 
@@ -631,6 +647,31 @@ app.get("/wishlists/:user_id", async (req, res) => {
         console.error(err.message);
     }
 });
+app.get("/wishlists_stats", async (req, res) => {//returns the wishlisted books with their count of wishlist
+    try {
+            const viewUserWishlists = await pool.query(`SELECT book_id,count(book_id) as "countUsers",title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,count,status FROM wish_list_item,book WHERE wish_list_item.book_id=book.id group by book_id,title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,count,status ;`)
+        res.json(viewUserWishlists.rows); //book_id refers to what?
+
+
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+app.get("/wishlists_stats/:user_id", async (req, res) => {//returns the wishlisted books with their count of wishlist for a certain user id
+    //will use it in store to get it's wishlisted books and its count :)
+    try {
+        const { user_id } = req.params;
+            const viewUserWishlists = await pool.query(`SELECT book_id,count(book_id) as "countUsers",title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,count,status FROM wish_list_item,book WHERE wish_list_item.book_id=book.id and book_id in(select id from book where user_id=$1)group by book_id,title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,count,status ;`,[user_id])
+        res.json(viewUserWishlists.rows); //book_id refers to what?
+
+
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+
 
 app.get("/ordersbycertaindriver", async (req, res) => {
     try {
