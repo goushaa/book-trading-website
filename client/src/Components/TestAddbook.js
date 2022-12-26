@@ -1,10 +1,13 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react'
 import { Form, Button } from 'react-bootstrap'
+import { useParams } from 'react-router-dom';
 import Combobox from "react-widgets/Combobox";
 
 function TestAddbook() {
 
+    let { id } = useParams()
+    console.log(id);
     const [genres, setGenres] = useState([]);
     const [languages, setLanguages] = useState([]);
     const [cities, setCities] = useState([]); //should be used in other page (wrote in here for practice)
@@ -19,7 +22,7 @@ function TestAddbook() {
     const [description, setDescription] = useState('');
     const [image, setImage] = useState('');
     const count = 1 //to be changed if store
-    const user_id = 2 //to be passed between pages
+    const user_id = id //to be passed between pages
     const [base64, settingBase64] = useState('')
     useEffect(() => {
         axios.get('http://localhost:5000/genres').then((res) => {

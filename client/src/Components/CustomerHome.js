@@ -83,6 +83,7 @@ function CustomerHome() {
     axios
       .post(`http://localhost:5000/userOrder`, { user_id })
       .then((res) => {
+        console.log(res.data.id);
         setOrderid(res.data.id);
       })
       .catch((err) => console.log(err));
