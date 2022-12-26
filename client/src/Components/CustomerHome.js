@@ -63,7 +63,7 @@ function MyVerticallyCenteredModal(props) {
 
 function CustomerHome() {
   let { id } = useParams();
-
+  const [order_id, setOrderid] = useState(0);
 
   useEffect(() => {
     axios
@@ -76,6 +76,14 @@ function CustomerHome() {
       .get(`http://localhost:5000/books`)
       .then((res) => {
         setBooks(res.data);
+      })
+      .catch((err) => console.log(err));
+
+    let user_id = id
+    axios
+      .post(`http://localhost:5000/userOrder`, { user_id })
+      .then((res) => {
+        setOrderid(res.data.id);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -121,19 +129,22 @@ function CustomerHome() {
               </Navbar.Collapse>
             </Container>
           </Navbar>
-          <Button className="cart_btn" href="">
-            <svg
-              className="carticon"
-              xmlns="http://www.w3.org/2000/svg"
-              width="30"
-              height="60"
-              color="white"
-              class="bi bi-cart3"
-              viewBox="0 4 16 16"
-            >
-              <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-            </svg>
-          </Button>
+          <Link to={`Cart/${order_id}`}>
+            <Button className="cart_btn">
+              <svg
+                className="carticon"
+                xmlns="http://www.w3.org/2000/svg"
+                width="30"
+                height="60"
+                color="white"
+                class="bi bi-cart3"
+                viewBox="0 4 16 16"
+              >
+                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+              </svg>
+            </Button>
+          </Link>
+
           <Link to={'wishlists'} ><Button className="heart_btn">
             <svg
               className="hearticon"
