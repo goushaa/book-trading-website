@@ -1,13 +1,4 @@
-import React, { Fragment } from 'react'
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Container from 'react-bootstrap/Container';
-import Navbar from 'react-bootstrap/Navbar';
-import '../CSS/prom_bg.css'
-function Promotions() {
-    return (
-        <Fragment>
-            <Navbar bg="dark" variant="dark">
+asfasf
             <Container>
                 <Navbar.Brand >Coupons</Navbar.Brand>
             </Container>
