@@ -37,9 +37,9 @@ function AddBooktoCart() {
             setIsbn(res.data.isbn)
             setLanguageId(res.data.language_id)
             console.log(res.data);
+            console.log(genre_id);
         }).catch((err) => console.log(err));
         
-        console.log(genre_id);
         axios.get(`http://localhost:5000/genrenamefromgenreid/${genre_id}`).then((res) => {
             console.log(res.data);
             setGenreName(res.data);
@@ -100,22 +100,38 @@ function AddBooktoCart() {
         </Container>
       </Navbar>
         <Row>
-            <Col className='image'>
-            <Container class="col-sm ml-5 mt-3">
+            <Col>
+            <Container class="col-sm mt-3">
                         <img src={image} />
                     </Container>
             </Col>
 
-            <Col className='tit'>
-            <Container className="col-sm mt-3">
+            <Col className="col-sm mt-3">
+            <Container >
                         <h1>{title}</h1>
                         
                     </Container>
-                    <Container><div className='p'>Price: </div> <div className='price'>{purchase_price} L.E</div></Container>
-                    <Container><div className='author'>Author: </div><div className='a'> {author_name}</div></Container>
-                    <Container className='description'>{description}</Container>
+                    <Row>
+                    <Container>Price: {purchase_price} L.E</Container>
+                    </Row>
+                    <Row>
+                    <Container>Author:{author_name}</Container>
+                    </Row>
+                    <Row>
+                    <Container>genre:{genre}</Container>
+                    </Row>
+                    <Row>
+                    <Container>Version:{version}</Container>
+                    </Row>
+                    <Row>
+                    <Container>ISBN:{isbn}</Container>
+                    </Row>
+                    <Row>
+                    <Container>Description: {description}</Container>
+                    </Row>
                     <Container className="quantity">
-                <h6>Quantity</h6>
+                        <Row><h6>Quantity</h6></Row>
+                
                 <Row> 
                     <Col className='col-3'>
                     <Form.Control className=" box mt-1 w-25" type="text" Value={quantity} disabled />

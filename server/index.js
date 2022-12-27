@@ -235,7 +235,7 @@ app.get("/wishlists_stats/:user_id", async (req, res) => {//returns the wishlist
 
 app.get("/books", async (req, res) => {
     try {
-        const getBooks = await pool.query('SELECT * FROM book WHERE book.user_id in (select id from "user" where type =2) and status = 0');
+        const getBooks = await pool.query('SELECT * FROM book WHERE book.user_id in (select id from "user" where type =3) and status = 0');
         res.json(getBooks.rows);
 
 
