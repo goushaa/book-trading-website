@@ -325,9 +325,9 @@ app.get("/userbooks/:id", async (req, res) => {
 app.post("/addToCart", async (req, res) => {
     try {
 
-        const { book_id, order_id, quantity} = req.body;
-        const found=await pool.query("select id from order_item where book_id=$1 and order_id=$2");
-        if(found.rowCount==1){
+        const { book_id, order_id, quantity } = req.body;
+        const found = await pool.query("select id from order_item where book_id=$1 and order_id=$2");
+        if (found.rowCount == 1) {
             res.json(-1);
             return;
         }
@@ -351,23 +351,23 @@ app.post("/userOrder", async (req, res) => {
 
 app.post("/makeOrder", async (req, res) => {
     try {
-        var { code, order_id,price} = req.body;
+        var { code, order_id, price } = req.body;
         var coupon;
-        if(code!=""){
-             coupon= await pool.query("select id,maximum_use from coupons where code=$1",[code]);
+        if (code != "") {
+            coupon = await pool.query("select id,maximum_use from coupons where code=$1", [code]);
 
-        if(coupon.rowCount==0||coupon.rows[0].maximum_use<1){
-            res.json("wrong coupon");
-            return ;
+            if (coupon.rowCount == 0 || coupon.rows[0].maximum_use < 1) {
+                res.json("wrong coupon");
+                return;
+            }
         }
-    }
 
-        if(price==0){
+        if (price == 0) {
             res.json("empty cart");
-            return ;
+            return;
         }
 
-        const updateCopun =await pool.query('UPDATE "coupons" SET maximum_use=$1 where code=$2',[coupon.rows[0].maximum_use-1,code]);
+        const updateCopun = await pool.query('UPDATE "coupons" SET maximum_use=$1 where code=$2', [coupon.rows[0].maximum_use - 1, code]);
 
         const date = new Date;
         console.log(date);
@@ -602,7 +602,7 @@ app.post("/applyCoupon", async (req, res) => {
     try {
         const { code } = req.body;
         const getCoupon = await pool.query("SELECT id,code,discount,is_relative FROM Coupons WHERE code = $1;", [code]);
-        if(getCoupon.rowCount==0){
+        if (getCoupon.rowCount == 0) {
             res.json(-1);
             return;
         }
