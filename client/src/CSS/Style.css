@@ -174,11 +174,13 @@
 .navbar {
   font-style: italic;
 }
+
 .searchbar {
   transform: translate(-115%, 50%);
   -ms-transform: translate(50%, 50%);
   width: 500px;
 }
+
 .searchbtn {
   transform: translate(-40%, -50%);
   -ms-transform: translate(50%, 50%);
@@ -243,6 +245,7 @@
   background-color: transparent;
   border: 2px solid transparent;
 }
+
 .menu2 {
   position: absolute;
   background-color: rgb(204, 216, 217);
@@ -295,6 +298,7 @@
   cursor: pointer;
   border-radius: 120px;
 }
+
 .menu2 .name {
   position: absolute;
   transform: translate(94%, -20%);
@@ -423,6 +427,13 @@
   font-weight: 500;
 }
 
+
+.kadyImage {
+  height: 200px;
+  width: 100%;
+  object-fit: cover
+}
+
 .box1 {
   transform: translate(-150%, 150%);
 }
@@ -549,3 +560,4 @@
   font-size: 12px;
   width: 30%;
 }
+
