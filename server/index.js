@@ -22,6 +22,14 @@ app.listen(5000, () => {
 //create app.post (validation if exist & send type) sign in
 
 // signup
+//************************user*******************************/
+//type
+//0 =>superadmin
+//1 =>admin
+//2 =>user
+//3 =>store
+//4 =>driver
+
 
 app.post("/signup", async (req, res) => {
     try {
@@ -64,7 +72,7 @@ app.post("/signup", async (req, res) => {
             const sign = await pool.query('INSERT INTO "user" ' + "(first_name,last_name,address,city_id,user_name,password,email,type) values ($1,$2,$3,$4,$5,$6,$7,$8) returning *", [first, last, address, city_id, user_name, password, email, type]);
             res.json(sign.rows[0]);
             if (type == '2') {
-                const order = await pool.query(`INSERT INTO "order" (user_id,status) VALUES ($1,$2) RETURNING *`, [sign.rows[0].id, 0]);
+                const order = await pool.query(`INSERT INTO "order" (user_id,status,price) VALUES ($1,$2,0) RETURNING *`, [sign.rows[0].id, 0]);
                 console.log(order.rows[0]);
             }
         }
@@ -72,7 +80,7 @@ app.post("/signup", async (req, res) => {
         console.log(err.message);
     }
 })
-//login
+
 app.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -91,39 +99,186 @@ app.post("/login", async (req, res) => {
     }
 });
 
-app.post("/cityidfromcityname", async (req, res) => {
+app.post("/updateUser", async (req, res) => {
     try {
-        const { city_name } = req.body;
-        const city_id = await pool.query(`SELECT id FROM city WHERE name = $1`, [city_name]);
+        const { first, last, address, city_id, user_name, id } = req.body
+        const updateUser = await pool.query('UPDATE "user" SET first_name = $1, last_name = $2, address = $3, city_id = $4, user_name = $5 WHERE id = $6 RETURNING *', [first, last, address, city_id, user_name, id]);
+        res.json(updateUser.rows[0]);
 
-        if (city_id.rowCount != 0) {
-            res.json(city_id.rows[0]);
-            console.log(city_id.row[0]);
-        }
-        else {
-            res.json("-1");
-            console.log(city_id.row[0]);
-        }
+
     } catch (err) {
-        console.log(err.message);
+        console.error(err.message);
     }
 });
 
 
+app.get("/notifications", async (req, res) => {
+    try {
 
-//unread number
+        // return the last 10 notifications 
+        // page returns other 10's
+        var { user_id, page } = req.body;
+        page = (page - 1) * 10;
+        console.log(user_id, page);
+        const viewNotifications = await pool.query("SELECT * FROM notification WHERE user_id = $1 ORDER BY date DESC LIMIT 10 offset $2;", [user_id, page]);
+        res.json(viewNotifications.rows);
+        //front end should loop on all feedbacks and display them
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+//read notification
+app.post("/notification/read", async (req, res) => {
+    try {
+        const { notification_id } = req.body;
+        const readNotification = await pool.query("UPDATE notification SET read=1 where id=$1 returning *", [notification_id]);
+        res.json(readNotification.rows[0]);
+    } catch (err) {
+        console.error(err);
+    }
+})
+
+app.get("/storeData/:id", async (req, res) => { //takes user id of store and returns its name and adress
+    try {
+        const { id } = req.params;
+        const order = await pool.query('select user_name,address from "user" where id =$1 and type not in (0,1)', [id]);
+        res.json(order.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+app.post("/notifications/readall", async (req, res) => {
+    try {
+        const { notification_id } = req.body;
+        const realAllNotifications = await pool.query("UPDATE notification SET read=1 where id=$1 returning &", [notification_id]);
+        res.json(realAllNotifications);
+    } catch (err) {
+        console.error(err);
+    }
+})
 
 
-//type
-//0 =>superadmin
-//1 =>admin
-//2 =>user
-//3 =>store
-//4 =>driver
+//************************wish list*******************************/
+app.post("/addWishlist/:user_id", async (req, res) => {
+    try {
+        const { user_id } = req.params;
+        const { book_id } = req.body; //why did we do this
+        //NEEDS VALIDATION AND REVISION
+        const addWishlist = await pool.query("INSERT INTO wish_list_item (user_id,book_id) VALUES ($1,$2) RETURNING *;", [user_id, book_id]);
+        res.json(addWishlist.rows[0]);
 
-//retrieve all books app.get
+    } catch (err) {
+        console.error(err.message);
+    }
+});
 
-//stores add books app.post
+app.post("/deleteWishlist/:user_id", async (req, res) => {
+    try {
+        const { user_id } = req.params;
+        const { book_id } = req.body;
+        //NEEDS VALIDATION AND REVISION
+        const deleteWishlist = await pool.query("DELETE FROM wish_list_item  WHERE user_id = $1 AND book_id = $2 RETURNING *;", [user_id, book_id]);
+        if (deleteWishlist.rowCount == 0) {
+            res.json(`WISHLIST ALREADY ISN'T IN THE SYSTEM`);
+            console.log(`WISHLIST ALREADY ISN'T IN THE SYSTEM`);
+        }
+        else {
+            res.json(deleteWishlist.rows[0]);
+            console.log(`SUCCESSFUL DELETION`);
+        }
+
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+app.get("/wishlists/:user_id", async (req, res) => {//takes user id and returns the data of the wishlisted books
+    try {
+        const { user_id } = req.params;
+        const viewUserWishlists = await pool.query("SELECT book_id,title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,count,status FROM wish_list_item,book WHERE wish_list_item.user_id = $1 and wish_list_item.book_id=book.id;", [user_id])
+        res.json(viewUserWishlists.rows); //book_id refers to what?
+
+
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+app.get("/wishlists_stats", async (req, res) => {//returns the wishlisted books with their count of wishlist
+    try {
+        const viewUserWishlists = await pool.query(`SELECT book_id,count(book_id) as "countUsers",title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,count,status FROM wish_list_item,book WHERE wish_list_item.book_id=book.id group by book_id,title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,count,status ;`)
+        res.json(viewUserWishlists.rows); //book_id refers to what?
+
+
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+app.get("/wishlists_stats/:user_id", async (req, res) => {//returns the wishlisted books with their count of wishlist for a certain user id
+    //will use it in store to get it's wishlisted books and its count :)
+    try {
+        const { user_id } = req.params;
+        const viewUserWishlists = await pool.query(`SELECT book_id,count(book_id) as "countUsers",title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,count,status FROM wish_list_item,book WHERE wish_list_item.book_id=book.id and book_id in(select id from book where user_id=$1)group by book_id,title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,count,status ;`, [user_id])
+        res.json(viewUserWishlists.rows); //book_id refers to what?
+
+
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+//************************book*******************************/
+
+
+
+app.get("/books", async (req, res) => {
+    try {
+        const getBooks = await pool.query('SELECT * FROM book WHERE book.user_id in (select id from "user" where type =2) and status = 0');
+        res.json(getBooks.rows);
+
+
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+app.post("/bookinfo", async (req, res) => {
+    try {
+        const { book_id } = req.body;
+        const getBookInfo = await pool.query('SELECT * FROM book WHERE id = $1', [book_id]);
+        res.json(getBookInfo.rows[0]);
+
+
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+app.get("/bookinfo/:book_id", async (req, res) => {
+    try {
+        const { book_id } = req.params;
+        const getBookInfo = await pool.query('SELECT * FROM book WHERE id = $1', [book_id]);
+        res.json(getBookInfo.rows[0]);
+
+
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+app.post("/bookinfo/quantity", async (req, res) => {
+    try {
+        const { book_id } = req.body;
+        const getBookInfo = await pool.query('SELECT count,status FROM book WHERE id = $1', [book_id]);
+        res.json(getBookInfo.rows[0]);
+
+
+    } catch (err) {
+        console.error(err.message);
+    }
+});
 app.post("/addbook", async (req, res) => {
     try {
         var { title, genre_id, isbn, author_name, language_id, purshace_price, version, description, image, user_id, count } = req.body;
@@ -151,6 +306,7 @@ app.delete("/deletebook", async (req, res) => {
     }
 })
 
+
 app.get("/userbooks/:id", async (req, res) => {
     try {
         const { id } = req.params;
@@ -161,10 +317,20 @@ app.get("/userbooks/:id", async (req, res) => {
         console.error(err.message);
     }
 })
-//add book to cart
+
+
+
+//************************order*******************************/
+
 app.post("/addToCart", async (req, res) => {
     try {
-        const { book_id, order_id, quantity } = req.body;
+
+        const { book_id, order_id, quantity} = req.body;
+        const found=await pool.query("select id from order_item where book_id=$1 and order_id=$2");
+        if(found.rowCount==1){
+            res.json(-1);
+            return;
+        }
         const orderItem = await pool.query("INSERT INTO order_item (book_id,order_id,quantity,paid_status) VALUES ($1,$2,$3,0) RETURNING *", [book_id, order_id, quantity]);
         res.json(orderItem.rows[0]);
     } catch (err) {
@@ -182,24 +348,43 @@ app.post("/userOrder", async (req, res) => {
     }
 });
 
-//user submits order
+
 app.post("/makeOrder", async (req, res) => {
     try {
-        var { coupon_id, order_id } = req.body;
-        //status 1 means pending
-        const checkEmpty = await pool.query("SELECT COUNT(order_id) FROM order_item where order_id=$1", [order_id]);
-        if (checkEmpty.rows[0].count == 0) {
-            console.log("empty order");
-            res.json("empty order");
-            return;
+        var { code, order_id,price} = req.body;
+        var coupon;
+        if(code!=""){
+             coupon= await pool.query("select id,maximum_use from coupons where code=$1",[code]);
+
+        if(coupon.rowCount==0||coupon.rows[0].maximum_use<1){
+            res.json("wrong coupon");
+            return ;
         }
+    }
+
+        if(price==0){
+            res.json("empty cart");
+            return ;
+        }
+
+        const updateCopun =await pool.query('UPDATE "coupons" SET maximum_use=$1 where code=$2',[coupon.rows[0].maximum_use-1,code]);
+
         const date = new Date;
         console.log(date);
-        if (coupon_id == -1) coupon_id = 'null';
-        const makeOrder = await pool.query('UPDATE "order" SET status=1,order_date = $1,coupon_id =' + coupon_id + " WHERE id=$2 RETURNING *", [date, order_id]);
+        const makeOrder = await pool.query('UPDATE "order" SET status=1,order_date = $1,price =' + price + " WHERE id=$2 RETURNING *", [date, order_id]);
         //res.json(makeOrder.rows[0]);
-        const newOrder = await pool.query(`INSERT INTO "order" (user_id,status) VALUES ($1,$2) RETURNING *`, [makeOrder.rows[0].id, 0]);
+        const newOrder = await pool.query(`INSERT INTO "order" (user_id,status,price) VALUES ($1,0,0) RETURNING *`, [makeOrder.rows[0].id]);
         res.json(newOrder.rows[0]); //we always check on the order with status 0 thus orders items in the cart
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+app.post("/order/total/:id", async (req, res) => {
+    try {
+        const { user_id } = req.body;
+        const order = await pool.query('select * from "order" where user_id=$1 and status=0', [user_id]);
+        res.json(order.rows[0]);
     } catch (err) {
         console.error(err.message);
     }
@@ -240,43 +425,82 @@ app.post("/deliverOrder", async (req, res) => {
     }
 });
 
-app.get("/notifications", async (req, res) => {
-    try {
 
-        // return the last 10 notifications 
-        // page returns other 10's
-        var { user_id, page } = req.body;
-        page = (page - 1) * 10;
-        console.log(user_id, page);
-        const viewNotifications = await pool.query("SELECT * FROM notification WHERE user_id = $1 ORDER BY date DESC LIMIT 10 offset $2;", [user_id, page]);
-        res.json(viewNotifications.rows);
-        //front end should loop on all feedbacks and display them
+//view order
+app.get("/orders", async (req, res) => {
+    try {
+        const viewOrders = await pool.query("SELECT * FROM order;");
+        res.json(viewOrders.rows);
+        //front end should loop on all orders and display them
     } catch (err) {
         console.error(err.message);
     }
 });
 
-//read notification
-app.post("/notification/read", async (req, res) => {
+//admin views order
+app.get("/orders/:id", async (req, res) => { //takes order id and returns it's order items data and book related to it
     try {
-        const { notification_id } = req.body;
-        const readNotification = await pool.query("UPDATE notification SET read=1 where id=$1 returning *", [notification_id]);
-        res.json(readNotification.rows[0]);
+        const { id } = req.params;
+        const viewOrder = await pool.query("select book_id,quantity,title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image from order_item,book where book_id=book.id and order_id=$1;", [id]); //return order items to user
+        res.json(viewOrder.rows);
+        //front end should display one order when click on it
     } catch (err) {
-        console.error(err);
+        console.error(err.message);
     }
-})
+});
+app.get("/orders/userDriver/:id", async (req, res) => { //takes order id and returns it's user and ssn of driver
+    try {
+        const { id } = req.params;
+        const viewOrder = await pool.query(`select user_id,ssn from "order" where id=$1;`, [id]); //return order items to user
+        res.json(viewOrder.rows);
+        //front end should display one order when click on it
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+//admin views pending orders
+app.get("/pendingOrders", async (req, res) => {
+    try {
+        const viewPendingOrders = await pool.query("SELECT * FROM order WHERE status = 1;");
+        res.json(viewPendingOrders.rows);
+        //front end should loop on all orders and display them
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+app.get("/orderItemInfo/:book_id", async (req, res) => {
+    try {
+        const { book_id } = req.params;
+        const getOrderItemInfo = await pool.query('SELECT * FROM book b, order_item o WHERE b.id = o.book_id AND b.id = $1', [book_id]);
+        res.json(getOrderItemInfo.rows[0]);
+
+
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+
+///////////////////who knows what/////////////
+//unread number
+
+
+
+//retrieve all books app.get
+
+//stores add books app.post
+
+//add book to cart
+
+
+
+//user submits order
+
+
 
 //UNDER CONSTRUCTION (REAL ALL)
-app.post("/notifications/readall", async (req, res) => {
-    try {
-        const { notification_id } = req.body;
-        const realAllNotifications = await pool.query("UPDATE notification SET read=1 where id=$1 returning &", [notification_id]);
-        res.json(realAllNotifications);
-    } catch (err) {
-        console.error(err);
-    }
-})
 
 
 
@@ -306,33 +530,6 @@ app.post("/notifications/readall", async (req, res) => {
 //driver views pending assigned order app.get
 //driver finishes order app.post
 //get cities
-app.get("/cities", async (req, res) => {
-    try {
-        const cities = await pool.query("select * from city");
-        res.json(cities.rows);
-    } catch (err) {
-        console.log(err.message);
-    }
-});
-
-app.get("/genres", async (req, res) => {
-    try {
-        const genres = await pool.query("SELECT * FROM genre");
-        res.json(genres.rows);
-
-    } catch (err) {
-        console.log(err.message);
-    }
-});
-
-app.get("/languages", async (req, res) => {
-    try {
-        const languages = await pool.query("SELECT * FROM language");
-        res.json(languages.rows);
-    } catch (err) {
-        console.log(err.message);
-    }
-});
 
 //admin adds coupon app.post (DONE)
 //admin sees user's wishlist app.get (NEEDS REVISION)
@@ -346,7 +543,6 @@ app.get("/languages", async (req, res) => {
 
 /////////////////////////////COUPONS/////////////////////////////
 
-//coupons
 app.post("/addCoupon", async (req, res) => {
     try {
         //validated in backend
@@ -358,7 +554,7 @@ app.post("/addCoupon", async (req, res) => {
             //discount positive 
             //maximum positive  
             //isRelative 0,1
-            const newCoupon = await pool.query("INSERT INTO coupons (code,discount,maximum_use,is_relative) VALUES ($1,$2,$3,$4) RETURNING *;"
+            const newCoupon = await pool.query("INSERT INTO coupons (code,discount,maximum_use,is_relative,status) VALUES ($1,$2,$3,$4,0) RETURNING *;"
                 , [code, discount, maximum_use, is_relative]);
             res.json(newCoupon.rows[0]);
             console.log(`SUCCESSFUL INSERTION`);
@@ -402,10 +598,14 @@ app.get("/coupons", async (req, res) => {
     }
 });
 
-app.get("/coupons/:code", async (req, res) => {
+app.post("/applyCoupon", async (req, res) => {
     try {
-        const { code } = req.params;
-        const getCoupon = await pool.query("SELECT * FROM Coupons WHERE code = $1;", [code]);
+        const { code } = req.body;
+        const getCoupon = await pool.query("SELECT id,code,discount,is_relative FROM Coupons WHERE code = $1;", [code]);
+        if(getCoupon.rowCount==0){
+            res.json(-1);
+            return;
+        }
         res.json(getCoupon.rows[0]);
         //front end should display single coupon
     } catch (err) {
@@ -428,38 +628,6 @@ app.delete("/coupons/:code", async (req, res) => {
 
 //wishlist
 
-app.post("/addWishlist/:user_id", async (req, res) => {
-    try {
-        const { user_id } = req.params;
-        const { book_id } = req.body; //why did we do this
-        //NEEDS VALIDATION AND REVISION
-        const addWishlist = await pool.query("INSERT INTO wish_list_item (user_id,book_id) VALUES ($1,$2) RETURNING *;", [user_id, book_id]);
-        res.json(addWishlist.rows[0]);
-
-    } catch (err) {
-        console.error(err.message);
-    }
-});
-
-app.post("/deleteWishlist/:user_id", async (req, res) => {
-    try {
-        const { user_id } = req.params;
-        const { book_id } = req.body;
-        //NEEDS VALIDATION AND REVISION
-        const deleteWishlist = await pool.query("DELETE FROM wish_list_item  WHERE user_id = $1 AND book_id = $2 RETURNING *;", [user_id, book_id]);
-        if (deleteWishlist.rowCount == 0) {
-            res.json(`WISHLIST ALREADY ISN'T IN THE SYSTEM`);
-            console.log(`WISHLIST ALREADY ISN'T IN THE SYSTEM`);
-        }
-        else {
-            res.json(deleteWishlist.rows[0]);
-            console.log(`SUCCESSFUL DELETION`);
-        }
-
-    } catch (err) {
-        console.error(err.message);
-    }
-});
 
 /////////////////////////////ADMIN/////////////////////////////
 
@@ -555,16 +723,6 @@ app.get("/users/:id", async (req, res) => {
     }
 });
 
-//admin views pending orders
-app.get("/pendingOrders", async (req, res) => {
-    try {
-        const viewPendingOrders = await pool.query("SELECT * FROM order WHERE status = 1;");
-        res.json(viewPendingOrders.rows);
-        //front end should loop on all orders and display them
-    } catch (err) {
-        console.error(err.message);
-    }
-});
 
 //get driver user id given ssn
 app.get("/driveruseridgivenssn", async (req, res) => {
@@ -578,28 +736,7 @@ app.get("/driveruseridgivenssn", async (req, res) => {
     }
 });
 
-//view order
-app.get("/orders", async (req, res) => {
-    try {
-        const viewOrders = await pool.query("SELECT * FROM order;");
-        res.json(viewOrders.rows);
-        //front end should loop on all orders and display them
-    } catch (err) {
-        console.error(err.message);
-    }
-});
 
-//admin views order
-app.get("/orders/:id", async (req, res) => { //takes order id and returns it's order items data and book related to it
-    try {
-        const { id } = req.params;
-        const viewOrder = await pool.query("select book_id,quantity,title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image from order_item,book where book_id=book.id and order_id=$1;", [id]); //return order items to user
-        res.json(viewOrder.rows);
-        //front end should display one order when click on it
-    } catch (err) {
-        console.error(err.message);
-    }
-});
 
 app.get("/driver/orders/:ssn", async (req, res) => { //takes ssn of driver and returns orders that he has to do 
     try {
@@ -634,52 +771,6 @@ app.get("/feedback", async (req, res) => {
 //count and group by wish list items for store  done
 //select orders to deliver for driver done
 // select order items of a certain order line(583)
-app.get("/wishlists", async (req, res) => {
-    try {
-        const viewWishlists = await pool.query("SELECT * FROM wish_list_item;"); //wrong query ik (tell me how to fix it)
-        res.json(viewWishlists.rows);
-
-
-    } catch (err) {
-        console.error(err.message);
-    }
-});
-
-
-app.get("/wishlists/:user_id", async (req, res) => {//takes user id and returns the data of the wishlisted books
-    try {
-        const { user_id } = req.params;
-        const viewUserWishlists = await pool.query("SELECT book_id,title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,count,status FROM wish_list_item,book WHERE wish_list_item.user_id = $1 and wish_list_item.book_id=book.id;", [user_id])
-        res.json(viewUserWishlists.rows); //book_id refers to what?
-
-
-    } catch (err) {
-        console.error(err.message);
-    }
-});
-app.get("/wishlists_stats", async (req, res) => {//returns the wishlisted books with their count of wishlist
-    try {
-        const viewUserWishlists = await pool.query(`SELECT book_id,count(book_id) as "countUsers",title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,count,status FROM wish_list_item,book WHERE wish_list_item.book_id=book.id group by book_id,title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,count,status ;`)
-        res.json(viewUserWishlists.rows); //book_id refers to what?
-
-
-    } catch (err) {
-        console.error(err.message);
-    }
-});
-
-app.get("/wishlists_stats/:user_id", async (req, res) => {//returns the wishlisted books with their count of wishlist for a certain user id
-    //will use it in store to get it's wishlisted books and its count :)
-    try {
-        const { user_id } = req.params;
-        const viewUserWishlists = await pool.query(`SELECT book_id,count(book_id) as "countUsers",title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,count,status FROM wish_list_item,book WHERE wish_list_item.book_id=book.id and book_id in(select id from book where user_id=$1)group by book_id,title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,count,status ;`, [user_id])
-        res.json(viewUserWishlists.rows); //book_id refers to what?
-
-
-    } catch (err) {
-        console.error(err.message);
-    }
-});
 
 
 
@@ -707,78 +798,57 @@ app.get("/driverorderitemstodeliver", async (req, res) => {
     }
 });
 
-app.post("/updateUser", async (req, res) => {
+
+
+
+
+
+//************************utilities*******************************/
+app.get("/cities", async (req, res) => {
     try {
-        const { first, last, address, city_id, user_name, id } = req.body
-        const updateUser = await pool.query('UPDATE "user" SET first_name = $1, last_name = $2, address = $3, city_id = $4, user_name = $5 WHERE id = $6 RETURNING *', [first, last, address, city_id, user_name, id]);
-        res.json(updateUser.rows[0]);
-
-
+        const cities = await pool.query("select * from city");
+        res.json(cities.rows);
     } catch (err) {
-        console.error(err.message);
+        console.log(err.message);
     }
 });
 
-app.get("/books", async (req, res) => {
+app.get("/genres", async (req, res) => {
     try {
-        const getBooks = await pool.query('SELECT * FROM book WHERE book.user_id in (select id from "user" where type =2) and status = 0');
-        res.json(getBooks.rows);
-
+        const genres = await pool.query("SELECT * FROM genre");
+        res.json(genres.rows);
 
     } catch (err) {
-        console.error(err.message);
+        console.log(err.message);
     }
 });
 
-app.post("/bookinfo", async (req, res) => {
+app.get("/languages", async (req, res) => {
     try {
-        const { book_id } = req.body;
-        const getBookInfo = await pool.query('SELECT * FROM book WHERE id = $1', [book_id]);
-        res.json(getBookInfo.rows[0]);
-
-
+        const languages = await pool.query("SELECT * FROM language");
+        res.json(languages.rows);
     } catch (err) {
-        console.error(err.message);
-    }
-});
-
-app.get("/bookinfo/:book_id", async (req, res) => {
-    try {
-        const { book_id } = req.params;
-        const getBookInfo = await pool.query('SELECT * FROM book WHERE id = $1', [book_id]);
-        res.json(getBookInfo.rows[0]);
-
-
-    } catch (err) {
-        console.error(err.message);
-    }
-});
-
-app.post("/bookinfo/quantity", async (req, res) => {
-    try {
-        const { book_id } = req.body;
-        const getBookInfo = await pool.query('SELECT count,status FROM book WHERE id = $1', [book_id]);
-        res.json(getBookInfo.rows[0]);
-
-
-    } catch (err) {
-        console.error(err.message);
-    }
-});
-
-app.get("/orderItemInfo/:book_id", async (req, res) => {
-    try {
-        const { book_id } = req.params;
-        const getOrderItemInfo = await pool.query('SELECT * FROM book b, order_item o WHERE b.id = o.book_id AND b.id = $1', [book_id]);
-        res.json(getOrderItemInfo.rows[0]);
-
-
-    } catch (err) {
-        console.error(err.message);
+        console.log(err.message);
     }
 });
 
 
+app.post("/cityidfromcityname", async (req, res) => {
+    try {
+        const { city_name } = req.body;
+        const city_id = await pool.query(`SELECT id FROM city WHERE name = $1`, [city_name]);
 
-//////////////MOHAMED & MUSTAFA REQUESTS///////////////////////
+        if (city_id.rowCount != 0) {
+            res.json(city_id.rows[0]);
+            console.log(city_id.row[0]);
+        }
+        else {
+            res.json("-1");
+            console.log(city_id.row[0]);
+        }
+    } catch (err) {
+        console.log(err.message);
+    }
+});
+
 
