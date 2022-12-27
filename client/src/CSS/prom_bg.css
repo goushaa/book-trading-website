@@ -67,3 +67,40 @@
   color: rgb(215, 0, 0);
   border-color: rgb(226, 226, 226);
 }
+.btnss
+{
+  transform: translate(-20%,10%);
+  width:20px;
+}
+.price
+{
+  font-size: 20px;
+  font-weight: 500;
+  font-style: italic;
+  transform: translate(7%,-90%);
+}
+.description
+{
+  transform: translate(0.5%,-220%);
+}
+.p{
+  transform: translate(0.5%,-2%);
+}
+.tit
+{
+  transform: translate(-15%,0%);
+}
+.image
+{
+  transform: translate(10%,0%);
+}
+.author
+{
+  transform: translate(0.5%,-110%);
+}
+.a{
+  font-size: 20px;
+  font-weight: 500;
+  font-style: italic;
+  transform: translate(9%,-180%);
+}

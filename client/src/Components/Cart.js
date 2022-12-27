@@ -17,7 +17,7 @@ function Cart() {
     }, []);
     return (
         <div>
-            <Row>
+            <Container>
                 {
                     orderItems.map(orderItem => {
                         return (
@@ -36,7 +36,7 @@ function Cart() {
                         )
                     })
                 }
-            </Row>
+            </Container>
             <Form>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>

@@ -104,7 +104,7 @@ const [city_id, setCityID] = useState([]);
                                 }
                             </Form.Select>
 <div className="text">UserName</div>
-<Form.Control className=" box mt-1" type="text" defaultValue={viewUser.user_name} onChange={changeUser} />
+<Form.Control className=" box mt-1" type="text" defaultValue={viewUser.user_name}  onChange={changeUser} />
 <div className="text">Email</div>
 <p>{viewUser.email}</p>
 <Row>

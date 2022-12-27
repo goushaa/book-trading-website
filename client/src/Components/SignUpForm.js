@@ -77,6 +77,7 @@ function SignUpForm() {
                     return;
                 }
                 else {
+                    window.location.href=`/login`;
                     return;
                 }
             }

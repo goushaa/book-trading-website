@@ -721,7 +721,7 @@ app.post("/updateUser", async (req, res) => {
 
 app.get("/books", async (req, res) => {
     try {
-        const getBooks = await pool.query('SELECT * FROM book WHERE book.user_id in (select id from "user" where type =2) and status = 0');
+        const getBooks = await pool.query('SELECT * FROM book WHERE book.user_id in (select id from "user" where type =3) and status = 0');
         res.json(getBooks.rows);
 
 
@@ -778,7 +778,29 @@ app.get("/orderItemInfo/:book_id", async (req, res) => {
     }
 });
 
+app.get("/genrenamefromgenreid/:genre_id", async (req, res) => {
+    try {
+        const { genre_id } = req.params;
+        const getGenreName = await pool.query('SELECT name FROM genre WHERE id = $1', [genre_id]);
+        res.json(getGenreName.rows[0]);
 
+
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+app.get("/languagenamefromlanguageid/:language_id", async (req, res) => {
+    try {
+        const { language_id } = req.params;
+        const getLanguageName = await pool.query('SELECT name FROM language WHERE id = $1', [language_id]);
+        res.json(getLanguageName.rows[0]);
+
+
+    } catch (err) {
+        console.error(err.message);
+    }
+});
 
 //////////////MOHAMED & MUSTAFA REQUESTS///////////////////////
 

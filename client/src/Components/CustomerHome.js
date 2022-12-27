@@ -76,6 +76,7 @@ function CustomerHome() {
       .get(`http://localhost:5000/books`)
       .then((res) => {
         setBooks(res.data);
+        console.log(res.data);
       })
       .catch((err) => console.log(err));
 
@@ -310,6 +311,7 @@ function CustomerHome() {
             return (
               <div className="cards">
                 <div className="col-2">
+                  <CardGroup classname="col-lg-4 col-md-6 col-12">
                   <Card className="course-card">
                     <Card.Img variant="top" src={book.image}></Card.Img>
                     <Card.Body>
@@ -319,6 +321,7 @@ function CustomerHome() {
                       </Link>
                     </Card.Body>
                   </Card>
+                  </CardGroup>
                 </div>
               </div>
             )
