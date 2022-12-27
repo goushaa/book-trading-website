@@ -18,6 +18,7 @@ import CardGroup from "react-bootstrap/CardGroup";
 import Modal from "react-bootstrap/Modal";
 import { useParams, Link } from "react-router-dom";
 import axios from 'axios'
+import "../CSS/Style.css"
 
 function MyVerticallyCenteredModal(props) {
   return (
@@ -301,30 +302,40 @@ function CustomerHome() {
       </Row>
 
       <Row>
-        <h1 className="featuredbooks">Latest Books</h1>
+        <h1 className="featuredbooks mb-5">Latest Books</h1>
       </Row>
 
-      <Row>
-        {
-          books.map(book => {
-            return (
-              <div className="cards">
-                <div className="col-2">
-                  <Card className="course-card">
-                    <Card.Img variant="top" src={book.image}></Card.Img>
-                    <Card.Body>
-                      <Card.Title>{book.title}</Card.Title>
-                      <Link to={`book/${book.id}`}>
-                        <Button variant="success">View</Button>
-                      </Link>
-                    </Card.Body>
-                  </Card>
+      <div className="container mt-4">
+        <div className='row'>
+          {
+            books.map(book => {
+              return (
+                <div className="col-lg-4 col-md-6 col-12">
+                  <div>
+                    <Card className="course-card">
+                      <Card.Img variant="top" src={book.image} class="kadyImage" ></Card.Img>
+                      <Card.Body>
+                        <Card.Title>{book.title}</Card.Title>
+                        <p>{book.description}</p>
+                        <div>
+                          <Link to={`book/${book.id}`}>
+                            <Button variant="success" className="mr-3">View</Button>
+                          </Link>
+                          <Link to={`book/${book.id}`}>
+                            <Button variant="success" className="ml-3">WISHLIST</Button>
+                          </Link>
+                        </div>
+
+                      </Card.Body>
+                    </Card>
+                  </div>
                 </div>
-              </div>
-            )
-          })
-        }
-      </Row>
+              )
+            })
+          }
+        </div> {/* ./row*/}
+      </div>
+
     </Fragment>
   );
 }
