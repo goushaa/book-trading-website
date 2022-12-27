@@ -1,7 +1,14 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
-
+import Container from "react-bootstrap/Container";
+import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
+import "../CSS/prom_bg.css";
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 function AddBooktoCart() {
     const { id, book_id } = useParams();
     const [image, setImage] = useState('');
@@ -12,7 +19,11 @@ function AddBooktoCart() {
     const [quantity, setQuantityCounter] = useState(1);
     const [readbooksquantity, setQuantity] = useState(0);
     const [order_id, setORDERID] = useState(0);
-
+    const [genre_id, setGenreId] = useState('');
+    const [version, setVersion] = useState('');
+    const [isbn, setIsbn] = useState('');
+    const [langId, setLanguageId] = useState('');
+    const [genre, setGenreName] = useState('');
     useEffect(() => {
         axios.get(`http://localhost:5000/bookinfo/${book_id}`).then((res) => {
             setImage(res.data.image)
@@ -21,8 +32,18 @@ function AddBooktoCart() {
             setpurchase_price(res.data.purchase_price)
             setdescription(res.data.description)
             setQuantity(res.data.count)
+            setGenreId(res.data.genre_id)
+            setVersion(res.data.version)
+            setIsbn(res.data.isbn)
+            setLanguageId(res.data.language_id)
+            console.log(res.data);
         }).catch((err) => console.log(err));
 
+        console.log(genre_id);
+        axios.get(`http://localhost:5000/genrenamefromgenreid/${genre_id}`).then((res) => {
+            console.log(res.data);
+            setGenreName(res.data);
+        }).catch(err => console.log(err));
     }, []);
 
     function increment(e) {
@@ -44,6 +65,7 @@ function AddBooktoCart() {
         axios.post(`http://localhost:5000/bookinfo/quantity`, { book_id }).then((res) => {
             if (quantity > res.data.count || res.data.status == 1) {
                 //https://getbootstrap.com/docs/4.0/components/alerts/
+                console.log("deleted or not right quantity");
                 return;
             }
 
@@ -52,6 +74,7 @@ function AddBooktoCart() {
         let user_id = id
         axios.post(`http://localhost:5000/userOrder`, { user_id }).then((res) => {
             setORDERID(res.data.id);
+            console.log(res.data);
         }).catch((err) => console.log(err));
 
         //don't add same book_id to order more than once (book already in order to add/decrease number of books go to your cart page)
@@ -64,29 +87,54 @@ function AddBooktoCart() {
 
     return (
         <Fragment>
+            <Navbar bg="dark" variant="dark" expand="lg">
+                <Container>
+                    <Navbar.Brand href="/">
+                        <h3>Online Book Store</h3>
+                    </Navbar.Brand>
 
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm">
+                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                    <Navbar.Collapse id="basic-navbar-nav">
+                        <Nav className="me-auto">
+                            <Nav.Item></Nav.Item>
+                        </Nav>
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar>
+            <Row>
+                <Col className='image'>
+                    <Container class="col-sm ml-5 mt-3">
                         <img src={image} />
-                    </div>
-                    <div class="col-sm">
+                    </Container>
+                </Col>
+
+                <Col className='tit'>
+                    <Container className="col-sm mt-3">
                         <h1>{title}</h1>
-                        <h1>{author_name}</h1>
-                        <h1>{purchase_price}</h1>
-                        <h1>{description}</h1>
-                    </div>
-                    <div class="col-sm">
-                        {quantity}
-                        <button type="button" onClick={increment} class="btn btn-primary">+</button>
-                        <button type="button" onClick={decrement} class="btn btn-danger">-</button>
-                        <h1>ADD TO CART</h1>
-                        <button type="button" onClick={addToCart} class="btn btn-primary">ADD</button>
 
-                    </div>
-                </div>
-            </div>
+                    </Container>
+                    <Container><div className='p'>Price: </div> <div className='price'>{purchase_price} L.E</div></Container>
+                    <Container><div className='author'>Author: </div><div className='a'> {author_name}</div></Container>
+                    <Container className='description'>{description}</Container>
+                    <Container className="quantity">
+                        <h6>Quantity</h6>
+                        <Row>
+                            <Col className='col-3'>
+                                <Form.Control className=" box mt-1 w-25" type="text" Value={quantity} disabled />
+                            </Col>
+                            <Col className='btnss'>
+                                <button type="button" onClick={increment} class="btn btn-dark">+</button>
+                                <button type="button" onClick={decrement} class="btn btn-secondary">-</button>
+                            </Col>
 
+                        </Row>
+                        <Row>
+                            <Button className='mt-2' variant='success' onClick={addToCart} class="btn btn-success w-75">Add To Cart</Button>
+                        </Row>
+
+                    </Container>
+                </Col>
+            </Row>
         </Fragment>
     )
 }

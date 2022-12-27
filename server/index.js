@@ -325,9 +325,9 @@ app.get("/userbooks/:id", async (req, res) => {
 app.post("/addToCart", async (req, res) => {
     try {
 
-        const { book_id, order_id, quantity} = req.body;
-        const found=await pool.query("select id from order_item where book_id=$1 and order_id=$2");
-        if(found.rowCount==1){
+        const { book_id, order_id, quantity } = req.body;
+        const found = await pool.query("select id from order_item where book_id=$1 and order_id=$2", [book_id, order_id]);
+        if (found.rowCount == 1) {
             res.json(-1);
             return;
         }
@@ -351,23 +351,23 @@ app.post("/userOrder", async (req, res) => {
 
 app.post("/makeOrder", async (req, res) => {
     try {
-        var { code, order_id,price} = req.body;
+        var { code, order_id, price } = req.body;
         var coupon;
-        if(code!=""){
-             coupon= await pool.query("select id,maximum_use from coupons where code=$1",[code]);
+        if (code != "") {
+            coupon = await pool.query("select id,maximum_use from coupons where code=$1", [code]);
 
-        if(coupon.rowCount==0||coupon.rows[0].maximum_use<1){
-            res.json("wrong coupon");
-            return ;
+            if (coupon.rowCount == 0 || coupon.rows[0].maximum_use < 1) {
+                res.json("wrong coupon");
+                return;
+            }
         }
-    }
 
-        if(price==0){
+        if (price == 0) {
             res.json("empty cart");
-            return ;
+            return;
         }
 
-        const updateCopun =await pool.query('UPDATE "coupons" SET maximum_use=$1 where code=$2',[coupon.rows[0].maximum_use-1,code]);
+        const updateCopun = await pool.query('UPDATE "coupons" SET maximum_use=$1 where code=$2', [coupon.rows[0].maximum_use - 1, code]);
 
         const date = new Date;
         console.log(date);
@@ -554,7 +554,7 @@ app.post("/addCoupon", async (req, res) => {
             //discount positive 
             //maximum positive  
             //isRelative 0,1
-            const newCoupon = await pool.query("INSERT INTO coupons (code,discount,maximum_use,is_relative,status) VALUES ($1,$2,$3,$4,0) RETURNING *;"
+            const newCoupon = await pool.query("INSERT INTO coupons (code,discount,maximum_use,is_relative) VALUES ($1,$2,$3,$4) RETURNING *;"
                 , [code, discount, maximum_use, is_relative]);
             res.json(newCoupon.rows[0]);
             console.log(`SUCCESSFUL INSERTION`);
@@ -600,9 +600,9 @@ app.get("/coupons", async (req, res) => {
 
 app.post("/applyCoupon", async (req, res) => {
     try {
-        const { code } = req.body;
-        const getCoupon = await pool.query("SELECT id,code,discount,is_relative FROM Coupons WHERE code = $1;", [code]);
-        if(getCoupon.rowCount==0){
+        const { coupon_code } = req.body;
+        const getCoupon = await pool.query("SELECT id,code,discount,is_relative FROM Coupons WHERE code = $1;", [coupon_code]);
+        if (getCoupon.rowCount == 0) {
             res.json(-1);
             return;
         }
