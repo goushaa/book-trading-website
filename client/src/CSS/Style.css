@@ -422,3 +422,130 @@
   font-size: 25px;
   font-weight: 500;
 }
+
+.box1 {
+  transform: translate(-150%, 150%);
+}
+.box1text {
+  transform: translate(-150%, 200%);
+  color: black;
+  font-style: italic;
+  font-weight: 700;
+}
+
+.box2 {
+  transform: translate(-150%, 250%);
+}
+.box2text {
+  transform: translate(-150%, 370%);
+  color: black;
+  font-style: italic;
+  font-weight: 700;
+}
+
+.box3 {
+  transform: translate(-150%, 350%);
+}
+.box3text {
+  transform: translate(-150%, 520%);
+  color: black;
+  font-style: italic;
+  font-weight: 700;
+}
+
+.box4 {
+  transform: translate(-150%, 450%);
+}
+.box4text {
+  transform: translate(-150%, 680%);
+  color: black;
+  font-style: italic;
+  font-weight: 700;
+}
+
+.box5 {
+  transform: translate(-150%, 550%);
+}
+.box5text {
+  transform: translate(-150%, 820%);
+  color: black;
+  font-style: italic;
+  font-weight: 700;
+}
+
+.box6 {
+  transform: translate(6%, -940%);
+}
+.box6text {
+  transform: translate(6%, -1510%);
+  color: black;
+  font-style: italic;
+  font-weight: 700;
+}
+
+.box7 {
+  transform: translate(6%, -830%);
+}
+.box7text {
+  transform: translate(6%, -1350%);
+  color: black;
+  font-style: italic;
+  font-weight: 700;
+}
+
+.box8 {
+  transform: translate(6%, -730%);
+}
+.box8text {
+  transform: translate(6%, -1200%);
+  color: black;
+  font-style: italic;
+  font-weight: 700;
+}
+
+.box9 {
+  transform: translate(6%, -640%);
+}
+.box9text {
+  transform: translate(6%, -1030%);
+  color: black;
+  font-style: italic;
+  font-weight: 700;
+}
+
+.box10 {
+  transform: translate(6%, -540%);
+}
+.box10text {
+  transform: translate(6%, -900%);
+  color: black;
+  font-style: italic;
+  font-weight: 700;
+}
+
+.box11 {
+  transform: translate(150%, -2020%);
+}
+.box11text {
+  transform: translate(150%, -3220%);
+  color: black;
+  font-style: italic;
+  font-weight: 700;
+}
+
+.box12 {
+  transform: translate(150%, -1910%);
+}
+.box12text {
+  transform: translate(150%, -3060%);
+  color: black;
+  font-style: italic;
+  font-weight: 700;
+}
+
+.viewbtn {
+  background-color: rgb(24, 93, 55);
+  border: 0;
+  font-size: 12px;
+  width: 30%;
+}
