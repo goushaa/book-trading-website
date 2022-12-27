@@ -174,6 +174,7 @@ CREATE TABLE "order" (
   "delivery_date" timestamp,
   "status" int,
   "coupon_id" int,
+  "price" float,
   primary key("id"),
   CONSTRAINT "FK_order.driver_ssn"
     FOREIGN KEY ("driver_ssn")
