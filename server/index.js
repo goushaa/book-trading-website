@@ -851,4 +851,3 @@ app.post("/cityidfromcityname", async (req, res) => {
     }
 });
 
-

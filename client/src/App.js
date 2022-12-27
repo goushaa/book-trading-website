@@ -17,7 +17,7 @@ import AdminViewStorePage from "./Pages/AdminViewStorePage";
 import AdminViewDriverPage from "./Pages/AdminViewDriverPage";
 import AdminViewCouponPage from "./Pages/AdminViewCouponPage";
 import StorePage from "./Pages/StorePage";
-import ViewAccount from "./Pages/ViewAccount"
+import ViewAccount from "./Pages/ViewAccount";
 import DriverPage from "./Pages/DriverPage";
 import Wishlist from "./Components/Wishlist";
 import WishlistPage from "./Pages/WishlistPage";
@@ -36,7 +36,10 @@ function App() {
         <Route path="/SignUp" element={<SignUp />}></Route>
         <Route path="/Home/:id" element={<CustomerHomePage />}></Route>
         <Route path="/Home/:id/wishlists" element={<WishlistPage />}></Route>
-        <Route path="/Home/:id/wishlists/:book_id" element={<ViewWishListItemPage />}></Route>
+        <Route
+          path="/Home/:id/wishlists/:book_id"
+          element={<ViewWishListItemPage />}
+        ></Route>
         <Route path="/driver/:id" element={<DriverPage />}></Route>
         <Route path="/Admin" element={<Admin />}></Route>
         <Route path="/Promotions" element={<Promotions />}></Route>
@@ -44,15 +47,16 @@ function App() {
         <Route path="/driversignup" element={<DriverSignupPage />}></Route>
         <Route path="/superadmin" element={<SuperAdminPage />}></Route>
         <Route path="/users/:id" element={<AdminViewUserPage />}></Route>
-        <Route path="/stores/:id" element={<StorePage />}></Route>
+        <Route path="/stores/:id" element={<AdminViewStorePage />}></Route>
         <Route path="/drivers/:ssn" element={<AdminViewDriverPage />}></Route>
         <Route path="/coupons/:code" element={<AdminViewCouponPage />}></Route>
         <Route path="/store/:id" element={<StorePage />}></Route>
         <Route path="/home/:id/ViewAccount" element={<ViewAccount />}></Route>
-        <Route path="/home/:id/book/:book_id" element={<AddBooktoCartPage />}></Route>
+        <Route
+          path="/home/:id/book/:book_id"
+          element={<AddBooktoCartPage />}
+        ></Route>
         <Route path="/home/:id/Cart/:order_id" element={<CartPage />}></Route>
-
-
       </Routes>
     </Fragment>
   );
