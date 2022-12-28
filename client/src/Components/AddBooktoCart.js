@@ -25,8 +25,10 @@ function AddBooktoCart() {
     const [isbn, setIsbn] = useState('');
     const [langId, setLanguageId] = useState('');
     const [genre, setGenreName] = useState('');
+    const [language, setLanguageName] = useState('');
     useEffect(() => {
-        axios.get(`http://localhost:5000/bookinfo/${book_id}`).then((res) => {
+        axios.post(`http://localhost:5000/bookinfo`,{book_id}).then((res) => {
+            console.log(res.data);
             setImage(res.data.image)
             settitle(res.data.title)
             setauthor_name(res.data.author_name)
@@ -37,17 +39,25 @@ function AddBooktoCart() {
             setVersion(res.data.version)
             setIsbn(res.data.isbn)
             setLanguageId(res.data.language_id)
-            console.log(res.data);
-            console.log(genre_id);
         }).catch((err) => console.log(err));
 
-        console.log(genre_id);
-        axios.get(`http://localhost:5000/genrenamefromgenreid/${genre_id}`).then((res) => {
-            console.log(res.data);
-            setGenreName(res.data);
-        }).catch(err => console.log(err));
     }, []);
 
+    useEffect(() => {
+        axios.get(`http://localhost:5000/genrenamefromgenreid/${genre_id}`).then((res) => {
+            setGenreName(res.data.name);
+        }).catch(err => console.log(err));
+
+    }, [genre_id]);
+
+    useEffect(() => {
+        axios.get(`http://localhost:5000/languagenamefromlanguageid/${langId}`).then((res) => {
+            setLanguageName(res.data.name);
+        }).catch(err => console.log(err));
+
+    }, [langId]);
+   
+        
     function increment(e) {
         if (quantity < readbooksquantity) {
             setQuantityCounter(quantity + 1);
@@ -85,7 +95,6 @@ function AddBooktoCart() {
         axios.post(`http://localhost:5000/addToCart`, { book_id, order_id, quantity }).then((res) => {
             console.log(res.data);
         }).catch((err) => console.log(err));
-
     }
 
     return (
@@ -112,24 +121,29 @@ function AddBooktoCart() {
                 </Col>
 
             <Col className="col-sm mt-3">
+                <Row>
             <Container >
                         <h1>{title}</h1>
 
                     </Container>
+                    </Row>
                     <Row>
                     <Container>Price: {purchase_price} L.E</Container>
                     </Row>
                     <Row>
-                    <Container>Author:{author_name}</Container>
+                    <Container>Author: {author_name}</Container>
                     </Row>
                     <Row>
-                    <Container>genre:{genre}</Container>
+                    <Container>genre: {genre}</Container>
                     </Row>
                     <Row>
-                    <Container>Version:{version}</Container>
+                    <Container>Version: {version}</Container>
                     </Row>
                     <Row>
-                    <Container>ISBN:{isbn}</Container>
+                        <Container>Language: {language} </Container>
+                    </Row>
+                    <Row>
+                    <Container>ISBN: {isbn}</Container>
                     </Row>
                     <Row>
                     <Container>Description: {description}</Container>
