@@ -703,6 +703,19 @@ app.get("/drivers/:ssn", async (req, res) => {
     }
 });
 
+//admin views driver
+app.post("/driverssnfromdriverid", async (req, res) => {
+    try {
+        const { id } = req.body;
+        const getDriverSSN = await pool.query(`SELECT ssn FROM driver  WHERE id = $1;`, [id]);
+        res.json(getDriverSSN.rows[0]);
+        //front end should display one driver when click on him
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+
 //admin views stores
 app.get("/stores", async (req, res) => {
     try {
