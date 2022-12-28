@@ -24,6 +24,7 @@ import WishlistPage from "./Pages/WishlistPage";
 import ViewWishListItemPage from "./Pages/ViewWishListItemPage";
 import AddBooktoCartPage from "./Pages/AddBooktoCartPage";
 import CartPage from "./Pages/CartPage";
+import AdminViewOrderPage from "./Pages/AdminViewPendingOrdersPage";
 
 function App() {
   return (
@@ -52,7 +53,7 @@ function App() {
         <Route path="/coupons/:code" element={<AdminViewCouponPage />}></Route>
         <Route
           path="/pendingorders/:id"
-          element={<AdminViewStorePage />}
+          element={<AdminViewOrderPage />}
         ></Route>
         <Route path="/store/:id" element={<StorePage />}></Route>
         <Route path="/home/:id/ViewAccount" element={<ViewAccount />}></Route>
