@@ -10,7 +10,13 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 function ViewWishListItem() {
-    const { id, book_id } = useParams();
+    if(localStorage.length==0)
+    window.location.href = "/";
+    const userData = JSON.parse(localStorage.getItem("user"));
+    if(userData.type!=2)
+    window.location.href = "/login";
+    const [id,setID] =useState(userData.id) ;
+    const {book_id} = useParams();
 
     const [image, setImage] = useState('');
     const [title, settitle] = useState('');
@@ -27,6 +33,8 @@ function ViewWishListItem() {
     const [genre, setGenreName] = useState('');
     const [language, setLanguageName] = useState('');
     useEffect(() => {
+    console.log(book_id);
+
         axios.post(`http://localhost:5000/bookinfo`,{book_id}).then((res) => {
             console.log(res.data);
             setImage(res.data.image)
