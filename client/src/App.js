@@ -25,7 +25,10 @@ import ViewWishListItemPage from "./Pages/ViewWishListItemPage";
 import AddBooktoCartPage from "./Pages/AddBooktoCartPage";
 import CartPage from "./Pages/CartPage";
 import AdminViewOrderPage from "./Pages/AdminViewPendingOrdersPage";
+
 import DriverViewOrdersPage from "./Pages/DriverViewOrdersPage";
+
+
 
 function App() {
   return (
@@ -65,6 +68,7 @@ function App() {
         ></Route>
         <Route path="/store/:id" element={<StorePage />}></Route>
         <Route path="/home/:id/ViewAccount" element={<ViewAccount />}></Route>
+        <Route path="/home/:user_id/ViewAccount" element={<ViewAccount />}></Route>
         <Route
           path="/home/:id/book/:book_id"
           element={<AddBooktoCartPage />}

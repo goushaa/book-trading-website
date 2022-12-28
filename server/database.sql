@@ -193,49 +193,24 @@ CREATE TABLE "order" (
       ON DELETE SET NULL
 );
 
-CREATE TABLE "ticket_category" (
-  "id" serial,
-  "name" varChar(50) NOT NULL,
-  primary key("id")
-);
+
 
 CREATE TABLE "ticket" (
   "id" serial,
   "user_id" int,
-  "category_id" int,
   "user_complaint" varChar(1000),
-  "time" timestamp,
+  "admin_reply" varChar(1000),
+  "replied" int ,
+  "ticket_time" timestamp,
+  "reply_time" timestamp,
   primary key("id"),
   CONSTRAINT "FK_ticket.user_id"
     FOREIGN KEY ("user_id")
       REFERENCES "user"("id")
        ON UPDATE CASCADE
-      ON DELETE SET NULL,
-  CONSTRAINT "FK_ticket.category_id"
-    FOREIGN KEY ("category_id")
-      REFERENCES "ticket_category"("id")
-       ON UPDATE CASCADE
       ON DELETE SET NULL
 );
 
-CREATE TABLE "ticket_reply" (
-  "id" serial,
-  "ticket_id" int NOT NULL,
-  "user_id" int ,
-  "reply" varChar (1000) NOT NULL,
-  "time" timestamp NOT NULL,
-  primary key("id"),
-  CONSTRAINT "FK_ticket_reply.user_id"
-    FOREIGN KEY ("user_id")
-      REFERENCES "user"("id")
-       ON UPDATE CASCADE
-      ON DELETE SET NULL,
-  CONSTRAINT "FK_ticket_reply.ticket_id"
-    FOREIGN KEY ("ticket_id")
-      REFERENCES "ticket"("id")
-       ON UPDATE CASCADE
-      ON DELETE CASCADE
-);
 
 CREATE TABLE "order_item" (
   "id" serial,

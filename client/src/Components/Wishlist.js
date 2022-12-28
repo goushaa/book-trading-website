@@ -9,57 +9,87 @@ import { Row, Tab, Tabs, Col } from 'react-bootstrap';
 import axios from 'axios';
 import Card from "react-bootstrap/Card";
 import { Link } from 'react-router-dom';
-
+import Nav from "react-bootstrap/Nav";
 
 function Wishlist() {
   let { user_id } = useParams()
   const [wishlists, setWishLists] = useState([]);
-  const [image, setImage] = useState('')
-  const [title, setTitle] = useState('')
   useEffect(() => {
     axios
       .get(`http://localhost:5000/wishlists/${user_id}`)
       .then((res) => {
         setWishLists(res.data)
-        console.log(res.data);
       })
       .catch((err) => console.log(err));
   }, []);
 function deletewishlist(book_id)
 {
+  console.log(user_id);
+  console.log(book_id);
   axios
-      .post(`http://localhost:5000/deleteWishlist/${user_id}`,{book_id})
+      .post(`http://localhost:5000/deleteWishlist`,{user_id,book_id})
       .then((res) => {
-        
+        window.location.reload();
       })
-      .catch((err) => console.log(err));
-}
+      .catch((err) => console.log(err));}
+     
   return (
     <Fragment>
+      
+      <Navbar bg="dark" variant="dark" expand="lg" className="nav">
+            <Container fluid>
+              <Navbar.Brand className="title" href="/">
+                <h3>Online Book Store</h3>
+              </Navbar.Brand>
+              <Navbar.Toggle aria-controls="navbarScroll" />
+              <Navbar.Collapse id="navbarScroll">
+                <Nav
+                  className="me-auto my-2 my-lg-0"
+                  style={{ maxHeight: "100px" }}
+                  navbarScroll
+                ></Nav>
+                <Form>
+                  <Form.Control
+                    type="search"
+                    placeholder="Search for a book"
+                    className="searchbar"
+                    aria-label="Search"
+                  />
+                  <Button variant="outline-success" className="searchbtn">
+                    Search
+                  </Button>
+                </Form>
+              </Navbar.Collapse>
+            </Container>
+          </Navbar>
       <Container className="Store_bg">
-      {
-            wishlists.map(wishlist => {
-              return (
-                <div className="col-lg-4 col-md-6 col-12">
-                  <div>
-                    <Card className="course-card">
-                      <Card.Img variant="top" src={wishlist.image} class="kadyImage" ></Card.Img>
-                      <Card.Body>
-                        <Card.Title>{wishlist.title}</Card.Title>
-                        <p>{wishlist.description}</p>
-                        <div>
-                         <Link>
-                         <Button variant="success" className="ml-3" onClick={deletewishlist(wishlist.book_id)} > Delete</Button>
-                         </Link>
-                        </div>
-
-                      </Card.Body>
-                    </Card>
-                  </div>
-                </div>
-              )
-            })
-          }
+      
+               <table class="table">
+               <thead class="thead-dark">
+                 <tr>
+                   <th scope="col">Book</th>
+                   <th scope="col">View</th>
+                   <th scope="col">Delete</th>
+                 </tr>
+               </thead>
+               <tbody>
+                 {wishlists.map((wishlist) => (
+                   <tr key={wishlist.book_id}>
+                     <td>
+                       {wishlist.title}
+                     </td>
+                     <td>
+                      <Link to={`${wishlist.book_id}`}>
+                     <Button variant='success'>View</Button>
+                     </Link>
+                     </td>
+                     <td>
+                     <Button variant='success' onClick={()=>deletewishlist(wishlist.book_id)}>Delete</Button>
+                     </td>
+                   </tr>
+                 ))}
+               </tbody>
+             </table>
       </Container>
 
 

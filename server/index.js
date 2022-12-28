@@ -196,26 +196,27 @@ app.post("/notifications/readall", async (req, res) => {
 });
 
 //************************wish list*******************************/
-app.post("/addWishlist/:user_id", async (req, res) => {
-  try {
-    const { user_id } = req.params;
-    const { book_id } = req.body; //why did we do this
-    console.log(user_id, book_id);
-    //NEEDS VALIDATION AND REVISION
-    const addWishlist = await pool.query(
-      "INSERT INTO wish_list_item (user_id,book_id) VALUES ($1,$2) RETURNING *;",
-      [user_id, book_id]
-    );
-    res.json(addWishlist.rows[0]);
+
+app.post("/addWishlist", async (req, res) => {
+
+
+    try {
+        const {user_id, book_id } = req.body; //why did we do this
+        console.log(user_id,book_id);
+        //NEEDS VALIDATION AND REVISION
+        const addWishlist = await pool.query("INSERT INTO wish_list_item (user_id,book_id) VALUES ($1,$2) RETURNING *;", [user_id, book_id]);
+        res.json(addWishlist.rows[0]);
+
+
+
   } catch (err) {
     console.error(err.message);
   }
 });
 
-app.post("/deleteWishlist/:user_id", async (req, res) => {
+app.post("/deleteWishlist", async (req, res) => {
   try {
-    const { user_id } = req.params;
-    const { book_id } = req.body;
+    const { user_id,book_id } = req.body;
     //NEEDS VALIDATION AND REVISION
     const deleteWishlist = await pool.query(
       "DELETE FROM wish_list_item  WHERE user_id = $1 AND book_id = $2 RETURNING *;",
@@ -231,6 +232,7 @@ app.post("/deleteWishlist/:user_id", async (req, res) => {
   } catch (err) {
     console.error(err.message);
   }
+  
 });
 
 app.get("/wishlists/:user_id", async (req, res) => {
@@ -369,7 +371,7 @@ app.post("/addbook", async (req, res) => {
   }
 });
 //stores delete books app.delete
-app.delete("/deletebook", async (req, res) => {
+app.post("/deletebook", async (req, res) => {
   try {
     const { id } = req.body;
     book = await pool.query("UPDATE BOOK SET status=1 where id=$1", [id]);
@@ -617,6 +619,17 @@ app.get("/pendingOrders", async (req, res) => {
     );
     res.json(viewPendingOrders.rows);
     //front end should loop on all orders and display them
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/pendingOrders/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log(id);
+    const viewPendingOrder = await pool.query('SELECT * FROM "order" WHERE id = $1;', [id]);
+    res.json(viewPendingOrder.rows[0]);
   } catch (err) {
     console.error(err.message);
   }
@@ -1009,6 +1022,31 @@ app.get("/driverssnfromdriverid/:id", async (req, res) => {
     console.error(err.message);
   }
 });
+//************************tickets*******************************/
+
+app.post("/addTicket", async (req, res) => {
+  try {
+    const { user_id, complaint } = req.body;
+
+    const addTicket = await pool.query("INSERT INTO ticket  (user_id,user_complaint,admin_reply,replied,ticket_time,reply_time) VALUES ($1,$2,null,0,$3,null) returning *;", [user_id, complaint, new Date]);
+    res.json(addTicket.rows[0]);
+    //front end should display one driver when click on him
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.post("/ticketReply", async (req, res) => {
+  try {
+    const { adminReply, id } = req.body;
+
+    const replyTicket = await pool.query("UPDATE ticket SET admin_reply=$1,replied = 1,reply_time=$2 WHERE id =$3 returning *;", [adminReply, new Date, id]);
+    res.json(replyTicket.rows[0]);
+    //front end should display one driver when click on him
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 //************************utilities*******************************/
 app.get("/cities", async (req, res) => {
@@ -1083,6 +1121,7 @@ app.get("/languagenamefromlanguageid/:language_id", async (req, res) => {
   }
 });
 
+
 app.get("/pendingOrders/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -1096,3 +1135,4 @@ app.get("/pendingOrders/:id", async (req, res) => {
     console.error(err.message);
   }
 });
+
