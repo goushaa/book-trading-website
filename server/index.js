@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const pool = require("./db");
-const { timeStamp } = require("console");
+const { timeStamp, log } = require("console");
 
 //middleware
 app.use(cors());
@@ -621,6 +621,17 @@ app.get("/pendingOrders", async (req, res) => {
   }
 });
 
+app.get("/pendingOrders/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log(id);
+    const viewPendingOrder = await pool.query('SELECT * FROM "order" WHERE id = $1;', [id]);
+    res.json(viewPendingOrder.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 app.get("/orderItemInfo/:book_id", async (req, res) => {
   try {
     const { book_id } = req.params;
@@ -990,6 +1001,31 @@ app.post("/driverssnfromdriverid", async (req, res) => {
     console.error(err.message);
   }
 });
+//************************tickets*******************************/
+
+app.post("/addTicket", async (req, res) => {
+  try {
+    const { user_id, complaint } = req.body;
+
+    const addTicket = await pool.query("INSERT INTO ticket  (user_id,user_complaint,admin_reply,replied,ticket_time,reply_time) VALUES ($1,$2,null,0,$3,null) returning *;", [user_id, complaint, new Date]);
+    res.json(addTicket.rows[0]);
+    //front end should display one driver when click on him
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.post("/ticketReply", async (req, res) => {
+  try {
+    const { adminReply, id } = req.body;
+
+    const replyTicket = await pool.query("UPDATE ticket SET admin_reply=$1,replied = 1,reply_time=$2 WHERE id =$3 returning *;", [adminReply, new Date, id]);
+    res.json(replyTicket.rows[0]);
+    //front end should display one driver when click on him
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 //************************utilities*******************************/
 app.get("/cities", async (req, res) => {
@@ -1064,3 +1100,4 @@ app.get("/languagenamefromlanguageid/:language_id", async (req, res) => {
   }
 });
 //
+
