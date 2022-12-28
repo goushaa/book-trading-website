@@ -95,9 +95,13 @@ function TestAddbook() {
             "contentType": false,
             "data": form
         };
+
         let imgbb = await axios(settings);
-        setImage(imgbb.data.data.display_url);
-        axios.post('http://localhost:5000/addbook', { title, genre_id, isbn, author_name, language_id, purshace_price, version, description, image, user_id, count }).then(res => {
+        if (imgbb.data.data.display_url == '') {
+            imgbb = await axios(settings);
+        }
+        //setImage(imgbb.data.data.display_url);
+        axios.post('http://localhost:5000/addbook', { title, genre_id, isbn, author_name, language_id, purshace_price, version, description, image: imgbb.data.data.display_url, user_id, count }).then(res => {
             console.log(res.data); //add book with image upload (has some bugs)
         }).catch(err => console.log(err))
     }
