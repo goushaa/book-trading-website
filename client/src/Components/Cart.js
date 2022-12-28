@@ -8,10 +8,10 @@ function Cart() {
     if(localStorage.length==0)
     window.location.href = "/";
     const userData = JSON.parse(localStorage.getItem("user"));
-    if(userData.type!=2)
-    window.location.href = "/";
-    let { id } = userData.id;
-    const { order_id, setorder_id } = useParams()
+    if(userData.type==1||userData.type==0)
+    window.location.href = "/login";
+    const [id,setID] =useState(userData.id) ;
+    const [ order_id, setorder_id ] = useState(0);
     const [coupon_code, setCode] = useState('')
     const [orderItems, setOrderItem] = useState([]);
     const [price, setPurchase] = useState(0);
@@ -19,6 +19,7 @@ function Cart() {
     const [code, setOrderCoupon] = useState('');
 
 useEffect(()=>{
+    // console.log(order_id);
     axios.get(`http://localhost:5000/orders/${order_id}`).then((res) => {
         setOrderItem(res.data);
         console.log(res.data);
@@ -40,7 +41,7 @@ useEffect(()=>{
           setorder_id(res.data.id);
         })
         .catch((err) => console.log(err));
-    }, []);
+    }, [id]);
     ///applyCoupon
     function applyCoupon(e) {
 
@@ -85,7 +86,7 @@ useEffect(()=>{
             //setOrderItem(res.data);
             console.log(res.data);
             if (res.data !== 'empty cart' || res.data !== 'wrong coupon') {
-                window.location.href = '..'
+                window.location.href = '/home'
             }
 
         }).catch((err) => console.log(err));

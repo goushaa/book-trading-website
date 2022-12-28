@@ -1,17 +1,22 @@
-import React, { Fragment, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import axios from "axios";
+import React, { Fragment, useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import axios from 'axios'
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import "../CSS/prom_bg.css";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 function AddBooktoCart() {
-
-    const { id, book_id } = useParams();
+    if(localStorage.length==0)
+    window.location.href = "/";
+    const userData = JSON.parse(localStorage.getItem("user"));
+    if(userData.type==1||userData.type==0)
+    window.location.href = "/login";
+    const [id,setID] =useState(userData.id) ;
+    const {  book_id } = useParams();
 
     const [image, setImage] = useState('');
     const [title, settitle] = useState('');
@@ -65,14 +70,13 @@ function AddBooktoCart() {
         }
 
 
+    }
+    function decrement(e) {
+        if (quantity > 1) {
+            setQuantityCounter(quantity - 1);
+        }
 
     }
-  }
-  function decrement(e) {
-    if (quantity > 1) {
-      setQuantityCounter(quantity - 1);
-    }
-
 
     function addToCart(e) {
 
@@ -86,18 +90,23 @@ function AddBooktoCart() {
         }).catch((err) => console.log(err));
         ///userOrder
 
-        console.log(id);
+        // console.log(id);
         axios.post(`http://localhost:5000/userOrder`, { id }).then((res) => {
             setORDERID(res.data.id);
-            console.log(res.data);
+            console.log(res.data.id);
         }).catch((err) => console.log(err));
 
         //don't add same book_id to order more than once (book already in order to add/decrease number of books go to your cart page)
 
-        axios.post(`http://localhost:5000/addToCart`, { book_id, order_id, quantity }).then((res) => {
-            console.log(res.data);
-        }).catch((err) => console.log(err));
+ 
     }
+    useEffect(()=>{
+        console.log(order_id,book_id,quantity);
+        axios.post(`http://localhost:5000/addToCart`, { book_id, order_id, quantity }).then((res) => {
+            console.log(order_id,book_id,quantity);
+            window.location.href="/home/cart";
+        }).catch((err) => console.log(err));
+    },[order_id])
 
     return (
         <Fragment>
@@ -168,13 +177,9 @@ function AddBooktoCart() {
 
                     </Container>
                 </Col>
-
             </Row>
-          </Container>
-        </Col>
-      </Row>
-    </Fragment>
-  );
+        </Fragment>
+    )
 }
 
 export default AddBooktoCart;

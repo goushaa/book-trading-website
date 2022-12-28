@@ -70,7 +70,7 @@ function App() {
         <Route path="/home/ViewAccount" element={<ViewAccount />}></Route>
 
         <Route
-          path="/home/:id/book/:book_id"
+          path="/home/book/:book_id"
           element={<AddBooktoCartPage />}
         ></Route>
         <Route path="/home/Cart" element={<CartPage />}></Route>
