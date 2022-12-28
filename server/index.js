@@ -165,6 +165,7 @@ app.post("/addWishlist/:user_id", async (req, res) => {
     try {
         const { user_id } = req.params;
         const { book_id } = req.body; //why did we do this
+        console.log(user_id,book_id);
         //NEEDS VALIDATION AND REVISION
         const addWishlist = await pool.query("INSERT INTO wish_list_item (user_id,book_id) VALUES ($1,$2) RETURNING *;", [user_id, book_id]);
         res.json(addWishlist.rows[0]);
