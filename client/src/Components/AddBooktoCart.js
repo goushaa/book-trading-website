@@ -10,6 +10,7 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 function AddBooktoCart() {
+
     if(localStorage.length==0)
     window.location.href = "/";
     const userData = JSON.parse(localStorage.getItem("user"));
@@ -116,15 +117,38 @@ function AddBooktoCart() {
                         <h3>Online Book Store</h3>
                     </Navbar.Brand>
 
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="me-auto">
-                            <Nav.Item></Nav.Item>
-                        </Nav>
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar>
+
+        <Col className="col-sm mt-3">
+          <Row>
+            <Container>
+              <h1>{title}</h1>
+            </Container>
+          </Row>
+          <Row>
+            <Container>Price: {purchase_price} L.E</Container>
+          </Row>
+          <Row>
+            <Container>Author: {author_name}</Container>
+          </Row>
+          <Row>
+            <Container>genre: {genre}</Container>
+          </Row>
+          <Row>
+            <Container>Version: {version}</Container>
+          </Row>
+          <Row>
+            <Container>Language: {language} </Container>
+          </Row>
+          <Row>
+            <Container>ISBN: {isbn}</Container>
+          </Row>
+          <Row>
+            <Container>Description: {description}</Container>
+          </Row>
+          <Container className="quantity">
+            <h6>Quantity</h6>
             <Row>
+
                 <Col className='image'>
                     <Container class="col-sm ml-5 mt-3">
                         <img src={image} />
@@ -177,6 +201,7 @@ function AddBooktoCart() {
 
                     </Container>
                 </Col>
+
             </Row>
         </Fragment>
     )
