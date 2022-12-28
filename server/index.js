@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const pool = require("./db");
+const { timeStamp } = require("console");
 
 
 //middleware
@@ -235,7 +236,7 @@ app.get("/wishlists_stats/:user_id", async (req, res) => {//returns the wishlist
 
 app.get("/books", async (req, res) => {
     try {
-        const getBooks = await pool.query('SELECT * FROM book WHERE book.user_id in (select id from "user" where type =2) and status = 0');
+        const getBooks = await pool.query('SELECT * FROM book WHERE book.user_id in (select id from "user" where type =3) and status = 0');
         res.json(getBooks.rows);
 
 
@@ -326,6 +327,7 @@ app.post("/addToCart", async (req, res) => {
     try {
 
         const { book_id, order_id, quantity } = req.body;
+        console.log(book_id, order_id, quantity);
         const found = await pool.query("select id from order_item where book_id=$1 and order_id=$2", [book_id, order_id]);
         if (found.rowCount == 1) {
             res.json(-1);
@@ -340,8 +342,8 @@ app.post("/addToCart", async (req, res) => {
 
 app.post("/userOrder", async (req, res) => {
     try {
-        const { user_id } = req.body;
-        const order = await pool.query('select * from "order" where user_id=$1 and status=0', [user_id]);
+        const { id } = req.body;
+        const order = await pool.query('select * from "order" where user_id=$1 and status=0', [id]);
         res.json(order.rows[0]);
     } catch (err) {
         console.error(err.message);
@@ -353,6 +355,7 @@ app.post("/makeOrder", async (req, res) => {
     try {
         var { code, order_id, price } = req.body;
         var coupon;
+
         if (code != "") {
             coupon = await pool.query("select id,maximum_use from coupons where code=$1", [code]);
 
@@ -360,6 +363,7 @@ app.post("/makeOrder", async (req, res) => {
                 res.json("wrong coupon");
                 return;
             }
+            const updateCopun = await pool.query('UPDATE "coupons" SET maximum_use=$1 where code=$2', [coupon.rows[0].maximum_use - 1, code]);
         }
 
         if (price == 0) {
@@ -367,13 +371,35 @@ app.post("/makeOrder", async (req, res) => {
             return;
         }
 
-        const updateCopun = await pool.query('UPDATE "coupons" SET maximum_use=$1 where code=$2', [coupon.rows[0].maximum_use - 1, code]);
+
+        const books = await pool.query("select book_id,quantity,count from order_item,book where book_id=book.id and order_id=$1;", [order_id]);
+        var ok = 1;
+        console.log(books.rowCount);
+        for (let i = 0; i < books.rowCount; i++) {
+            console.log(books.rows[i]);
+            if (books.rows[i].count < books.rows[i].quantity) {
+                ok = 0;
+                await pool.query("delete from order_item where order_id=$1 and book_id=$2", [order_id, books.rows[i].book_id]);
+            }
+        }
+
+        if (ok == 0) {
+            res.json("insufficient amount of books (order items deleted)");
+            return;
+        }
+        for (let i = 0; i < books.rowCount; i++) {
+            await pool.query("update book set count =$1 where id=$2", [books.rows[i].count - books.rows[i].quantity, books.rows[i].book_id]);
+        }
+
+
+
+
 
         const date = new Date;
         console.log(date);
         const makeOrder = await pool.query('UPDATE "order" SET status=1,order_date = $1,price =' + price + " WHERE id=$2 RETURNING *", [date, order_id]);
         //res.json(makeOrder.rows[0]);
-        const newOrder = await pool.query(`INSERT INTO "order" (user_id,status,price) VALUES ($1,0,0) RETURNING *`, [makeOrder.rows[0].id]);
+        const newOrder = await pool.query(`INSERT INTO "order" (user_id,status,price) VALUES ($1,0,0) RETURNING *`, [makeOrder.rows[0].user_id]);
         res.json(newOrder.rows[0]); //we always check on the order with status 0 thus orders items in the cart
     } catch (err) {
         console.error(err.message);
