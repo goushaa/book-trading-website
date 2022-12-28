@@ -57,7 +57,7 @@ function AdminForm() {
       .get("http://localhost:5000/wishlists_stats")
       .then((res) => {
         setwishlist(res.data);
-        console.log(res.data)
+        console.log(res.data);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -406,9 +406,7 @@ function AdminForm() {
                         }}
                       >
                         {drivers.map((driver) => (
-                          <option value={driver.ssn}>
-                            {driver.email}{" "}
-                          </option>
+                          <option value={driver.ssn}>{driver.email} </option>
                         ))}
                       </select>
                     </td>
@@ -418,14 +416,28 @@ function AdminForm() {
                         className="viewbtn w-30"
                         onClick={function (e) {
                           setOrderID(pendingOrder.id);
-                          axios.post(`http://localhost:5000/driveruseridgivenssn`, { driver_ssn }).then((res) => {
-                            setDriverID(res.data.user_id);
-
-                          }).catch((err) => console.log(err));
+                          axios
+                            .post(
+                              `http://localhost:5000/driveruseridgivenssn`,
+                              { driver_ssn }
+                            )
+                            .then((res) => {
+                              setDriverID(res.data.user_id);
+                            })
+                            .catch((err) => console.log(err));
                           //console.log(driver_ssn, pendingOrder.id, driver_id_sui);
-                          axios.post(`http://localhost:5000/AdminGiveOrderToDriver`, { driver_ssn: driver_ssn, order_id: pendingOrder.id, driver_user_id: driver_user_id }).then((res) => {
-                            console.log(res.data);
-                          })
+                          axios
+                            .post(
+                              `http://localhost:5000/AdminGiveOrderToDriver`,
+                              {
+                                driver_ssn: driver_ssn,
+                                order_id: pendingOrder.id,
+                                driver_user_id: driver_user_id,
+                              }
+                            )
+                            .then((res) => {
+                              console.log(res.data);
+                            })
                             .catch((err) => console.log(err));
                         }}
                       >
@@ -441,8 +453,7 @@ function AdminForm() {
           <Tab eventKey="wishlists" title="Wishlists">
             <h1>Wishlists</h1>
 
-
-          <table class="table">
+            {/* <table class="table">
               <thead class="thead-dark">
                 <tr>
                   <th scope="col">Book</th>
@@ -463,7 +474,7 @@ function AdminForm() {
                 ))}
               </tbody>
 
-            </table>
+            </table> */}
           </Tab>
         </Tabs>
       </Container>

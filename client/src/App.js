@@ -25,10 +25,8 @@ import ViewWishListItemPage from "./Pages/ViewWishListItemPage";
 import AddBooktoCartPage from "./Pages/AddBooktoCartPage";
 import CartPage from "./Pages/CartPage";
 import AdminViewOrderPage from "./Pages/AdminViewPendingOrdersPage";
-
 import DriverViewOrdersPage from "./Pages/DriverViewOrdersPage";
-
-
+import Sell from "./Pages/SellPage";
 
 function App() {
   return (
@@ -49,6 +47,7 @@ function App() {
         ></Route>
         <Route path="/driver/:id" element={<DriverPage />}></Route>
         <Route path="/Admin" element={<Admin />}></Route>
+        <Route path="/Home/Sell" element={<Sell />}></Route>
         <Route path="/Promotions" element={<Promotions />}></Route>
         <Route path="/addBook" element={<TestAddbook />}></Route>
         <Route path="/driversignup" element={<DriverSignupPage />}></Route>

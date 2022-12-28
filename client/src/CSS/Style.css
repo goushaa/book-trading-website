@@ -47,11 +47,12 @@
 
 .HomePage .text {
   position: absolute;
-  top: 35%;
+  top: 30%;
   left: 8.5%;
   text-align: center;
-  color: rgb(9, 4, 4);
-  font-size: 50px;
+  color: rgb(77, 17, 17);
+  font-size: 70px;
+  font-weight: 600;
   font-style: bold;
 }
 
@@ -562,4 +563,17 @@
 
 .combo {
   width: 50%;
+}
+
+.salebtn2 {
+  position: absolute;
+  transform: translate(200%, 400%);
+  background-color: black;
+  font-weight: 400;
+  color: white;
+  width: 230px;
+  font-size: 40px;
+  border: none;
+  cursor: pointer;
+  border-radius: 30px;
 }

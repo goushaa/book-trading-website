@@ -13,6 +13,7 @@ function Driver() {
   let { id } = useParams();
   const [ssn, setssn] = useState(0);
   const [Orders, setOrders] = useState([]);
+  const [status, setstatus] = useState([]);
   const [Orderid, setOrderid] = useState(0);
   const [DeliveredOrders, setDeliveredOrders] = useState([]);
 
@@ -22,13 +23,6 @@ function Driver() {
       .then((res) => {
         //console.log(res.data.ssn);
         setssn(res.data.ssn);
-      })
-      .catch((err) => console.log(err));
-
-    axios
-      .get(`http://localhost:5000/ordersdeliveredbycertaindriver/${ssn}`)
-      .then((res) => {
-        setDeliveredOrders(res.data);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -44,6 +38,16 @@ function Driver() {
       })
       .catch((err) => console.log(err));
   }, [ssn]);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/ordersdeliveredbycertaindriver/${ssn}`)
+      .then((res) => {
+        setDeliveredOrders(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, [Orders]);
 
   function delivered(order_id) {
     axios

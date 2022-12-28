@@ -8,7 +8,7 @@ import HomePageBackground from "../Images/HomePageBackground.jpg";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Dropdown from "react-bootstrap/Dropdown";
 import "../CSS/Style.css";
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
 
 function HomeLogInBackground() {
   const [show, setShow] = useState(false);
@@ -45,34 +45,19 @@ function HomeLogInBackground() {
             >
               Sign Up
             </Button>{" "}
-            <Link to="/signup"><Button className="leftmenubtn3">Create a business account</Button>{" "}</Link>
-            <Link to="/signup"><Button className="leftmenubtn4">Add your store</Button>{" "}</Link>
-            <Link to="/driversignup"><Button className="leftmenubtn5">Sign up to deliver</Button>{" "}</Link>
+            <Link to="/signup">
+              <Button className="leftmenubtn3">
+                Create a business account
+              </Button>{" "}
+            </Link>
+            <Link to="/signup">
+              <Button className="leftmenubtn4">Add your store</Button>{" "}
+            </Link>
+            <Link to="/driversignup">
+              <Button className="leftmenubtn5">Sign up to deliver</Button>{" "}
+            </Link>
           </Offcanvas.Body>
         </Offcanvas>
-        <Row>
-          <div class="col-md-12" className="locationbar">
-            <h6 class="text-center"></h6>
-
-            <input
-              type="search"
-              id="address"
-              class="form-control"
-              placeholder="Enter delivery address"
-            />
-          </div>
-        </Row>
-        <Dropdown>
-          <Dropdown.Toggle variant="success" id="dropdown-basic">
-            Delivery time
-          </Dropdown.Toggle>
-
-          <Dropdown.Menu>
-            <Dropdown.Item href="#/action-1">Deliver now</Dropdown.Item>
-            <Dropdown.Item href="#/action-2">Schedule for later</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-        <Button className="findbookbtn">Find book</Button> <Row></Row>
       </Container>
     </Fragment>
   );
