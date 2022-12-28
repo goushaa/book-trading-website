@@ -1,15 +1,16 @@
-import React, { Fragment, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import axios from 'axios'
+import React, { Fragment, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import "../CSS/prom_bg.css";
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 function AddBooktoCart() {
+
     const { id, book_id } = useParams();
 
     const [image, setImage] = useState('');
@@ -64,13 +65,14 @@ function AddBooktoCart() {
         }
 
 
-    }
-    function decrement(e) {
-        if (quantity > 1) {
-            setQuantityCounter(quantity - 1);
-        }
 
     }
+  }
+  function decrement(e) {
+    if (quantity > 1) {
+      setQuantityCounter(quantity - 1);
+    }
+
 
     function addToCart(e) {
 
@@ -166,9 +168,13 @@ function AddBooktoCart() {
 
                     </Container>
                 </Col>
+
             </Row>
-        </Fragment>
-    )
+          </Container>
+        </Col>
+      </Row>
+    </Fragment>
+  );
 }
 
 export default AddBooktoCart;

@@ -72,7 +72,7 @@ app.post("/signup", async (req, res) => {
       //creats user to link it later to driver
       const sign = await pool.query(
         'INSERT INTO "user" ' +
-        "(first_name,last_name,address,city_id,user_name,password,email,type) values ($1,$2,$3,$4,$5,$6,$7,$8) returning *",
+          "(first_name,last_name,address,city_id,user_name,password,email,type) values ($1,$2,$3,$4,$5,$6,$7,$8) returning *",
         [first, last, address, city_id, user_name, password, email, type]
       );
       console.log(sign.rows[0].id);
@@ -86,7 +86,7 @@ app.post("/signup", async (req, res) => {
     else {
       const sign = await pool.query(
         'INSERT INTO "user" ' +
-        "(first_name,last_name,address,city_id,user_name,password,email,type) values ($1,$2,$3,$4,$5,$6,$7,$8) returning *",
+          "(first_name,last_name,address,city_id,user_name,password,email,type) values ($1,$2,$3,$4,$5,$6,$7,$8) returning *",
         [first, last, address, city_id, user_name, password, email, type]
       );
       res.json(sign.rows[0]);
@@ -196,6 +196,7 @@ app.post("/notifications/readall", async (req, res) => {
 });
 
 //************************wish list*******************************/
+
 app.post("/addWishlist", async (req, res) => {
 
 
@@ -207,10 +208,10 @@ app.post("/addWishlist", async (req, res) => {
         res.json(addWishlist.rows[0]);
 
 
+
   } catch (err) {
     console.error(err.message);
   }
-
 });
 
 app.post("/deleteWishlist", async (req, res) => {
@@ -277,16 +278,14 @@ app.get("/wishlists_stats/:user_id", async (req, res) => {
 //************************book*******************************/
 
 app.get("/books", async (req, res) => {
-
   try {
-    const getBooks = await pool.query('SELECT * FROM book WHERE book.user_id in (select id from "user" where type =3) and status = 0');
+    const getBooks = await pool.query(
+      'SELECT * FROM book WHERE book.user_id in (select id from "user" where type =3) and status = 0'
+    );
     res.json(getBooks.rows);
-
-
   } catch (err) {
     console.error(err.message);
   }
-
 });
 
 app.post("/bookinfo", async (req, res) => {
@@ -349,12 +348,12 @@ app.post("/addbook", async (req, res) => {
 
     book = await pool.query(
       "INSERT INTO book (title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,user_id,count,status) values($1," +
-      genre_id +
-      "," +
-      isbn +
-      ",$2," +
-      language_id +
-      ",$3,$4,$5,$6,$7,$8,0) RETURNING *",
+        genre_id +
+        "," +
+        isbn +
+        ",$2," +
+        language_id +
+        ",$3,$4,$5,$6,$7,$8,0) RETURNING *",
       [
         title,
         author_name,
@@ -491,8 +490,8 @@ app.post("/makeOrder", async (req, res) => {
     console.log(date);
     const makeOrder = await pool.query(
       'UPDATE "order" SET status=1,order_date = $1,price =' +
-      price +
-      " WHERE id=$2 RETURNING *",
+        price +
+        " WHERE id=$2 RETURNING *",
       [date, order_id]
     );
     //res.json(makeOrder.rows[0]);
@@ -526,7 +525,10 @@ app.post("/AdminGiveOrderToDriver", async (req, res) => {
     const { driver_ssn, order_id, driver_user_id } = req.body;
     console.log(driver_ssn, order_id, driver_user_id);
     //status 2 means driver starts delivering
-    const giveOrder = await pool.query('UPDATE "order" SET status=2,driver_ssn = $1 WHERE id=$2 RETURNING *', [driver_ssn, order_id]);
+    const giveOrder = await pool.query(
+      'UPDATE "order" SET status=2,driver_ssn = $1 WHERE id=$2 RETURNING *',
+      [driver_ssn, order_id]
+    );
     //send notification to driver
     const date = new Date();
     console.log(order_id);
@@ -534,14 +536,14 @@ app.post("/AdminGiveOrderToDriver", async (req, res) => {
     console.log(date);
     const sendNotificationDriver = await pool.query(
       "INSERT INTO notification (user_id,read,text,date) VALUES ($1,0,'You have been assigned order #" +
-      order_id +
-      " ',$2) RETURNING *",
+        order_id +
+        " ',$2) RETURNING *",
       [driver_user_id, date]
     );
     const sendNotificationUser = await pool.query(
       "INSERT INTO notification (user_id,read,text,date) VALUES ($1,0,'Your order #" +
-      order_id +
-      " has been assigned to a driver',$2) RETURNING *",
+        order_id +
+        " has been assigned to a driver',$2) RETURNING *",
       [giveOrder.rows[0].user_id, date]
     );
     console.log(sendNotificationDriver.rows[0]);
@@ -851,14 +853,16 @@ app.get("/drivers/:ssn", async (req, res) => {
 app.post("/driverssnfromdriverid", async (req, res) => {
   try {
     const { id } = req.body;
-    const getDriverSSN = await pool.query(`SELECT ssn FROM driver  WHERE id = $1;`, [id]);
+    const getDriverSSN = await pool.query(
+      `SELECT ssn FROM driver  WHERE id = $1;`,
+      [id]
+    );
     res.json(getDriverSSN.rows[0]);
     //front end should display one driver when click on him
   } catch (err) {
     console.error(err.message);
   }
 });
-
 
 //admin views stores
 app.get("/stores", async (req, res) => {
@@ -976,6 +980,20 @@ app.get("/ordersbycertaindriver/:ssn", async (req, res) => {
   }
 });
 
+app.get("/ordersdeliveredbycertaindriver/:ssn", async (req, res) => {
+  try {
+    const { ssn } = req.params;
+    console.log(ssn);
+    const viewDeliveredOrders = await pool.query(
+      'SELECT * FROM driver d,"order" o WHERE o.driver_ssn = d.ssn AND d.ssn = $1 AND o.status = 3;',
+      [ssn]
+    ); //order to be delivered by certain driver
+    res.json(viewDeliveredOrders.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 app.get("/driverorderitemstodeliver", async (req, res) => {
   try {
     const { ssn } = req.body;
@@ -989,13 +1007,15 @@ app.get("/driverorderitemstodeliver", async (req, res) => {
   }
 });
 
-app.post("/driverssnfromdriverid", async (req, res) => {
+app.get("/driverssnfromdriverid/:id", async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
+    console.log(id);
     const getDriverSSN = await pool.query(
       `SELECT ssn FROM driver  WHERE user_id = $1;`,
       [id]
     );
+    console.log(getDriverSSN.rows[0]);
     res.json(getDriverSSN.rows[0]);
     //front end should display one driver when click on him
   } catch (err) {
@@ -1100,5 +1120,19 @@ app.get("/languagenamefromlanguageid/:language_id", async (req, res) => {
     console.error(err.message);
   }
 });
-//
+
+
+app.get("/pendingOrders/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log(id);
+    const viewPendingOrder = await pool.query(
+      'SELECT * FROM "order" WHERE id = $1;',
+      [id]
+    );
+    res.json(viewPendingOrder.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 

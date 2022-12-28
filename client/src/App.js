@@ -25,7 +25,10 @@ import ViewWishListItemPage from "./Pages/ViewWishListItemPage";
 import AddBooktoCartPage from "./Pages/AddBooktoCartPage";
 import CartPage from "./Pages/CartPage";
 import AdminViewOrderPage from "./Pages/AdminViewPendingOrdersPage";
-import Viewbook from "./Pages/Viewbook";
+
+import DriverViewOrdersPage from "./Pages/DriverViewOrdersPage";
+
+
 
 function App() {
   return (
@@ -37,7 +40,10 @@ function App() {
         <Route path="/LogIn" element={<LogIn />}></Route>
         <Route path="/SignUp" element={<SignUp />}></Route>
         <Route path="/Home/:id" element={<CustomerHomePage />}></Route>
-        <Route path="/Home/:user_id/wishlists" element={<WishlistPage />}></Route>
+        <Route
+          path="/Home/:user_id/wishlists"
+          element={<WishlistPage />}
+        ></Route>
         <Route
           path="/Home/:id/wishlists/:book_id"
           element={<ViewWishListItemPage />}
@@ -52,7 +58,14 @@ function App() {
         <Route path="/stores/:id" element={<AdminViewStorePage />}></Route>
         <Route path="/drivers/:ssn" element={<AdminViewDriverPage />}></Route>
         <Route path="/coupons/:code" element={<AdminViewCouponPage />}></Route>
-        <Route path="/pendingorders/:id" element={<AdminViewOrderPage />} ></Route>
+        <Route
+          path="/pendingorders/:id"
+          element={<AdminViewOrderPage />}
+        ></Route>
+        <Route
+          path="/driverorders/:id"
+          element={<DriverViewOrdersPage />}
+        ></Route>
         <Route path="/store/:id" element={<StorePage />}></Route>
         <Route path="/home/:id/ViewAccount" element={<ViewAccount />}></Route>
         <Route path="/home/:user_id/ViewAccount" element={<ViewAccount />}></Route>
