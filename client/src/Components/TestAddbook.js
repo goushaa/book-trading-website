@@ -13,13 +13,13 @@ function TestAddbook() {
     const [cities, setCities] = useState([]); //should be used in other page (wrote in here for practice)
     //title, genre_id, isbn, author_name, language_id, purshace_price, version, description, image, user_id, count
     const [title, setTitle] = useState('');
-    const [genre_id, setGenre] = useState('');
-    const [isbn, setISBN] = useState('');
+    const [genre_id, setGenre] = useState(1);
+    const [isbn, setISBN] = useState(1);
     const [author_name, setAuthor] = useState('');
-    const [language_id, setLanguage] = useState('');
-    const [purshace_price, setPrice] = useState('');
-    const [version, setVersion] = useState('');
-    const [description, setDescription] = useState('');
+    const [language_id, setLanguage] = useState(1);
+    const [purshace_price, setPrice] = useState(15);
+    const [version, setVersion] = useState(1);
+    const [description, setDescription] = useState('hi');
     const [image, setImage] = useState('');
     const count = 1 //to be changed if store
     const user_id = id //to be passed between pages
@@ -100,9 +100,11 @@ function TestAddbook() {
         if (imgbb.data.data.display_url == '') {
             imgbb = await axios(settings);
         }
+        console.log( title, genre_id, isbn, author_name, language_id, purshace_price, version, description,  imgbb.data.data.display_url, user_id, count);
         //setImage(imgbb.data.data.display_url);
-        axios.post('http://localhost:5000/addbook', { title, genre_id, isbn, author_name, language_id, purshace_price, version, description, image: imgbb.data.data.display_url, user_id, count }).then(res => {
-            console.log(res.data); //add book with image upload (has some bugs)
+        axios.post('http://localhost:5000/addbook', {  title, genre_id, isbn, author_name, language_id, purshace_price, version, description, image: imgbb.data.data.display_url, user_id, count }).then(res => {
+            console.log('win'); //add book with image upload (has some bugs)    
+        console.log(res.data); //add book with image upload (has some bugs)
         }).catch(err => console.log(err))
     }
 

@@ -65,12 +65,12 @@ function App() {
           path="/driverorders/:id"
           element={<DriverViewOrdersPage />}
         ></Route>
-        <Route path="/store/:id" element={<StorePage />}></Route>
+        <Route path="/store" element={<StorePage />}></Route>
 
         <Route path="/home/ViewAccount" element={<ViewAccount />}></Route>
 
         <Route
-          path="/home/:id/book/:book_id"
+          path="/home/book/:book_id"
           element={<AddBooktoCartPage />}
         ></Route>
         <Route path="/home/Cart" element={<CartPage />}></Route>

@@ -20,9 +20,15 @@ INSERT INTO "user" (first_name,last_name,address,city_id,user_name,password,emai
 
 INSERT INTO "book" ("title","genre_id","isbn","author_name","language_id","purchase_price","version","description","image","user_id","count","status")
  VALUES ('Introduction to Algorithms, 3rd Edition (The MIT Press)',null,null,'Thomas H. Cormen','2','350','1','book for algo','https://m.media-amazon.com/images/P/0262033844.01._SCLZZZZZZZ_SX500_.jpg','2','50','0'),
+ VALUES ('test book',null,null,'Thomas H. Cormen','2','350','1','book for algo','https://edit.org/images/cat/book-covers-big-2019101610.jpg','2','50','0'),
+ VALUES ('test book',null,null,'Thomas H. Cormen','2','350','1','book for algo','https://template.canva.com/EADaopxBna4/1/0/251w-ujD6UPGa9hw.jpg','2','50','0'),
+ VALUES ('a million to one',null,null,'Thomas H. Cormen','2','350','1','book for algo','https://res.cloudinary.com/scastiel/image/upload/v1666969465/dmeeuxpg0hwq3wvmqlhc.jpg','2','50','0'),
+ ('Introduction to Algorithms, 3rd Edition (The MIT Press)',null,null,'Thomas H. Cormen','2','350','1','book for algo','https://m.media-amazon.com/images/P/0262033844.01._SCLZZZZZZZ_SX500_.jpg','2','50','0'),
+ ('Introduction to Algorithms, 3rd Edition (The MIT Press)',null,null,'Thomas H. Cormen','2','350','1','book for algo','https://m.media-amazon.com/images/P/0262033844.01._SCLZZZZZZZ_SX500_.jpg','2','50','0'),
  ('Introduction to Algorithms, 3rd Edition (The MIT Press)',null,null,'Thomas H. Cormen','2','350','1','book for algo','https://m.media-amazon.com/images/P/0262033844.01._SCLZZZZZZZ_SX500_.jpg','2','50','0'),
  ('Cracking the Coding Interview: 189 Programming Questions and Solutions',null,null,'Gayle Laakmann McDowell ','3','400','1','book for interviews','https://m.media-amazon.com/images/P/0984782850.01._SCLZZZZZZZ_SX500_.jpg','2','50','0'),
 
  ('Cracking the Coding Interview: 189 Programming Questions and Solutions',null,null,'Gayle Laakmann McDowell ','3','400','1','book for interviews','https://m.media-amazon.com/images/P/0984782850.01._SCLZZZZZZZ_SX500_.jpg','2','50','0');
+ ('Cracking the Coding Interview: 189 Programming Questions and Solutions',null,null,'Gayle Laakmann McDowell ','3','400','1','book for interviews','https://edit.org/images/cat/book-covers-big-2019101610.jpg');
 
 
