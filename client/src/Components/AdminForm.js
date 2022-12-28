@@ -13,6 +13,7 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import "../CSS/prom_bg.css";
+import "../CSS/Style.css";
 import axios from "axios";
 
 function AdminForm() {
@@ -45,12 +46,19 @@ function AdminForm() {
         setCoupons(res.data);
       })
       .catch((err) => console.log(err));
-
+      
     axios
       .get("http://localhost:5000/pendingOrders")
       .then((res) => {
         setPendingOrders(res.data);
         console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+
+      axios
+      .get("http://localhost:5000/wishlists_stats")
+      .then((res) => {
+        setwishlist(res.data);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -61,7 +69,7 @@ function AdminForm() {
   const [discount, setDiscount] = useState("");
   const [maximum_use, setMaximumUse] = useState("");
   const [is_relative, setIsRelative] = useState("0");
-
+  const [viewUserWishlists,setwishlist]=useState("");
   const [customers, setCustomers] = useState([]);
   const [stores, setStores] = useState([]);
   const [drivers, setDrivers] = useState([]);
@@ -70,6 +78,7 @@ function AdminForm() {
   const [driver_ssn, setDriverSSN] = useState([]);
   const [order_id, setOrderID] = useState([]);
   const [driver_user_id, setDriverID] = useState([]);
+  const [book,setbook]=useState([]);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -377,11 +386,11 @@ function AdminForm() {
                   <tr>
                     <td>
                       {pendingOrder.id}{" "}
-                      <Link to={`/pendingorders/${pendingOrder.id}`}></Link>
+                      <Link to={`/pendingOrders/${pendingOrder.id}`}></Link>
                     </td>
                     <td>
                       {
-                        <Link to={`/pendingorders/${pendingOrder.id}`}>
+                        <Link to={`/pendingOrders/${pendingOrder.id}`}>
                           <Button className="viewbtn w-30" variant="dark">
                             {" "}
                             View{" "}
@@ -391,7 +400,7 @@ function AdminForm() {
                     </td>
                     <td>
                       <select
-                        className="form-control"
+                        className="combo"
                         onChange={(e) => {
                           setDriverSSN(e.target.value);
                           console.log(e.target.value);
@@ -407,6 +416,7 @@ function AdminForm() {
                     <td>
                       <Button
                         variant="dark"
+                        className="viewbtn w-30"
                         onClick={function (e) {
                           setOrderID(pendingOrder.id);
                           console.log(pendingOrder.id);
@@ -443,6 +453,34 @@ function AdminForm() {
                 ))}
               </tbody>
             </table>
+          </Tab>
+          <Tab eventKey="wishlists" title="Wishlists">
+          <h1>Wishlists</h1>
+
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Book</th>
+      <th scope="col">Num. of occurences</th>
+    </tr>
+  </thead>
+  {/* <tbody>
+    {viewUserWishlists.map((wishlist) => (
+      <tr>
+        <td>
+
+        </td>
+        <td>
+        {wishlist.title}
+        </td>
+        <td>
+       
+        </td>
+      </tr>
+    ))}
+  </tbody> */}
+</table>
           </Tab>
         </Tabs>
       </Container>

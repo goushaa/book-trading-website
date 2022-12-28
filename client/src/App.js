@@ -24,6 +24,7 @@ import WishlistPage from "./Pages/WishlistPage";
 import ViewWishListItemPage from "./Pages/ViewWishListItemPage";
 import AddBooktoCartPage from "./Pages/AddBooktoCartPage";
 import CartPage from "./Pages/CartPage";
+import AdminViewOrderPage from "./Pages/AdminViewPendingOrdersPage";
 
 function App() {
   return (
@@ -35,7 +36,7 @@ function App() {
         <Route path="/LogIn" element={<LogIn />}></Route>
         <Route path="/SignUp" element={<SignUp />}></Route>
         <Route path="/Home/:id" element={<CustomerHomePage />}></Route>
-        <Route path="/Home/:id/wishlists" element={<WishlistPage />}></Route>
+        <Route path="/Home/:user_id/wishlists" element={<WishlistPage />}></Route>
         <Route
           path="/Home/:id/wishlists/:book_id"
           element={<ViewWishListItemPage />}
@@ -52,7 +53,7 @@ function App() {
         <Route path="/coupons/:code" element={<AdminViewCouponPage />}></Route>
         <Route
           path="/pendingorders/:id"
-          element={<AdminViewStorePage />}
+          element={<AdminViewOrderPage />}
         ></Route>
         <Route path="/store/:id" element={<StorePage />}></Route>
         <Route path="/home/:id/ViewAccount" element={<ViewAccount />}></Route>

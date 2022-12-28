@@ -197,18 +197,19 @@ app.post("/notifications/readall", async (req, res) => {
 
 //************************wish list*******************************/
 app.post("/addWishlist/:user_id", async (req, res) => {
-  try {
-    const { user_id } = req.params;
-    const { book_id } = req.body; //why did we do this
-    //NEEDS VALIDATION AND REVISION
-    const addWishlist = await pool.query(
-      "INSERT INTO wish_list_item (user_id,book_id) VALUES ($1,$2) RETURNING *;",
-      [user_id, book_id]
-    );
-    res.json(addWishlist.rows[0]);
-  } catch (err) {
-    console.error(err.message);
-  }
+
+    try {
+        const { user_id } = req.params;
+        const { book_id } = req.body; //why did we do this
+        console.log(user_id,book_id);
+        //NEEDS VALIDATION AND REVISION
+        const addWishlist = await pool.query("INSERT INTO wish_list_item (user_id,book_id) VALUES ($1,$2) RETURNING *;", [user_id, book_id]);
+        res.json(addWishlist.rows[0]);
+
+    } catch (err) {
+        console.error(err.message);
+    }
+
 });
 
 app.post("/deleteWishlist/:user_id", async (req, res) => {
@@ -275,14 +276,16 @@ app.get("/wishlists_stats/:user_id", async (req, res) => {
 //************************book*******************************/
 
 app.get("/books", async (req, res) => {
-  try {
-    const getBooks = await pool.query(
-      'SELECT * FROM book WHERE book.user_id in (select id from "user" where type =3) and status = 0'
-    );
-    res.json(getBooks.rows);
-  } catch (err) {
-    console.error(err.message);
-  }
+
+    try {
+        const getBooks = await pool.query('SELECT * FROM book WHERE book.user_id in (select id from "user" where type =3) and status = 0');
+        res.json(getBooks.rows);
+
+
+    } catch (err) {
+        console.error(err.message);
+    }
+
 });
 
 app.post("/bookinfo", async (req, res) => {
