@@ -12,7 +12,12 @@ import { Link } from 'react-router-dom';
 import Nav from "react-bootstrap/Nav";
 
 function Wishlist() {
-  let { user_id } = useParams()
+  if(localStorage.length==0)
+  window.location.href = "/";
+  const userData = JSON.parse(localStorage.getItem("user"));
+  if(userData.type==1||userData.type==0)
+  window.location.href = "/login";
+  const [user_id,setID] =useState(userData.id) ;
   const [wishlists, setWishLists] = useState([]);
   useEffect(() => {
     axios
@@ -31,7 +36,11 @@ function deletewishlist(book_id)
       .then((res) => {
         window.location.reload();
       })
-      .catch((err) => console.log(err));}
+      .catch((err) => console.log(err));
+    }
+    function viewBook (book_id){
+      window.location.href="/home/book/"+book_id;
+    }
      
   return (
     <Fragment>
@@ -79,9 +88,8 @@ function deletewishlist(book_id)
                        {wishlist.title}
                      </td>
                      <td>
-                      <Link to={`${wishlist.book_id}`}>
-                     <Button variant='success'>View</Button>
-                     </Link>
+                   
+                     <Button onClick={()=>viewBook(wishlist.book_id)} variant='success' >View</Button>
                      </td>
                      <td>
                      <Button variant='success' onClick={()=>deletewishlist(wishlist.book_id)}>Delete</Button>

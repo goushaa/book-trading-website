@@ -19,7 +19,7 @@ function AccountInfo() {
   const [id,setID] =useState(userData.id) ;
   
   useEffect(() => {
-  //  console.log(id);
+   console.log(id);
     axios
       .get(`http://localhost:5000/users/${id}`)
       .then((res) => {
@@ -33,7 +33,7 @@ function AccountInfo() {
         setCities(res.data);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [id]);
 
 
   const [city_name, setCity] = useState("Giza");
@@ -68,7 +68,7 @@ function AccountInfo() {
       })
       .then((res) => {
         console.log(res.data);
-        // window.location.reload();
+        window.location.reload();
       })
       .catch((err) => console.log(err));
   },[city_id])

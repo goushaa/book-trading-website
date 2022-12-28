@@ -68,7 +68,7 @@ function AdminForm() {
   const [discount, setDiscount] = useState("");
   const [maximum_use, setMaximumUse] = useState("");
   const [is_relative, setIsRelative] = useState("0");
-  const [viewUserWishlists, setwishlist] = useState("");
+  const [viewUserWishlists, setwishlist] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [stores, setStores] = useState([]);
   const [drivers, setDrivers] = useState([]);
@@ -353,7 +353,7 @@ function AdminForm() {
                             )
                             .then((res) => {
                               console.log(res);
-                              window.location.reload();
+                              window.location.reload()git;
                             })
                             .catch((err) => console.log(err));
                         }}

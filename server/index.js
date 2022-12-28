@@ -324,6 +324,7 @@ app.post("/bookinfo/quantity", async (req, res) => {
 });
 app.post("/addbook", async (req, res) => {
   try {
+  
     var {
       title,
       genre_id,
@@ -335,33 +336,22 @@ app.post("/addbook", async (req, res) => {
       description,
       image,
       user_id,
-      count,
+      count
     } = req.body;
+    console.log(
+      language_id
+    );
     //checking for nulls in gernre,isbn,language_id
     //front enter enters user couut with 1 but bookstores count with anything
     //front end will not let other users (superadmin-admin-driver) go into the my books page
     if (genre_id == -1) genre_id = "null";
     if (isbn == -1) isbn = "null";
     if (language_id == -1) language_id = "null";
-
+      console.log(    `INSERT INTO book (title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,user_id,count,status) values
+      ('${title}',${genre_id},'${isbn}' ,'${author_name}', ${language_id} ,${purshace_price},${version},'${description}' ,'${image}',${user_id},${count},0) RETURNING *;`);
     book = await pool.query(
-      "INSERT INTO book (title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,user_id,count,status) values($1," +
-        genre_id +
-        "," +
-        isbn +
-        ",$2," +
-        language_id +
-        ",$3,$4,$5,$6,$7,$8,0) RETURNING *",
-      [
-        title,
-        author_name,
-        purshace_price,
-        version,
-        description,
-        image,
-        user_id,
-        count,
-      ]
+      `INSERT INTO book (title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,user_id,count,status) values
+      ('${title}',${genre_id},'${isbn}' ,'${author_name}', ${language_id} ,${purshace_price},${version},'${description}' ,'${image}',${user_id},${count},0) RETURNING *;`
     );
     res.json(book.rows[0]);
   } catch (err) {

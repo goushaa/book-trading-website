@@ -19,8 +19,13 @@ import Card from "react-bootstrap/Card";
 import { useParams } from "react-router-dom";
 
 function StoresUI() {
-  let { id } = useParams();
-  console.log(id)
+  if(localStorage.length==0)
+  window.location.href = "/";
+  const userData = JSON.parse(localStorage.getItem("user"));
+  if(userData.type!='3')
+  window.location.href = "/login";
+  const [id,setID] =useState(userData.id) ;
+
 
   useEffect(() => {
     axios.get(`http://localhost:5000/userbooks/${id}`).then((res) => {
@@ -32,7 +37,7 @@ function StoresUI() {
       setWishlists(res.data);
     }).catch((err) => console.log(err));
 
-  }, []);
+  }, [id]);
   const [book, setBook] = useState([])
   const [wishlists, setWishlists] = useState([])
 
