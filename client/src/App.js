@@ -36,7 +36,7 @@ function App() {
         <Route path="/LogIn" element={<LogIn />}></Route>
         <Route path="/SignUp" element={<SignUp />}></Route>
         <Route path="/Home/:id" element={<CustomerHomePage />}></Route>
-        <Route path="/Home/:id/wishlists" element={<WishlistPage />}></Route>
+        <Route path="/Home/:user_id/wishlists" element={<WishlistPage />}></Route>
         <Route
           path="/Home/:id/wishlists/:book_id"
           element={<ViewWishListItemPage />}

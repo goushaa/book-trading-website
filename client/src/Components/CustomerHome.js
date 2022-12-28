@@ -99,8 +99,20 @@ function CustomerHome() {
 
   const handleSelect = (selectedIndex, e) => {
     setIndex(selectedIndex);
+
+    
   };
   const [modalShow, setModalShow] = React.useState(false);
+  function addwishlist(book_id)
+    {
+      let user_id=id;
+      axios
+      .post(`http://localhost:5000/addWishlist/${user_id}`, {book_id})
+      .then((res) => {
+        console.log(res.data)
+      })
+      .catch((err) => console.log(err));
+    }
   return (
     <Fragment>
       <Row>
@@ -321,9 +333,9 @@ function CustomerHome() {
                           <Link to={`book/${book.id}`}>
                             <Button variant="success" className="mr-3">View</Button>
                           </Link>
-                          <Link to={`book/${book.id}`}>
-                            <Button variant="success" className="ml-3">WISHLIST</Button>
-                          </Link>
+                         <Link to={`wishlists`}>
+                         <Button variant="success" className="ml-3" onClick={addwishlist(book.id)} > Add to Wishlist</Button>
+                         </Link>
                         </div>
 
                       </Card.Body>

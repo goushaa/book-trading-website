@@ -46,12 +46,19 @@ function AdminForm() {
         setCoupons(res.data);
       })
       .catch((err) => console.log(err));
-
+      
     axios
       .get("http://localhost:5000/pendingOrders")
       .then((res) => {
         setPendingOrders(res.data);
         console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+
+      axios
+      .get("http://localhost:5000/wishlists_stats")
+      .then((res) => {
+        setwishlist(res.data);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -62,7 +69,7 @@ function AdminForm() {
   const [discount, setDiscount] = useState("");
   const [maximum_use, setMaximumUse] = useState("");
   const [is_relative, setIsRelative] = useState("0");
-
+  const [viewUserWishlists,setwishlist]=useState("");
   const [customers, setCustomers] = useState([]);
   const [stores, setStores] = useState([]);
   const [drivers, setDrivers] = useState([]);
@@ -71,6 +78,7 @@ function AdminForm() {
   const [driver_ssn, setDriverSSN] = useState([]);
   const [order_id, setOrderID] = useState([]);
   const [driver_user_id, setDriverID] = useState([]);
+  const [book,setbook]=useState([]);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -445,6 +453,34 @@ function AdminForm() {
                 ))}
               </tbody>
             </table>
+          </Tab>
+          <Tab eventKey="wishlists" title="Wishlists">
+          <h1>Wishlists</h1>
+
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Book</th>
+      <th scope="col">Num. of occurences</th>
+    </tr>
+  </thead>
+  {/* <tbody>
+    {viewUserWishlists.map((wishlist) => (
+      <tr>
+        <td>
+
+        </td>
+        <td>
+        {wishlist.title}
+        </td>
+        <td>
+       
+        </td>
+      </tr>
+    ))}
+  </tbody> */}
+</table>
           </Tab>
         </Tabs>
       </Container>
