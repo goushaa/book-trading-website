@@ -9,6 +9,13 @@ import axios from 'axios'
 import '../CSS/prom_bg.css'
 
 function Superadmin() {
+    if(localStorage.length==0)
+    window.location.href = "/";
+    const userData = JSON.parse(localStorage.getItem("user"));
+    if(userData.type!=0)
+    window.location.href = "/login";
+    
+    const [id,setID] =useState(userData.id) ;
     useEffect(() => {
         axios.get('http://localhost:5000/cities').then((res) => {
             setCities(res.data);

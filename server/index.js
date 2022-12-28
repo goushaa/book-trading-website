@@ -107,7 +107,7 @@ app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
     const person = await pool.query(
-      `SELECT * FROM "user" WHERE email=$1 AND password=$2`,
+      `SELECT id,first_name,last_name,address,city_id,user_name,email,type FROM "user" WHERE email=$1 AND password=$2`,
       [email, password]
     );
 
@@ -126,6 +126,7 @@ app.post("/login", async (req, res) => {
 app.post("/updateUser", async (req, res) => {
   try {
     const { first, last, address, city_id, user_name, id } = req.body;
+    console.log(first, last, address, city_id, user_name, id );
     const updateUser = await pool.query(
       'UPDATE "user" SET first_name = $1, last_name = $2, address = $3, city_id = $4, user_name = $5 WHERE id = $6 RETURNING *',
       [first, last, address, city_id, user_name, id]
