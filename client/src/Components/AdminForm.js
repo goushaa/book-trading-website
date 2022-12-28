@@ -22,7 +22,6 @@ function AdminForm() {
       .get("http://localhost:5000/drivers")
       .then((res) => {
         setDrivers(res.data);
-        console.log(res.data);
       })
       .catch((err) => console.log(err));
 
@@ -46,16 +45,15 @@ function AdminForm() {
         setCoupons(res.data);
       })
       .catch((err) => console.log(err));
-      
+
     axios
       .get("http://localhost:5000/pendingOrders")
       .then((res) => {
         setPendingOrders(res.data);
-        console.log(res.data);
       })
       .catch((err) => console.log(err));
 
-      axios
+    axios
       .get("http://localhost:5000/wishlists_stats")
       .then((res) => {
         setwishlist(res.data);
@@ -70,16 +68,16 @@ function AdminForm() {
   const [discount, setDiscount] = useState("");
   const [maximum_use, setMaximumUse] = useState("");
   const [is_relative, setIsRelative] = useState("0");
-  const [viewUserWishlists,setwishlist]=useState("");
+  const [viewUserWishlists, setwishlist] = useState("");
   const [customers, setCustomers] = useState([]);
   const [stores, setStores] = useState([]);
   const [drivers, setDrivers] = useState([]);
   const [coupons, setCoupons] = useState([]);
   const [pendingOrders, setPendingOrders] = useState([]);
-  const [driver_ssn, setDriverSSN] = useState([]);
-  const [order_id, setOrderID] = useState([]);
-  const [driver_user_id, setDriverID] = useState([]);
-  const [book,setbook]=useState([]);
+  const [driver_ssn, setDriverSSN] = useState(0);
+  const [order_id, setOrderID] = useState(0);
+  const [driver_user_id, setDriverID] = useState(0);
+  const [book, setbook] = useState([]);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -409,7 +407,7 @@ function AdminForm() {
                       >
                         {drivers.map((driver) => (
                           <option value={driver.ssn}>
-                            {driver.user_name}{" "}
+                            {driver.email}{" "}
                           </option>
                         ))}
                       </select>
@@ -420,29 +418,14 @@ function AdminForm() {
                         className="viewbtn w-30"
                         onClick={function (e) {
                           setOrderID(pendingOrder.id);
-                          console.log(pendingOrder.id);
-                          axios
-                            .get(
-                              `http://localhost:5000/driveruseridgivenssn`,
-                              driver_ssn
-                            )
-                            .then((res) => {
-                              setDriverID(res.data);
-                              console.log(res.data);
-                            })
-                            .catch((err) => console.log(err));
-                          axios
-                            .post(
-                              `http://localhost:5000/AdminGiveOrderToDriver`,
-                              {
-                                driver_ssn,
-                                order_id,
-                                driver_user_id,
-                              }
-                            )
-                            .then((res) => {
-                              console.log(res);
-                            })
+                          axios.post(`http://localhost:5000/driveruseridgivenssn`, { driver_ssn }).then((res) => {
+                            setDriverID(res.data.user_id);
+
+                          }).catch((err) => console.log(err));
+                          //console.log(driver_ssn, pendingOrder.id, driver_id_sui);
+                          axios.post(`http://localhost:5000/AdminGiveOrderToDriver`, { driver_ssn: driver_ssn, order_id: pendingOrder.id, driver_user_id: driver_user_id }).then((res) => {
+                            console.log(res.data);
+                          })
                             .catch((err) => console.log(err));
                         }}
                       >
@@ -456,7 +439,8 @@ function AdminForm() {
             </table>
           </Tab>
           <Tab eventKey="wishlists" title="Wishlists">
-          <h1>Wishlists</h1>
+            <h1>Wishlists</h1>
+
 
           <table class="table">
               <thead class="thead-dark">
@@ -478,6 +462,7 @@ function AdminForm() {
                   </tr>
                 ))}
               </tbody>
+
             </table>
           </Tab>
         </Tabs>
