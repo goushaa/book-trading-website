@@ -8,6 +8,7 @@ import "../CSS/Style.css";
 
 function AdminViewOrders() {
   let { id } = useParams();
+  console.log(id);
   useEffect(() => {
     axios
       .get(`http://localhost:5000/pendingOrders/${id}`)
