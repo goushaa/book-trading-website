@@ -80,9 +80,9 @@ function CustomerHome() {
       })
       .catch((err) => console.log(err));
 
-    let user_id = id
+
     axios
-      .post(`http://localhost:5000/userOrder`, { user_id })
+      .post(`http://localhost:5000/userOrder`, { id })
       .then((res) => {
         console.log(res.data.id);
         setOrderid(res.data.id);

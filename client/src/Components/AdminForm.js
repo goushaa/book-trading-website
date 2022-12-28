@@ -13,6 +13,7 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import "../CSS/prom_bg.css";
+import "../CSS/Style.css";
 import axios from "axios";
 
 function AdminForm() {
@@ -21,6 +22,7 @@ function AdminForm() {
       .get("http://localhost:5000/drivers")
       .then((res) => {
         setDrivers(res.data);
+        console.log(res.data);
       })
       .catch((err) => console.log(err));
 
@@ -49,6 +51,7 @@ function AdminForm() {
       .get("http://localhost:5000/pendingOrders")
       .then((res) => {
         setPendingOrders(res.data);
+        console.log(res.data);
       })
       .catch((err) => console.log(err));
 
@@ -317,7 +320,7 @@ function AdminForm() {
             </table>
           </Tab>
           <Tab eventKey="Coupons" title="Coupons">
-            <h1>testCoupons</h1>
+            <h1>Coupons</h1>
             <table class="table">
               <thead class="thead-dark">
                 <tr>
@@ -367,51 +370,89 @@ function AdminForm() {
           </Tab>
 
           <Tab eventKey="Pending Orders" title="Pending Orders">
-            <h1>Assign them to Drivers</h1>
+            <h1>Orders</h1>
 
-            {pendingOrders.map((pendingOrder) => (
-              <div>
-                <select
-                  className="form-control"
-                  onChange={(e) => {
-                    setDriverSSN(e.target.value);
-                  }}
-                >
-                  {drivers.map((driver) => (
-                    <option value={driver.ssn}>{driver.ssn} </option>
-                  ))}
-                </select>
-
-                <Button
-                  variant="dark"
-                  onClick={function (e) {
-                    setOrderID(pendingOrder.id);
-                    axios
-                      .get(
-                        `http://localhost:5000/driveruseridgivenssn`,
-                        driver_ssn
-                      )
-                      .then((res) => {
-                        setDriverID(res.data);
-                      })
-                      .catch((err) => console.log(err));
-                    axios
-                      .post(`http://localhost:5000/AdminGiveOrderToDriver`, {
-                        driver_ssn,
-                        order_id,
-                        driver_user_id,
-                      })
-                      .then((res) => {
-                        console.log(res);
-                      })
-                      .catch((err) => console.log(err));
-                  }}
-                >
-                  {" "}
-                  Assign
-                </Button>
-              </div>
-            ))}
+            <table class="table">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Details</th>
+                  <th scope="col">Select Driver</th>
+                  <th scope="col">Assign</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pendingOrders.map((pendingOrder) => (
+                  <tr>
+                    <td>
+                      {pendingOrder.id}{" "}
+                      <Link to={`/pendingOrders/${pendingOrder.id}`}></Link>
+                    </td>
+                    <td>
+                      {
+                        <Link to={`/pendingOrders/${pendingOrder.id}`}>
+                          <Button className="viewbtn w-30" variant="dark">
+                            {" "}
+                            View{" "}
+                          </Button>
+                        </Link>
+                      }
+                    </td>
+                    <td>
+                      <select
+                        className="combo"
+                        onChange={(e) => {
+                          setDriverSSN(e.target.value);
+                          console.log(e.target.value);
+                        }}
+                      >
+                        {drivers.map((driver) => (
+                          <option value={driver.ssn}>
+                            {driver.user_name}{" "}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                    <td>
+                      <Button
+                        variant="dark"
+                        className="viewbtn w-30"
+                        onClick={function (e) {
+                          setOrderID(pendingOrder.id);
+                          console.log(pendingOrder.id);
+                          axios
+                            .get(
+                              `http://localhost:5000/driveruseridgivenssn`,
+                              driver_ssn
+                            )
+                            .then((res) => {
+                              setDriverID(res.data);
+                              console.log(res.data);
+                            })
+                            .catch((err) => console.log(err));
+                          axios
+                            .post(
+                              `http://localhost:5000/AdminGiveOrderToDriver`,
+                              {
+                                driver_ssn,
+                                order_id,
+                                driver_user_id,
+                              }
+                            )
+                            .then((res) => {
+                              console.log(res);
+                            })
+                            .catch((err) => console.log(err));
+                        }}
+                      >
+                        {" "}
+                        Assign
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </Tab>
           <Tab eventKey="wishlists" title="Wishlists">
           <h1>Wishlists</h1>
