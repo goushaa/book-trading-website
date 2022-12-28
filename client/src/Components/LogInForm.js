@@ -64,7 +64,7 @@ function LogInForm() {
           }
           else if (response.data.type == 3) {
             //stores
-            navigate(`/store/${response.data.id}`, { state: response.data });
+            navigate(`/store`);
           } else if (response.data.type == 4) {
             //driver
             navigate(`/driver/${response.data.id}`, { state: response.data });

@@ -65,7 +65,7 @@ function App() {
           path="/driverorders/:id"
           element={<DriverViewOrdersPage />}
         ></Route>
-        <Route path="/store/:id" element={<StorePage />}></Route>
+        <Route path="/store" element={<StorePage />}></Route>
 
         <Route path="/home/ViewAccount" element={<ViewAccount />}></Route>
 
