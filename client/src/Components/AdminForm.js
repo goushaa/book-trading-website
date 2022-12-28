@@ -13,6 +13,7 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import "../CSS/prom_bg.css";
+import "../CSS/Style.css";
 import axios from "axios";
 
 function AdminForm() {
@@ -377,11 +378,11 @@ function AdminForm() {
                   <tr>
                     <td>
                       {pendingOrder.id}{" "}
-                      <Link to={`/pendingorders/${pendingOrder.id}`}></Link>
+                      <Link to={`/pendingOrders/${pendingOrder.id}`}></Link>
                     </td>
                     <td>
                       {
-                        <Link to={`/pendingorders/${pendingOrder.id}`}>
+                        <Link to={`/pendingOrders/${pendingOrder.id}`}>
                           <Button className="viewbtn w-30" variant="dark">
                             {" "}
                             View{" "}
@@ -391,7 +392,7 @@ function AdminForm() {
                     </td>
                     <td>
                       <select
-                        className="form-control"
+                        className="combo"
                         onChange={(e) => {
                           setDriverSSN(e.target.value);
                           console.log(e.target.value);
@@ -407,6 +408,7 @@ function AdminForm() {
                     <td>
                       <Button
                         variant="dark"
+                        className="viewbtn w-30"
                         onClick={function (e) {
                           setOrderID(pendingOrder.id);
                           console.log(pendingOrder.id);

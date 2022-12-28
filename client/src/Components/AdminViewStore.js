@@ -38,7 +38,7 @@ function AdminViewStore() {
       <Navbar bg="dark" variant="dark">
         <Container>
           <Navbar.Brand>
-            <h3>Customer Info</h3>
+            <h3>Store Info</h3>
           </Navbar.Brand>
           <Navbar.Collapse className="justify-content-end"></Navbar.Collapse>
         </Container>
