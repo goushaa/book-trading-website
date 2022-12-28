@@ -196,15 +196,16 @@ app.post("/notifications/readall", async (req, res) => {
 });
 
 //************************wish list*******************************/
-app.post("/addWishlist/:user_id", async (req, res) => {
+app.post("/addWishlist", async (req, res) => {
 
-  try {
-    const { user_id } = req.params;
-    const { book_id } = req.body; //why did we do this
-    console.log(user_id, book_id);
-    //NEEDS VALIDATION AND REVISION
-    const addWishlist = await pool.query("INSERT INTO wish_list_item (user_id,book_id) VALUES ($1,$2) RETURNING *;", [user_id, book_id]);
-    res.json(addWishlist.rows[0]);
+
+    try {
+        const {user_id, book_id } = req.body; //why did we do this
+        console.log(user_id,book_id);
+        //NEEDS VALIDATION AND REVISION
+        const addWishlist = await pool.query("INSERT INTO wish_list_item (user_id,book_id) VALUES ($1,$2) RETURNING *;", [user_id, book_id]);
+        res.json(addWishlist.rows[0]);
+
 
   } catch (err) {
     console.error(err.message);
@@ -212,10 +213,9 @@ app.post("/addWishlist/:user_id", async (req, res) => {
 
 });
 
-app.post("/deleteWishlist/:user_id", async (req, res) => {
+app.post("/deleteWishlist", async (req, res) => {
   try {
-    const { user_id } = req.params;
-    const { book_id } = req.body;
+    const { user_id,book_id } = req.body;
     //NEEDS VALIDATION AND REVISION
     const deleteWishlist = await pool.query(
       "DELETE FROM wish_list_item  WHERE user_id = $1 AND book_id = $2 RETURNING *;",
@@ -231,6 +231,7 @@ app.post("/deleteWishlist/:user_id", async (req, res) => {
   } catch (err) {
     console.error(err.message);
   }
+  
 });
 
 app.get("/wishlists/:user_id", async (req, res) => {
@@ -371,7 +372,7 @@ app.post("/addbook", async (req, res) => {
   }
 });
 //stores delete books app.delete
-app.delete("/deletebook", async (req, res) => {
+app.post("/deletebook", async (req, res) => {
   try {
     const { id } = req.body;
     book = await pool.query("UPDATE BOOK SET status=1 where id=$1", [id]);

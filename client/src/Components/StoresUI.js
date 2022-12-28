@@ -35,12 +35,20 @@ function StoresUI() {
   }, []);
   const [book, setBook] = useState([])
   const [wishlists, setWishlists] = useState([])
+
+  function deletebook(id)
+  {
+    axios.post(`http://localhost:5000/deletebook`,{id}).then((res) => {
+      window.location.reload();
+    }).catch((err) => console.log(err));
+  }
   return (
     <Fragment>
       <Navbar bg="dark" variant="dark" expand="lg">
         <Container>
           <Navbar.Brand href="/">
-            <h3>Store</h3>
+            <h3>Online Book Store</h3>
+            <h5>Store</h5>
           </Navbar.Brand>
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -53,7 +61,7 @@ function StoresUI() {
       </Navbar>
       <Container className="Store_bg">
         <Tabs
-          defaultActiveKey="AddBook"
+          defaultActiveKey="viewbooks"
           id="justify-tab-example"
           className="mb-3"
           justify
@@ -69,14 +77,14 @@ function StoresUI() {
                 {
                   book.map(book => {
                     return (
-                      <div className="col-lg-4 col-md-6 col-12">
+                      <div className="col-lg-4 col-md-6 col-12" key={book.id}>
                         <div>
                           <Card className="course-card">
                             <Card.Img variant="top" src={book.image}></Card.Img>
                             <Card.Body>
                               <Card.Title>{book.title}</Card.Title>
                               <p>{book.description}</p>
-
+<Button variant="success" onClick={()=>deletebook(book.id)} >Delete</Button>
                             </Card.Body>
                           </Card>
                         </div>
@@ -90,25 +98,34 @@ function StoresUI() {
           </Tab>
           <Tab eventKey="ViewWishlist" title="View Customers' Wishlists">
             <h1>View Wishlists</h1>
-            {
-              wishlists.map(wishlist => {
-                return (
-                  <div className="col-lg-4 col-md-6 col-12">
-                    <div>
-                      <Card className="course-card">
-                        <Card.Img variant="top" src={wishlist.image}></Card.Img>
-                        <Card.Body>
-                          <Card.Title>book ID: {wishlist.book_id}</Card.Title>
-                          <p>Number of users: {wishlist.countUsers}</p>
-                          <p>Availability: {wishlist.status}</p>
-
-                        </Card.Body>
-                      </Card>
-                    </div>
-                  </div>
-                )
-              })
-            }
+            <table class="table">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Book</th>
+                  <th scope="col">Num. Of Occurrences</th>
+                  <th scope="col">Avialability</th>
+                  <th scope="col">ISBN</th>
+                </tr>
+              </thead>
+              <tbody>
+                {wishlists.map((wishlist) => (
+                  <tr>
+                    <td>
+                      {wishlist.title}
+                    </td>
+                    <td>
+                      {wishlist.countUsers}{" "}
+                    </td>
+                    <td>
+                      {wishlist.status}{" "}
+                    </td>
+                    <td>
+                      {wishlist.isbn}{" "}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
 
 
           </Tab>

@@ -29,29 +29,26 @@ function MyVerticallyCenteredModal(props) {
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">Promotions</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">Tickets</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>
-              <h5>Enter Your Coupon here..</h5>
+              <h5>Add your Ticket</h5>
             </Form.Label>
             <Container className="c1">
               <Form.Control
                 className="prom_text"
                 type="string"
-                maxLength={6}
-                placeholder="Enter coupon"
+                placeholder="Add Ticket"
               />
             </Container>
-            <Form.Text className="text-muted">
-              Your Coupon must be 6 characters/numbers
-            </Form.Text>
+           
           </Form.Group>
 
           <Button variant="dark" type="submit">
-            Apply
+            Comment
           </Button>
         </Form>
       </Modal.Body>
@@ -106,12 +103,17 @@ function CustomerHome() {
   function addwishlist(book_id)
     {
       let user_id=id;
+      console.log(book_id);
       axios
-      .post(`http://localhost:5000/addWishlist/${user_id}`, {book_id})
+      .post(`http://localhost:5000/addWishlist`, {user_id,book_id})
       .then((res) => {
-        console.log(res.data)
+        console.log(res.data.book_id)
+      
+        window.location.href =`${user_id}/wishlists`;
+        
       })
       .catch((err) => console.log(err));
+
     }
   return (
     <Fragment>
@@ -256,7 +258,7 @@ function CustomerHome() {
                 className="leftmenu2btn6"
                 onClick={() => setModalShow(true)}
               >
-                Promotions
+                Tickets
               </Button>{" "}
               <MyVerticallyCenteredModal
                 show={modalShow}
@@ -319,12 +321,11 @@ function CustomerHome() {
 
       <div className="container mt-4">
         <div className='row'>
-          {
-            books.map(book => {
-              return (
-                <div className="col-lg-4 col-md-6 col-12">
+        {books.map((book) => (
+                <div className="col-lg-4 col-md-6 col-12" key={book.id}>
                   <div>
                     <Card className="course-card">
+                   
                       <Card.Img variant="top" src={book.image} class="kadyImage" ></Card.Img>
                       <Card.Body>
                         <Card.Title>{book.title}</Card.Title>
@@ -333,18 +334,18 @@ function CustomerHome() {
                           <Link to={`book/${book.id}`}>
                             <Button variant="success" className="mr-3">View</Button>
                           </Link>
-                         <Link to={`wishlists`}>
-                         <Button variant="success" className="ml-3" onClick={addwishlist(book.id)} > Add to Wishlist</Button>
+                         <Link>
+                         <Button variant="success" className="ml-3" onClick={() => addwishlist(book.id)} > Add to Wishlist</Button>
                          </Link>
                         </div>
-
+                        
                       </Card.Body>
+                    
                     </Card>
                   </div>
                 </div>
-              )
-            })
-          }
+                 ))}
+              
         </div> {/* ./row*/}
       </div>
 
