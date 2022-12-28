@@ -26,6 +26,10 @@ import AddBooktoCartPage from "./Pages/AddBooktoCartPage";
 import CartPage from "./Pages/CartPage";
 import AdminViewOrderPage from "./Pages/AdminViewPendingOrdersPage";
 
+import DriverViewOrdersPage from "./Pages/DriverViewOrdersPage";
+
+
+
 function App() {
   return (
     <Fragment>
@@ -35,8 +39,10 @@ function App() {
         <Route path="/Sell&Bid" element={<SellandBidding />}></Route>
         <Route path="/LogIn" element={<LogIn />}></Route>
         <Route path="/SignUp" element={<SignUp />}></Route>
+
         <Route path="/Home" element={<CustomerHomePage />}></Route>
         <Route path="/Home/wishlists" element={<WishlistPage />}></Route>
+
         <Route
           path="/Home/:id/wishlists/:book_id"
           element={<ViewWishListItemPage />}
@@ -51,9 +57,18 @@ function App() {
         <Route path="/stores/:id" element={<AdminViewStorePage />}></Route>
         <Route path="/drivers/:ssn" element={<AdminViewDriverPage />}></Route>
         <Route path="/coupons/:code" element={<AdminViewCouponPage />}></Route>
-        <Route path="/pendingorders/:id" element={<AdminViewOrderPage />} ></Route>
+        <Route
+          path="/pendingorders/:id"
+          element={<AdminViewOrderPage />}
+        ></Route>
+        <Route
+          path="/driverorders/:id"
+          element={<DriverViewOrdersPage />}
+        ></Route>
         <Route path="/store/:id" element={<StorePage />}></Route>
+
         <Route path="/home/ViewAccount" element={<ViewAccount />}></Route>
+
         <Route
           path="/home/:id/book/:book_id"
           element={<AddBooktoCartPage />}

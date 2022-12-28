@@ -1,15 +1,16 @@
-import React, { Fragment, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import axios from 'axios'
+import React, { Fragment, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import "../CSS/prom_bg.css";
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 function AddBooktoCart() {
+
     const { id, book_id } = useParams();
 
     const [image, setImage] = useState('');
@@ -25,8 +26,10 @@ function AddBooktoCart() {
     const [isbn, setIsbn] = useState('');
     const [langId, setLanguageId] = useState('');
     const [genre, setGenreName] = useState('');
+    const [language, setLanguageName] = useState('');
     useEffect(() => {
-        axios.get(`http://localhost:5000/bookinfo/${book_id}`).then((res) => {
+        axios.post(`http://localhost:5000/bookinfo`,{book_id}).then((res) => {
+            console.log(res.data);
             setImage(res.data.image)
             settitle(res.data.title)
             setauthor_name(res.data.author_name)
@@ -37,30 +40,39 @@ function AddBooktoCart() {
             setVersion(res.data.version)
             setIsbn(res.data.isbn)
             setLanguageId(res.data.language_id)
-            console.log(res.data);
-            console.log(genre_id);
         }).catch((err) => console.log(err));
 
-        console.log(genre_id);
-        axios.get(`http://localhost:5000/genrenamefromgenreid/${genre_id}`).then((res) => {
-            console.log(res.data);
-            setGenreName(res.data);
-        }).catch(err => console.log(err));
     }, []);
 
+    useEffect(() => {
+        axios.get(`http://localhost:5000/genrenamefromgenreid/${genre_id}`).then((res) => {
+            setGenreName(res.data.name);
+        }).catch(err => console.log(err));
+
+    }, [genre_id]);
+
+    useEffect(() => {
+        axios.get(`http://localhost:5000/languagenamefromlanguageid/${langId}`).then((res) => {
+            setLanguageName(res.data.name);
+        }).catch(err => console.log(err));
+
+    }, [langId]);
+   
+        
     function increment(e) {
         if (quantity < readbooksquantity) {
             setQuantityCounter(quantity + 1);
         }
 
 
-    }
-    function decrement(e) {
-        if (quantity > 1) {
-            setQuantityCounter(quantity - 1);
-        }
 
     }
+  }
+  function decrement(e) {
+    if (quantity > 1) {
+      setQuantityCounter(quantity - 1);
+    }
+
 
     function addToCart(e) {
 
@@ -85,7 +97,6 @@ function AddBooktoCart() {
         axios.post(`http://localhost:5000/addToCart`, { book_id, order_id, quantity }).then((res) => {
             console.log(res.data);
         }).catch((err) => console.log(err));
-
     }
 
     return (
@@ -112,24 +123,29 @@ function AddBooktoCart() {
                 </Col>
 
             <Col className="col-sm mt-3">
+                <Row>
             <Container >
                         <h1>{title}</h1>
 
                     </Container>
+                    </Row>
                     <Row>
                     <Container>Price: {purchase_price} L.E</Container>
                     </Row>
                     <Row>
-                    <Container>Author:{author_name}</Container>
+                    <Container>Author: {author_name}</Container>
                     </Row>
                     <Row>
-                    <Container>genre:{genre}</Container>
+                    <Container>genre: {genre}</Container>
                     </Row>
                     <Row>
-                    <Container>Version:{version}</Container>
+                    <Container>Version: {version}</Container>
                     </Row>
                     <Row>
-                    <Container>ISBN:{isbn}</Container>
+                        <Container>Language: {language} </Container>
+                    </Row>
+                    <Row>
+                    <Container>ISBN: {isbn}</Container>
                     </Row>
                     <Row>
                     <Container>Description: {description}</Container>
@@ -152,9 +168,13 @@ function AddBooktoCart() {
 
                     </Container>
                 </Col>
+
             </Row>
-        </Fragment>
-    )
+          </Container>
+        </Col>
+      </Row>
+    </Fragment>
+  );
 }
 
 export default AddBooktoCart;

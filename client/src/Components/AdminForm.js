@@ -57,6 +57,7 @@ function AdminForm() {
       .get("http://localhost:5000/wishlists_stats")
       .then((res) => {
         setwishlist(res.data);
+        console.log(res.data)
       })
       .catch((err) => console.log(err));
   }, []);
@@ -440,29 +441,28 @@ function AdminForm() {
           <Tab eventKey="wishlists" title="Wishlists">
             <h1>Wishlists</h1>
 
-            <table class="table">
+
+          <table class="table">
               <thead class="thead-dark">
                 <tr>
-                  <th scope="col">#</th>
                   <th scope="col">Book</th>
-                  <th scope="col">Num. of occurences</th>
+                  <th scope="col">Num. Of Occurrences</th>
                 </tr>
               </thead>
-              {/* <tbody>
-    {viewUserWishlists.map((wishlist) => (
-      <tr>
-        <td>
+              <tbody>
+                {viewUserWishlists.map((wishlist) => (
+                  <tr>
+                    <td>
+                      {wishlist.title}
+                    </td>
+                    <td>
+                      {wishlist.countUsers}{" "}
+                    </td>
+                    
+                  </tr>
+                ))}
+              </tbody>
 
-        </td>
-        <td>
-        {wishlist.title}
-        </td>
-        <td>
-       
-        </td>
-      </tr>
-    ))}
-  </tbody> */}
             </table>
           </Tab>
         </Tabs>

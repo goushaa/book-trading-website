@@ -1,15 +1,16 @@
-import React, { Fragment, useState, useEffect } from 'react'
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Navbar from 'react-bootstrap/Navbar';
-import axios from 'axios'
+import React, { Fragment, useState, useEffect } from "react";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Navbar from "react-bootstrap/Navbar";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import '../CSS/prom_bg.css'
+import "../CSS/prom_bg.css";
 
 function LogInForm() {
+
   if(localStorage.length!=0){
 
     const userData = JSON.parse(localStorage.getItem("user"));
@@ -23,11 +24,11 @@ function LogInForm() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
   const navigate = useNavigate();
 
   function changeEmail(e) {
     setEmail(e.target.value);
-
   }
 
   function changePassword(e) {
@@ -35,28 +36,28 @@ function LogInForm() {
   }
 
   function submitForm() {
-    axios.post('http://localhost:5000/login', {
-      email,
-      password
-    })
+    axios
+      .post("http://localhost:5000/login", {
+        email,
+        password,
+      })
       .then(function (response) {
-
         console.log(response.data);
         if (response.data == -1) {
+
           //window.location.reload();
         }
         else {
           localStorage.setItem("user",JSON.stringify(response.data));
+
           console.log(response.data);
           if (response.data.type == 0) {
             //superadmin
             navigate("/superadmin");
-          }
-          else if (response.data.type == 1) {
+          } else if (response.data.type == 1) {
             //admin
             navigate("/admin");
-          }
-          else if (response.data.type == 2) {
+          } else if (response.data.type == 2) {
             //user
             //console.log(response.data);
             navigate(`/home/`, { state: response.data });
@@ -64,13 +65,11 @@ function LogInForm() {
           else if (response.data.type == 3) {
             //stores
             navigate(`/store/${response.data.id}`, { state: response.data });
-
-          }
-          else if (response.data.type == 4) {
+          } else if (response.data.type == 4) {
             //driver
             navigate(`/driver/${response.data.id}`, { state: response.data });
+            window.location.reload();
           }
-
         }
       })
       .catch(function (error) {
@@ -82,7 +81,7 @@ function LogInForm() {
     <Fragment>
       <Navbar bg="dark" variant="dark">
         <Container>
-          <Navbar.Brand >Online Book Store</Navbar.Brand>
+          <Navbar.Brand>Online Book Store</Navbar.Brand>
         </Container>
       </Navbar>
       <Container className="login">
@@ -92,10 +91,14 @@ function LogInForm() {
           </Col>
 
           <Row>
-            <Form >
+            <Form>
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Email address</Form.Label>
-                <Form.Control type="email" placeholder="Enter email" onChange={changeEmail} />
+                <Form.Control
+                  type="email"
+                  placeholder="Enter email"
+                  onChange={changeEmail}
+                />
                 <Form.Text className="text-muted">
                   We'll never share your email with anyone else.
                 </Form.Text>
@@ -103,22 +106,24 @@ function LogInForm() {
 
               <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label>Password</Form.Label>
-                <Form.Control type="password" placeholder="Password" onChange={changePassword} />
+                <Form.Control
+                  type="password"
+                  placeholder="Password"
+                  onChange={changePassword}
+                />
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicCheckbox">
                 <Form.Check type="checkbox" label="Check me out" />
               </Form.Group>
-              <Button variant="dark" onClick={submitForm} >
+              <Button variant="dark" onClick={submitForm}>
                 Log In
               </Button>
             </Form>
           </Row>
-
         </Row>
       </Container>
-
     </Fragment>
-  )
+  );
 }
 
-export default LogInForm
+export default LogInForm;
