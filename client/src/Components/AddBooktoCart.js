@@ -11,6 +11,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 function AddBooktoCart() {
     const { id, book_id } = useParams();
+
     const [image, setImage] = useState('');
     const [title, settitle] = useState('');
     const [author_name, setauthor_name] = useState('');
@@ -71,8 +72,9 @@ function AddBooktoCart() {
 
         }).catch((err) => console.log(err));
         ///userOrder
-        let user_id = id
-        axios.post(`http://localhost:5000/userOrder`, { user_id }).then((res) => {
+
+        console.log(id);
+        axios.post(`http://localhost:5000/userOrder`, { id }).then((res) => {
             setORDERID(res.data.id);
             console.log(res.data);
         }).catch((err) => console.log(err));

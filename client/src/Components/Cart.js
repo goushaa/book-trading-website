@@ -63,15 +63,19 @@ function Cart() {
         if (price == 0) {
             return
         }
-        console.log(price);
+
 
         if (totalPrice == price) {
             setOrderCoupon('')
         }
-        // axios.post(`http://localhost:5000/makeOrder`, { code }).then((res) => {
-        //     //setOrderItem(res.data);
+        axios.post(`http://localhost:5000/makeOrder`, { code, order_id, price }).then((res) => {
+            //setOrderItem(res.data);
+            console.log(res.data);
+            if (res.data !== 'empty cart' || res.data !== 'wrong coupon') {
+                window.location.href = '..'
+            }
 
-        // }).catch((err) => console.log(err));
+        }).catch((err) => console.log(err));
     }
     return (
 
