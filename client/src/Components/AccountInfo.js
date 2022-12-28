@@ -11,15 +11,22 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 function AccountInfo() {
-  let { id } = useParams();
+  if(localStorage.length==0)
+  window.location.href = "/";
+  const userData = JSON.parse(localStorage.getItem("user"));
+  if(userData.type==1||userData.type==0)
+  window.location.href = "/login";
+  const [id,setID] =useState(userData.id) ;
+  
   useEffect(() => {
+  //  console.log(id);
     axios
       .get(`http://localhost:5000/users/${id}`)
       .then((res) => {
         setUser(res.data);
+        // console.log(res);
       })
       .catch((err) => console.log(err));
-
     axios
       .get("http://localhost:5000/cities")
       .then((res) => {
@@ -27,23 +34,29 @@ function AccountInfo() {
       })
       .catch((err) => console.log(err));
   }, []);
+
+
   const [city_name, setCity] = useState("Giza");
-  const [city_id, setCityID] = useState([]);
+  const [city_id, setCityID] = useState(1);
   const [cities, setCities] = useState([]);
   const [viewUser, setUser] = useState([]);
 
-  function savechanges(e) {
-    axios
-      .post("http://localhost:5000/cityidfromcityname", { city_name })
-      .then((res) => {
-        setCityID(res.data.id);
-        console.log(res.data.id);
-      })
-      .catch((err) => console.log(err));
+  function logOUT(){
+    localStorage.clear();
+    window.location.href = "/";
+  }
+
+  useEffect(()=>{
     const first = viewUser.first_name;
     const last = viewUser.last_name;
     const address = viewUser.address;
     const user_name = viewUser.user_name;
+    console.log(   first,
+      last,
+      address,
+      city_id,
+      user_name,
+      id);
     axios
       .post("http://localhost:5000/updateUser", {
         first,
@@ -55,9 +68,20 @@ function AccountInfo() {
       })
       .then((res) => {
         console.log(res.data);
-        window.location.reload();
+        // window.location.reload();
       })
       .catch((err) => console.log(err));
+  },[city_id])
+  function savechanges(e) {
+    axios
+      .post("http://localhost:5000/cityidfromcityname", { city_name })
+      .then((res) => {
+        setCityID(res.data.id);
+        // console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+      
+   
   }
 
   function changeFirst(e) {
@@ -140,9 +164,7 @@ function AccountInfo() {
         <p>{viewUser.email}</p>
         <Row>
           <Col>
-            <Link to={"../"}>
-              <Button className="logout mt-3">Log Out</Button>
-            </Link>
+              <Button className="logout mt-3" onClick={logOUT}>Log Out</Button>
           </Col>
           <Col>
             <Button className="save mt-3" onClick={savechanges}>

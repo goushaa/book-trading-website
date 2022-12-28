@@ -35,8 +35,8 @@ function App() {
         <Route path="/Sell&Bid" element={<SellandBidding />}></Route>
         <Route path="/LogIn" element={<LogIn />}></Route>
         <Route path="/SignUp" element={<SignUp />}></Route>
-        <Route path="/Home/:id" element={<CustomerHomePage />}></Route>
-        <Route path="/Home/:user_id/wishlists" element={<WishlistPage />}></Route>
+        <Route path="/Home" element={<CustomerHomePage />}></Route>
+        <Route path="/Home/wishlists" element={<WishlistPage />}></Route>
         <Route
           path="/Home/:id/wishlists/:book_id"
           element={<ViewWishListItemPage />}
@@ -53,12 +53,12 @@ function App() {
         <Route path="/coupons/:code" element={<AdminViewCouponPage />}></Route>
         <Route path="/pendingorders/:id" element={<AdminViewOrderPage />} ></Route>
         <Route path="/store/:id" element={<StorePage />}></Route>
-        <Route path="/home/:id/ViewAccount" element={<ViewAccount />}></Route>
+        <Route path="/home/ViewAccount" element={<ViewAccount />}></Route>
         <Route
           path="/home/:id/book/:book_id"
           element={<AddBooktoCartPage />}
         ></Route>
-        <Route path="/home/:id/Cart/:order_id" element={<CartPage />}></Route>
+        <Route path="/home/Cart" element={<CartPage />}></Route>
       </Routes>
     </Fragment>
   );

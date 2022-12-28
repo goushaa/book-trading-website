@@ -63,10 +63,17 @@ function MyVerticallyCenteredModal(props) {
 }
 
 function CustomerHome() {
-  let { id } = useParams();
+  if(localStorage.length==0)
+  window.location.href = "/";
+  const userData = JSON.parse(localStorage.getItem("user"));
+  if(userData.type!=2)
+  window.location.href = "/login";
+  const [id,setID] =useState(userData.id) ;
   const [order_id, setOrderid] = useState(0);
 
   useEffect(() => {
+    // console.log(id);
+
     axios
       .get(`http://localhost:5000/users/${id}`)
       .then((res) => {
@@ -76,6 +83,7 @@ function CustomerHome() {
     axios
       .get(`http://localhost:5000/books`)
       .then((res) => {
+        // console.log(res.data);
         setBooks(res.data);
       })
       .catch((err) => console.log(err));
@@ -84,11 +92,12 @@ function CustomerHome() {
     axios
       .post(`http://localhost:5000/userOrder`, { id })
       .then((res) => {
-        console.log(res.data.id);
+        console.log(id);
+        console.log(res.data);
         setOrderid(res.data.id);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [id]);
   const [user, setUser] = useState([]);
   const [show, setShow] = useState(false);
   const [books, setBooks] = useState([]);
@@ -96,6 +105,13 @@ function CustomerHome() {
   const handleShow = () => setShow(true);
 
   const [index, setIndex] = useState(0);
+  function viewAcount(){
+    window.location.href ="/home/ViewAccount";
+  }
+  function wishlist(){
+    window.location.href ="/home/wishlists";
+
+  }
 
   const handleSelect = (selectedIndex, e) => {
     setIndex(selectedIndex);
@@ -158,8 +174,7 @@ function CustomerHome() {
               </svg>
             </Button>
           </Link>
-
-          <Link to={'wishlists'} ><Button className="heart_btn">
+<Button className="heart_btn" onClick={wishlist}>
             <svg
               className="hearticon"
               xmlns="http://www.w3.org/2000/svg"
@@ -175,10 +190,10 @@ function CustomerHome() {
                 d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
               />
             </svg>
-          </Button></Link>
+          </Button>
 
-          <Link to="ViewAccount">
-            <Button className="person_btn">
+         
+            <Button className="person_btn" onClick={viewAcount}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="30"
@@ -190,7 +205,6 @@ function CustomerHome() {
                 <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
               </svg>
             </Button>
-          </Link>
           <Button className="leftmenu2" onClick={handleShow}>
             ≡
           </Button>
