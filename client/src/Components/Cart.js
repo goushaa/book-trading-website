@@ -5,28 +5,41 @@ import { Row, Card, Button, Form, Container, Col } from 'react-bootstrap'
 
 
 function Cart() {
-    const { id, order_id } = useParams()
+    if(localStorage.length==0)
+    window.location.href = "/";
+    const userData = JSON.parse(localStorage.getItem("user"));
+    if(userData.type!=2)
+    window.location.href = "/";
+    let { id } = userData.id;
+    const { order_id, setorder_id } = useParams()
     const [coupon_code, setCode] = useState('')
     const [orderItems, setOrderItem] = useState([]);
     const [price, setPurchase] = useState(0);
     const [totalPrice, setTotal] = useState(0);
     const [code, setOrderCoupon] = useState('');
 
-
+useEffect(()=>{
+    axios.get(`http://localhost:5000/orders/${order_id}`).then((res) => {
+        setOrderItem(res.data);
+        console.log(res.data);
+        let sum = 0
+        res.data.map(orderItem => {
+            sum = sum + (orderItem.quantity * orderItem.purchase_price);
+        })
+        console.log(sum)
+        setPurchase(sum);
+        setTotal(sum);
+    }).catch((err) => console.log(err));
+},[order_id])
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/orders/${order_id}`).then((res) => {
-            setOrderItem(res.data);
-            console.log(res.data);
-            let sum = 0
-            res.data.map(orderItem => {
-                sum = sum + (orderItem.quantity * orderItem.purchase_price);
-            })
-            console.log(sum)
-            setPurchase(sum);
-            setTotal(sum);
-        }).catch((err) => console.log(err));
-
+        axios
+        .post(`http://localhost:5000/userOrder`, { id })
+        .then((res) => {
+          console.log(res.data.id);
+          setorder_id(res.data.id);
+        })
+        .catch((err) => console.log(err));
     }, []);
     ///applyCoupon
     function applyCoupon(e) {
