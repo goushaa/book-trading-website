@@ -50,6 +50,10 @@ function App() {
         <Route path="/stores/:id" element={<AdminViewStorePage />}></Route>
         <Route path="/drivers/:ssn" element={<AdminViewDriverPage />}></Route>
         <Route path="/coupons/:code" element={<AdminViewCouponPage />}></Route>
+        <Route
+          path="/pendingorders/:id"
+          element={<AdminViewStorePage />}
+        ></Route>
         <Route path="/store/:id" element={<StorePage />}></Route>
         <Route path="/home/:id/ViewAccount" element={<ViewAccount />}></Route>
         <Route

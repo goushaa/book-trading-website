@@ -20,14 +20,6 @@ function AdminViewCoupon() {
 
   const [coupon, setCoupon] = useState({});
   return (
-    // <div>
-    //     <ul>
-    //         <li>{coupon.code}</li>
-    //         <li>{coupon.discount}</li>
-    //         <li>{coupon.maximum_use}</li>
-    //         <li>{coupon.is_relative}</li>
-    //     </ul>
-    // </div>
     <Fragment>
       <Navbar bg="dark" variant="dark">
         <Container>
