@@ -10,13 +10,13 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 function AddBooktoCart() {
-    if(localStorage.length==0)
-    window.location.href = "/";
+    if (localStorage.length == 0)
+        window.location.href = "/";
     const userData = JSON.parse(localStorage.getItem("user"));
-    if(userData.type==1||userData.type==0)
-    window.location.href = "/login";
-    const [id,setID] =useState(userData.id) ;
-    const {  book_id } = useParams();
+    if (userData.type == 1 || userData.type == 0)
+        window.location.href = "/login";
+    const [id, setID] = useState(userData.id);
+    const { book_id } = useParams();
 
     const [image, setImage] = useState('');
     const [title, settitle] = useState('');
@@ -33,7 +33,7 @@ function AddBooktoCart() {
     const [genre, setGenreName] = useState('');
     const [language, setLanguageName] = useState('');
     useEffect(() => {
-        axios.post(`http://localhost:5000/bookinfo`,{book_id}).then((res) => {
+        axios.post(`http://localhost:5000/bookinfo`, { book_id }).then((res) => {
             console.log(res.data);
             setImage(res.data.image)
             settitle(res.data.title)
@@ -62,8 +62,8 @@ function AddBooktoCart() {
         }).catch(err => console.log(err));
 
     }, [langId]);
-   
-        
+
+
     function increment(e) {
         if (quantity < readbooksquantity) {
             setQuantityCounter(quantity + 1);
@@ -98,15 +98,15 @@ function AddBooktoCart() {
 
         //don't add same book_id to order more than once (book already in order to add/decrease number of books go to your cart page)
 
- 
+
     }
-    useEffect(()=>{
-        console.log(order_id,book_id,quantity);
+    useEffect(() => {
+        console.log(order_id, book_id, quantity);
         axios.post(`http://localhost:5000/addToCart`, { book_id, order_id, quantity }).then((res) => {
-            console.log(order_id,book_id,quantity);
-            window.location.href="/home/cart";
+            console.log(order_id, book_id, quantity);
+            window.location.href = "/home/cart";
         }).catch((err) => console.log(err));
-    },[order_id])
+    }, [order_id])
 
     return (
         <Fragment>
@@ -131,33 +131,33 @@ function AddBooktoCart() {
                     </Container>
                 </Col>
 
-            <Col className="col-sm mt-3">
-                <Row>
-            <Container >
-                        <h1>{title}</h1>
+                <Col className="col-sm mt-3">
+                    <Row>
+                        <Container >
+                            <h1>{title}</h1>
 
-                    </Container>
+                        </Container>
                     </Row>
                     <Row>
-                    <Container>Price: {purchase_price} L.E</Container>
+                        <Container>Price: {purchase_price} L.E</Container>
                     </Row>
                     <Row>
-                    <Container>Author: {author_name}</Container>
+                        <Container>Author: {author_name}</Container>
                     </Row>
                     <Row>
-                    <Container>genre: {genre}</Container>
+                        <Container>genre: {genre}</Container>
                     </Row>
                     <Row>
-                    <Container>Version: {version}</Container>
+                        <Container>Version: {version}</Container>
                     </Row>
                     <Row>
                         <Container>Language: {language} </Container>
                     </Row>
                     <Row>
-                    <Container>ISBN: {isbn}</Container>
+                        <Container>ISBN: {isbn}</Container>
                     </Row>
                     <Row>
-                    <Container>Description: {description}</Container>
+                        <Container>Description: {description}</Container>
                     </Row>
                     <Container className="quantity">
                         <h6>Quantity</h6>

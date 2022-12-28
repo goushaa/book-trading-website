@@ -1,16 +1,18 @@
-import axios from 'axios';
-import React, { useState, useEffect } from 'react'
-import { Form, Button } from 'react-bootstrap'
-import { useParams } from 'react-router-dom';
+import axios from "axios";
+import React, { useState, useEffect } from "react";
+import { Form, Button } from "react-bootstrap";
+import { useParams } from "react-router-dom";
 import Combobox from "react-widgets/Combobox";
 
 function TestAddbook() {
+
     if(localStorage.length==0)
     window.location.href = "/";
     const userData = JSON.parse(localStorage.getItem("user"));
     if(userData.type!=3)
     window.location.href = "/login";
     const [id,setID] =useState(userData.id) ;
+
     const [genres, setGenres] = useState([]);
     const [languages, setLanguages] = useState([]);
     const [cities, setCities] = useState([]); //should be used in other page (wrote in here for practice)
@@ -184,6 +186,7 @@ function TestAddbook() {
             </Form>
         </div >
     )
+
 }
 
-export default TestAddbook
+export default TestAddbook;

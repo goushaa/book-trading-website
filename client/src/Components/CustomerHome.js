@@ -17,8 +17,8 @@ import Card from "react-bootstrap/Card";
 import CardGroup from "react-bootstrap/CardGroup";
 import Modal from "react-bootstrap/Modal";
 import { useParams, Link } from "react-router-dom";
-import axios from 'axios'
-import "../CSS/Style.css"
+import axios from "axios";
+import "../CSS/Style.css";
 
 function MyVerticallyCenteredModal(props) {
   return (
@@ -44,7 +44,6 @@ function MyVerticallyCenteredModal(props) {
                 placeholder="Add Ticket"
               />
             </Container>
-           
           </Form.Group>
 
           <Button variant="dark" type="submit">
@@ -59,13 +58,15 @@ function MyVerticallyCenteredModal(props) {
   );
 }
 
+function sell() {
+  window.location.href = "Sell";
+}
+
 function CustomerHome() {
-  if(localStorage.length==0)
-  window.location.href = "/";
+  if (localStorage.length == 0) window.location.href = "/";
   const userData = JSON.parse(localStorage.getItem("user"));
-  if(userData.type!=2)
-  window.location.href = "/login";
-  const [id,setID] =useState(userData.id) ;
+  if (userData.type != 2) window.location.href = "/login";
+  const [id, setID] = useState(userData.id);
   const [order_id, setOrderid] = useState(0);
 
   useEffect(() => {
@@ -85,7 +86,6 @@ function CustomerHome() {
       })
       .catch((err) => console.log(err));
 
-
     axios
       .post(`http://localhost:5000/userOrder`, { id })
       .then((res) => {
@@ -102,12 +102,11 @@ function CustomerHome() {
   const handleShow = () => setShow(true);
 
   const [index, setIndex] = useState(0);
-  function viewAcount(){
-    window.location.href ="/home/ViewAccount";
+  function viewAcount() {
+    window.location.href = "/home/ViewAccount";
   }
-  function wishlist(){
-    window.location.href ="/home/wishlists";
-
+  function wishlist() {
+    window.location.href = "/home/wishlists";
   }
   function cart(){
     window.location.href ="/home/cart";
@@ -115,25 +114,23 @@ function CustomerHome() {
   }
   const handleSelect = (selectedIndex, e) => {
     setIndex(selectedIndex);
-
-    
   };
   const [modalShow, setModalShow] = React.useState(false);
-  function addwishlist(book_id)
-    {
-      let user_id=id;
-      console.log(book_id);
-      axios
-      .post(`http://localhost:5000/addWishlist`, {user_id,book_id})
+  function addwishlist(book_id) {
+    let user_id = id;
+    console.log(book_id);
+    axios
+      .post(`http://localhost:5000/addWishlist`, { user_id, book_id })
       .then((res) => {
+
         console.log(res.data.book_id)
       
         window.location.href ="/home/wishlists";
         
+
       })
       .catch((err) => console.log(err));
-
-    }
+  }
   return (
     <Fragment>
       <Row>
@@ -178,7 +175,9 @@ function CustomerHome() {
                 <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
               </svg>
             </Button>
+
 <Button className="heart_btn" onClick={wishlist}>
+
             <svg
               className="hearticon"
               xmlns="http://www.w3.org/2000/svg"
@@ -196,19 +195,18 @@ function CustomerHome() {
             </svg>
           </Button>
 
-         
-            <Button className="person_btn" onClick={viewAcount}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="30"
-                height="60"
-                fill="currentColor"
-                class="bi bi-person"
-                viewBox="0 4 16 16"
-              >
-                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
-              </svg>
-            </Button>
+          <Button className="person_btn" onClick={viewAcount}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="30"
+              height="60"
+              fill="currentColor"
+              class="bi bi-person"
+              viewBox="0 4 16 16"
+            >
+              <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+            </svg>
+          </Button>
           <Button className="leftmenu2" onClick={handleShow}>
             ≡
           </Button>
@@ -232,12 +230,9 @@ function CustomerHome() {
                   d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
                 />
               </svg>
-
-              <Link to={`ViewAccount`}><Button className="leftmenu2btn1" >
-                View account
-              </Button></Link>
-              {" "}
-
+              <Link to={`ViewAccount`}>
+                <Button className="leftmenu2btn1">View account</Button>
+              </Link>{" "}
               <Button className="leftmenu2btn2">
                 Create a business account
               </Button>{" "}
@@ -290,7 +285,10 @@ function CustomerHome() {
         <p className="saledescription">
           Save with free hand-picked coupons, promo codes, discounts & deals.{" "}
         </p>
-        <Button className="salebtn">Shop now</Button>{" "}
+        <Button className="salebtn" onClick={sell}>
+          Sell now
+        </Button>{" "}
+        <Button className="salebtn2">Bid now</Button>{" "}
         <Container>
           <Carousel
             className="slideshow"
@@ -301,31 +299,17 @@ function CustomerHome() {
           >
             <Carousel.Item>
               <img className="d-block w-100" src={Book1} alt="First slide" />
-              <Carousel.Caption>
-                <h3>First slide label</h3>
-                <p>
-                  Nulla vitae elit libero, a pharetra augue mollis interdum.
-                </p>
-              </Carousel.Caption>
+              <Carousel.Caption></Carousel.Caption>
             </Carousel.Item>
             <Carousel.Item>
               <img className="d-block w-100" src={Book2} alt="Second slide" />
 
-              <Carousel.Caption>
-                <h3>Second slide label</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-              </Carousel.Caption>
+              <Carousel.Caption></Carousel.Caption>
             </Carousel.Item>
             <Carousel.Item>
               <img className="d-block w-100" src={Book3} alt="Third slide" />
 
-              <Carousel.Caption>
-                <h3>Third slide label</h3>
-                <p>
-                  Praesent commodo cursus magna, vel scelerisque nisl
-                  consectetur.
-                </p>
-              </Carousel.Caption>
+              <Carousel.Caption></Carousel.Caption>
             </Carousel.Item>
           </Carousel>
         </Container>
@@ -336,35 +320,44 @@ function CustomerHome() {
       </Row>
 
       <div className="container mt-4">
-        <div className='row'>
-        {books.map((book) => (
-                <div className="col-lg-4 col-md-6 col-12" key={book.id}>
-                  <div>
-                    <Card className="course-card">
-                   
-                      <Card.Img variant="top" src={book.image} class="kadyImage" ></Card.Img>
-                      <Card.Body>
-                        <Card.Title>{book.title}</Card.Title>
-                        <p>{book.description}</p>
-                        <div>
-                          <Link to={`book/${book.id}`}>
-                            <Button variant="success" className="mr-3">View</Button>
-                          </Link>
-                         <Link>
-                         <Button variant="success" className="ml-3" onClick={() => addwishlist(book.id)} > Add to Wishlist</Button>
-                         </Link>
-                        </div>
-                        
-                      </Card.Body>
-                    
-                    </Card>
-                  </div>
-                </div>
-                 ))}
-              
-        </div> {/* ./row*/}
+        <div className="row">
+          {books.map((book) => (
+            <div className="col-lg-4 col-md-6 col-12" key={book.id}>
+              <div>
+                <Card className="course-card">
+                  <Card.Img
+                    variant="top"
+                    src={book.image}
+                    class="kadyImage"
+                  ></Card.Img>
+                  <Card.Body>
+                    <Card.Title>{book.title}</Card.Title>
+                    <p>{book.description}</p>
+                    <div>
+                      <Link to={`book/${book.id}`}>
+                        <Button variant="success" className="mr-3">
+                          View
+                        </Button>
+                      </Link>
+                      <Link>
+                        <Button
+                          variant="success"
+                          className="ml-3"
+                          onClick={() => addwishlist(book.id)}
+                        >
+                          {" "}
+                          Add to Wishlist
+                        </Button>
+                      </Link>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </div>
+            </div>
+          ))}
+        </div>{" "}
+        {/* ./row*/}
       </div>
-
     </Fragment>
   );
 }

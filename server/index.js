@@ -126,7 +126,7 @@ app.post("/login", async (req, res) => {
 app.post("/updateUser", async (req, res) => {
   try {
     const { first, last, address, city_id, user_name, id } = req.body;
-    console.log(first, last, address, city_id, user_name, id );
+    console.log(first, last, address, city_id, user_name, id);
     const updateUser = await pool.query(
       'UPDATE "user" SET first_name = $1, last_name = $2, address = $3, city_id = $4, user_name = $5 WHERE id = $6 RETURNING *',
       [first, last, address, city_id, user_name, id]
@@ -199,17 +199,15 @@ app.post("/notifications/readall", async (req, res) => {
 //************************wish list*******************************/
 
 app.post("/addWishlist", async (req, res) => {
-
-
-    try {
-        const {user_id, book_id } = req.body; //why did we do this
-        console.log(user_id,book_id);
-        //NEEDS VALIDATION AND REVISION
-        const addWishlist = await pool.query("INSERT INTO wish_list_item (user_id,book_id) VALUES ($1,$2) RETURNING *;", [user_id, book_id]);
-        res.json(addWishlist.rows[0]);
-
-
-
+  try {
+    const { user_id, book_id } = req.body; //why did we do this
+    console.log(user_id, book_id);
+    //NEEDS VALIDATION AND REVISION
+    const addWishlist = await pool.query(
+      "INSERT INTO wish_list_item (user_id,book_id) VALUES ($1,$2) RETURNING *;",
+      [user_id, book_id]
+    );
+    res.json(addWishlist.rows[0]);
   } catch (err) {
     console.error(err.message);
   }
@@ -217,7 +215,7 @@ app.post("/addWishlist", async (req, res) => {
 
 app.post("/deleteWishlist", async (req, res) => {
   try {
-    const { user_id,book_id } = req.body;
+    const { user_id, book_id } = req.body;
     //NEEDS VALIDATION AND REVISION
     const deleteWishlist = await pool.query(
       "DELETE FROM wish_list_item  WHERE user_id = $1 AND book_id = $2 RETURNING *;",
@@ -233,7 +231,6 @@ app.post("/deleteWishlist", async (req, res) => {
   } catch (err) {
     console.error(err.message);
   }
-  
 });
 
 app.get("/wishlists/:user_id", async (req, res) => {
@@ -619,7 +616,10 @@ app.get("/pendingOrders/:id", async (req, res) => {
   try {
     const { id } = req.params;
     console.log(id);
-    const viewPendingOrder = await pool.query('SELECT * FROM "order" WHERE id = $1;', [id]);
+    const viewPendingOrder = await pool.query(
+      'SELECT * FROM "order" WHERE id = $1;',
+      [id]
+    );
     res.json(viewPendingOrder.rows[0]);
   } catch (err) {
     console.error(err.message);
@@ -634,6 +634,19 @@ app.get("/orderItemInfo/:book_id", async (req, res) => {
       [book_id]
     );
     res.json(getOrderItemInfo.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/orderstatus/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const getOrderStatus = await pool.query(
+      'SELECT status FROM "order" WHERE id = $1',
+      [id]
+    );
+    res.json(getOrderStatus.rows[0]);
   } catch (err) {
     console.error(err.message);
   }
@@ -1019,7 +1032,10 @@ app.post("/addTicket", async (req, res) => {
   try {
     const { user_id, complaint } = req.body;
 
-    const addTicket = await pool.query("INSERT INTO ticket  (user_id,user_complaint,admin_reply,replied,ticket_time,reply_time) VALUES ($1,$2,null,0,$3,null) returning *;", [user_id, complaint, new Date]);
+    const addTicket = await pool.query(
+      "INSERT INTO ticket  (user_id,user_complaint,admin_reply,replied,ticket_time,reply_time) VALUES ($1,$2,null,0,$3,null) returning *;",
+      [user_id, complaint, new Date()]
+    );
     res.json(addTicket.rows[0]);
     //front end should display one driver when click on him
   } catch (err) {
@@ -1031,7 +1047,10 @@ app.post("/ticketReply", async (req, res) => {
   try {
     const { adminReply, id } = req.body;
 
-    const replyTicket = await pool.query("UPDATE ticket SET admin_reply=$1,replied = 1,reply_time=$2 WHERE id =$3 returning *;", [adminReply, new Date, id]);
+    const replyTicket = await pool.query(
+      "UPDATE ticket SET admin_reply=$1,replied = 1,reply_time=$2 WHERE id =$3 returning *;",
+      [adminReply, new Date(), id]
+    );
     res.json(replyTicket.rows[0]);
     //front end should display one driver when click on him
   } catch (err) {
@@ -1112,7 +1131,6 @@ app.get("/languagenamefromlanguageid/:language_id", async (req, res) => {
   }
 });
 
-
 app.get("/pendingOrders/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -1126,4 +1144,3 @@ app.get("/pendingOrders/:id", async (req, res) => {
     console.error(err.message);
   }
 });
-
