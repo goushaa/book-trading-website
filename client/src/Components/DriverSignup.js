@@ -7,6 +7,7 @@ import Col from 'react-bootstrap/Col';
 import Navbar from 'react-bootstrap/Navbar';
 import axios from 'axios'
 import '../CSS/prom_bg.css'
+import { Navigate } from 'react-router-dom';
 
 function DriverSignup() {
 
@@ -96,6 +97,9 @@ function DriverSignup() {
                 }
                 else if (res.data == 'driver license already in use') {
                     return;
+                }
+                else{
+                    window.location.href="/login"
                 }
             }
         ).catch(err => console.log(err));
