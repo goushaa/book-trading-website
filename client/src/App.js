@@ -43,10 +43,10 @@ function App() {
         <Route path="/Home/wishlists" element={<WishlistPage />}></Route>
 
         <Route
-          path="/Home/:id/wishlists/:book_id"
+          path="/Home/wishlists/:book_id"
           element={<ViewWishListItemPage />}
         ></Route>
-        <Route path="/driver/:id" element={<DriverPage />}></Route>
+        <Route path="/driver" element={<DriverPage />}></Route>
         <Route path="/Admin" element={<Admin />}></Route>
         <Route path="/Home/Sell" element={<Sell />}></Route>
         <Route path="/Home/viewReplies" element={<ViewRepliesPage />}></Route>

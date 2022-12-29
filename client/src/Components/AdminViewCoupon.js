@@ -7,13 +7,21 @@ import Navbar from "react-bootstrap/Navbar";
 import "../CSS/Style.css";
 
 function AdminViewCoupon() {
+  if(localStorage.length==0)
+  window.location.href = "/";
+  const userData = JSON.parse(localStorage.getItem("user"));
+  if(userData.type!=1)
+  window.location.href = "/login";
+  const [admin_id,setID] =useState(userData.id) ;
   let { code } = useParams();
   useEffect(() => {
+    console.log(code);
     axios
       .get(`http://localhost:5000/coupons/${code}`)
       .then((res) => {
         console.log(res.data);
-        setCoupon(res.data);
+        if(res.data[0])
+        setCoupon(res.data[0]);
       })
       .catch((err) => console.log(err));
   }, []);

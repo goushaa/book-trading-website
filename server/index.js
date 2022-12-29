@@ -278,7 +278,7 @@ app.get("/wishlists_stats/:user_id", async (req, res) => {
 app.get("/books", async (req, res) => {
   try {
     const getBooks = await pool.query(
-      'SELECT * FROM book WHERE book.user_id in (select id from "user" where type =3) and status = 0'
+      'SELECT * FROM book WHERE book.user_id in (select id from "user" where type =3) and status = 0 and count>0'
     );
     res.json(getBooks.rows);
   } catch (err) {
@@ -761,6 +761,16 @@ app.get("/coupons", async (req, res) => {
     console.error(err.message);
   }
 });
+app.get("/coupons/:code", async (req, res) => {
+  try {
+    const { code } = req.params;
+    const getCoupon = await pool.query(`SELECT * FROM Coupons where code='${code}';`);
+    res.json(getCoupon.rows);
+    //front end should loop on all coupons and display them
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 app.post("/applyCoupon", async (req, res) => {
   try {
@@ -928,6 +938,7 @@ app.post("/driveruseridgivenssn", async (req, res) => {
       "SELECT user_id FROM driver WHERE ssn = $1;",
       [driver_ssn]
     );
+    console.log(getuserid.rows[0]);
     res.json(getuserid.rows[0]);
     //front end should loop on all orders and display them
   } catch (err) {

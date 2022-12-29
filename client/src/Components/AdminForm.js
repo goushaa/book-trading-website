@@ -17,6 +17,12 @@ import "../CSS/Style.css";
 import axios from "axios";
 
 function AdminForm() {
+  if(localStorage.length==0)
+  window.location.href = "/";
+  const userData = JSON.parse(localStorage.getItem("user"));
+  if(userData.type!=1&&userData.type!=0)
+  window.location.href = "/login";
+  const [id,setID] =useState(userData.id) ;
   useEffect(() => {
     axios
       .get("http://localhost:5000/drivers")
@@ -72,8 +78,8 @@ function AdminForm() {
   const [show, setShow] = useState(false);
 
   const [code, setCode] = useState("");
-  const [discount, setDiscount] = useState("");
-  const [maximum_use, setMaximumUse] = useState("");
+  const [discount, setDiscount] = useState(0);
+  const [maximum_use, setMaximumUse] = useState(0);
   const [is_relative, setIsRelative] = useState("0");
   const [viewUserWishlists, setwishlist] = useState([]);
   const [customers, setCustomers] = useState([]);
@@ -90,11 +96,28 @@ function AdminForm() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  useEffect(()=>{
+    axios
+    .post(
+      `http://localhost:5000/AdminGiveOrderToDriver`,
+      {
+        driver_ssn: driver_ssn,
+        order_id: order_id,
+        driver_user_id: driver_user_id,
+      }
+    )
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => console.log(err));
+  },[driver_user_id])
+
   function changeCoupon(e) {
     setCode(e.target.value);
   }
 
   function changeDiscount(e) {
+    console.log(e.target.value);
     setDiscount(e.target.value);
   }
 
@@ -108,6 +131,7 @@ function AdminForm() {
 
   function addCoupon(e) {
     //needed validations
+    if(code==""||discount<1||maximum_use<1)return;
 
     axios
       .post("http://localhost:5000/addCoupon", {
@@ -187,7 +211,7 @@ function AdminForm() {
                 <Form.Group className="mb-3 " controlId="couponform">
                   <Form.Control
                     className="form-control w-75"
-                    type="string"
+                    type="number"
                     maxLength={6}
                     placeholder="Enter Discount"
                     onChange={changeDiscount}
@@ -196,7 +220,7 @@ function AdminForm() {
                 <Form.Group className="mb-3 " controlId="couponform">
                   <Form.Control
                     className="form-control w-75"
-                    type="string"
+                    type="number"
                     maxLength={6}
                     placeholder="Enter Maximum Use"
                     onChange={changeMaximumUse}
@@ -445,19 +469,7 @@ function AdminForm() {
                             })
                             .catch((err) => console.log(err));
                           //console.log(driver_ssn, pendingOrder.id, driver_id_sui);
-                          axios
-                            .post(
-                              `http://localhost:5000/AdminGiveOrderToDriver`,
-                              {
-                                driver_ssn: driver_ssn,
-                                order_id: pendingOrder.id,
-                                driver_user_id: driver_user_id,
-                              }
-                            )
-                            .then((res) => {
-                              console.log(res.data);
-                            })
-                            .catch((err) => console.log(err));
+                       
                         }}
                       >
                         {" "}
@@ -533,6 +545,7 @@ function AdminForm() {
               </tbody>
 
             </table>
+
           </Tab>
         </Tabs>
       </Container>
