@@ -1134,8 +1134,8 @@ app.post("/addbidbook", async (req, res) => {
     //const x = new Date(ending_time); 
     const starting_time = new Date();
 
-    //newBid = pool.query('INSERT INTO bid_item (user_id,starting_time,ending_time,book_id) VALUES ($1,$2,$3,$4)', [-1, starting_time, ending_time, book.rows[0].id])
-    //res.json(newBid.rows[0]); 
+    newBid = pool.query('INSERT INTO bid_item (user_id,starting_time,ending_time,book_id) VALUES ($1,$2,$3,$4)', [-1, starting_time, ending_time, book.rows[0].id])
+    res.json(newBid.rows[0]);
   } catch (err) {
     console.error(err.message);
   }
