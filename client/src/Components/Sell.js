@@ -5,22 +5,23 @@ import { useParams } from "react-router-dom";
 import Combobox from "react-widgets/Combobox";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
+import "../CSS/Style.css";
 
 function Sell() {
-  let { id } = JSON.parse(localStorage.getItem("user"));
+  const id = JSON.parse(localStorage.getItem("user")).id;
   console.log(id);
   const [genres, setGenres] = useState([]);
   const [languages, setLanguages] = useState([]);
   const [cities, setCities] = useState([]); //should be used in other page (wrote in here for practice)
   //title, genre_id, isbn, author_name, language_id, purshace_price, version, description, image, user_id, count
   const [title, setTitle] = useState("");
-  const [genre_id, setGenre] = useState(1);
-  const [isbn, setISBN] = useState(1);
+  const [genre_id, setGenre] = useState("");
+  const [isbn, setISBN] = useState("");
   const [author_name, setAuthor] = useState("");
-  const [language_id, setLanguage] = useState(1);
-  const [purshace_price, setPrice] = useState(15);
-  const [version, setVersion] = useState(1);
-  const [description, setDescription] = useState("hi");
+  const [language_id, setLanguage] = useState("");
+  const [purshace_price, setPrice] = useState("");
+  const [version, setVersion] = useState("");
+  const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
   const count = 1; //to be changed if store
   const user_id = id; //to be passed between pages
@@ -106,19 +107,6 @@ function Sell() {
     if (imgbb.data.data.display_url == "") {
       imgbb = await axios(settings);
     }
-    console.log(
-      title,
-      genre_id,
-      isbn,
-      author_name,
-      language_id,
-      purshace_price,
-      version,
-      description,
-      imgbb.data.data.display_url,
-      user_id,
-      count
-    );
     //setImage(imgbb.data.data.display_url);
     axios
       .post("http://localhost:5000/addbook", {
@@ -135,7 +123,6 @@ function Sell() {
         count,
       })
       .then((res) => {
-        console.log("win"); //add book with image upload (has some bugs)
         console.log(res.data); //add book with image upload (has some bugs)
       })
       .catch((err) => console.log(err));
@@ -147,7 +134,7 @@ function Sell() {
         <Container>
           <Navbar.Brand href="/">
             <h1>Online Book Store</h1>
-            <h5>Sell your books</h5>
+            <h5>Sell your book</h5>
           </Navbar.Brand>
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -159,6 +146,7 @@ function Sell() {
         </Container>
       </Navbar>
       <Container>
+
         <Form>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Title</Form.Label>
@@ -239,7 +227,7 @@ function Sell() {
             onChange={changeISBN}
           >
             <Form.Label>ISBN</Form.Label>
-            <Form.Control type="text" placeholder="Enter book isbn" />
+            <Form.Control type="number" placeholder="Enter book isbn" />
           </Form.Group>
 
           <Form.Group className="mb-3" onChange={changeURL}>
@@ -255,6 +243,7 @@ function Sell() {
             Sell Book
           </Button>
         </Form>
+
       </Container>
     </Fragment>
   );

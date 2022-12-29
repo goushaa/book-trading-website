@@ -210,11 +210,6 @@ function AdminForm() {
     setIsRelative(e.target.value);
   }
 
-  function logOUT() {
-    localStorage.clear();
-    window.location.href = "/";
-  }
-
   function addCoupon(e) {
     //needed validations
     if (code == "" || discount < 1 || maximum_use < 1) return;
@@ -318,7 +313,7 @@ function AdminForm() {
       <Navbar bg="dark" variant="dark" expand="lg">
         <Container>
           <Navbar.Brand href="/">
-            <h2>Admin</h2>
+            <h3>Admin</h3>
           </Navbar.Brand>
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -335,11 +330,6 @@ function AdminForm() {
                 </Button>
               </Nav.Item>
               <Nav.Link href="/pendingRequests">View Pending Requests</Nav.Link>
-              <Nav.Item>
-                <Button className="adminlogoutbtn" onClick={logOUT}>
-                  Log Out
-                </Button>
-              </Nav.Item>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -568,29 +558,13 @@ function AdminForm() {
 
           <Tab eventKey="Pending Orders" title="Pending Orders">
             <h1>Orders</h1>
-            <Row className="rr">
-              <Col>
-                <h5>Select Driver:</h5>
-              </Col>
-              <Col>
-                <select
-                  className="combo"
-                  onChange={(e) => {
-                    setDriverSSN(e.target.value);
-                    console.log(e.target.value);
-                  }}
-                >
-                  {drivers.map((driver) => (
-                    <option value={driver.ssn}>{driver.email} </option>
-                  ))}
-                </select>
-              </Col>
-            </Row>
+
             <table class="table">
               <thead class="thead-dark">
                 <tr>
                   <th scope="col">#</th>
                   <th scope="col">Details</th>
+                  <th scope="col">Select Driver</th>
                   <th scope="col">Assign</th>
                 </tr>
               </thead>
@@ -610,6 +584,19 @@ function AdminForm() {
                           </Button>
                         </Link>
                       }
+                    </td>
+                    <td>
+                      <select
+                        className="combo"
+                        onChange={(e) => {
+                          setDriverSSN(e.target.value);
+                          console.log(e.target.value);
+                        }}
+                      >
+                        {drivers.map((driver) => (
+                          <option value={driver.ssn}>{driver.email} </option>
+                        ))}
+                      </select>
                     </td>
                     <td>
                       <Button
@@ -650,11 +637,17 @@ function AdminForm() {
               <tbody>
                 {viewUserWishlists.map((wishlist) => (
                   <tr>
-                    <td>{wishlist.title}</td>
-                    <td>{wishlist.countUsers} </td>
+                    <td>
+                      {wishlist.title}
+                    </td>
+                    <td>
+                      {wishlist.countUsers}{" "}
+                    </td>
+                    
                   </tr>
                 ))}
               </tbody>
+
             </table>
           </Tab>
           <Tab eventKey="Tickets" title="Tickets">
@@ -723,6 +716,7 @@ function AdminForm() {
               />
             </Row>
 
+
             <Row>
               <h3>Orders' Comparison</h3>
               <Chart
@@ -733,6 +727,7 @@ function AdminForm() {
                 height={"400px"}
               />
             </Row>
+
           </Tab>
         </Tabs>
       </Container>

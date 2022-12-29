@@ -107,9 +107,17 @@ function AccountInfo() {
     <Fragment>
       <Navbar bg="dark" variant="dark">
         <Container>
-          <Navbar.Brand>
-            <h3>Account</h3>
+         
+          <Navbar.Brand href="/home">
+          <Row>
+          <Col>
+        <h3>Online Book Store</h3>
+        </Col>
+        <Col>Account
+        </Col>
+        </Row>
           </Navbar.Brand>
+         
           <Navbar.Collapse className="justify-content-end">
             <Navbar.Text>
               Signed in as{" "}

@@ -14,7 +14,7 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import "../CSS/prom_bg.css";
 import "../CSS/Style.css";
 import axios from "axios";
-
+import Card from "react-bootstrap/Card";
 
 
 
@@ -44,6 +44,7 @@ function Bidding() {
     const [description, setDescription] = useState('hi');
     const [image, setImage] = useState('');
     const [ending_time, setEndTime] = useState('');
+    const [myBids, setMyBids] = useState([]);
     const count = 1 //to be changed if store
 
     const [base64, settingBase64] = useState('')
@@ -57,6 +58,13 @@ function Bidding() {
         //should be used in other page (wrote in here for practice)
         axios.get('http://localhost:5000/cities').then((res) => {
             setCities(res.data);
+        }).catch(err => console.log(err));
+        axios.get('http://localhost:5000/cities').then((res) => {
+            setCities(res.data);
+        }).catch(err => console.log(err));
+        axios.post('http://localhost:5000/myBid',{user_id}).then((res) => {
+            console.log(res.data);
+            setMyBids(res.data);
         }).catch(err => console.log(err));
     }, [])
 
@@ -93,7 +101,7 @@ function Bidding() {
     }
 
     function changeDate(e) {
-        console.log(e.target.value);
+
         setEndTime(e.target.value);
     }
 
@@ -107,9 +115,19 @@ function Bidding() {
         reader.readAsDataURL(file);
     }
 
-
+function finishBid(book_id){
+    axios
+    .post(`http://localhost:5000/bidfinished`,{book_id})
+    .then((res) => {
+        window.location.reload();
+    })
+    .catch((err) => console.log(err));
+}
 
     async function tryImage(e) {
+        // console.log(new Date(ending_time));
+        if(new Date(ending_time)<new Date())return;
+        console.log('hello');
 
         var file = document.getElementById('imageInput');
         var form = new FormData();
@@ -133,12 +151,20 @@ function Bidding() {
 
         axios.post('http://localhost:5000/addbidbook', { title, genre_id, isbn, author_name, language_id, purshace_price, version, description, image: imgbb.data.data.display_url, user_id, count, ending_time }).then(res => {
             console.log('win'); //add book with image upload (has some bugs)    
+            window.location.href='/home';
             console.log(res.data); //add book with image upload (has some bugs)
         }).catch(err => console.log(err))
     }
     return (
         <Fragment>
-            <Container className="Admin_bg">
+              <Tabs
+          defaultActiveKey="bidItem"
+          id="justify-tab-example"
+          className="mb-3"
+          justify
+        >
+          <Tab eventKey="bidItem" title="bidItem">
+          <Container className="Admin_bg">
                 <h1>Place your bid item</h1>
                 <Form >
                     <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -212,6 +238,45 @@ function Bidding() {
                     </Button>
                 </Form>
             </Container>
+         </Tab>
+         <Tab eventKey="myBids" title="myBids">
+         <div className="container mt-4">
+        <div className="row">
+          {myBids.map((myBid) => (
+            <div className="col-lg-4 col-md-6 col-12" key={myBid.book_id}>
+              <div>
+                <Card className="course-card">
+                  <Card.Img
+                    variant="top"
+                    src={myBid.image}
+                    class="kadyImage"
+                  ></Card.Img>
+                  <Card.Body>
+                    <Card.Title>{myBid.title}</Card.Title>
+                    <div>
+        
+                      <Link>
+                        <Button
+                          variant="success"
+                          className="ml-3"
+                          onClick={() => finishBid(myBid.book_id)}
+                        >
+                          {" "}
+                          finsih Bid
+                        </Button>
+                      </Link>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </div>
+            </div>
+          ))}
+        </div>{" "}
+        {/* ./row*/}
+      </div>
+         </Tab>
+         </Tabs>
+           
         </Fragment>
     )
 }
