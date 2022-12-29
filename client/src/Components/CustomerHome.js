@@ -62,6 +62,10 @@ function sell() {
   window.location.href = "Sell";
 }
 
+function bid() {
+  window.location.href = "/Home/Bidding";
+}
+
 function CustomerHome() {
   if (localStorage.length == 0) window.location.href = "/";
   const userData = JSON.parse(localStorage.getItem("user"));
@@ -108,8 +112,8 @@ function CustomerHome() {
   function wishlist() {
     window.location.href = "/home/wishlists";
   }
-  function cart(){
-    window.location.href ="/home/cart";
+  function cart() {
+    window.location.href = "/home/cart";
 
   }
   const handleSelect = (selectedIndex, e) => {
@@ -124,9 +128,9 @@ function CustomerHome() {
       .then((res) => {
 
         console.log(res.data.book_id)
-      
-        window.location.href ="/home/wishlists";
-        
+
+        window.location.href = "/home/wishlists";
+
 
       })
       .catch((err) => console.log(err));
@@ -161,22 +165,22 @@ function CustomerHome() {
               </Navbar.Collapse>
             </Container>
           </Navbar>
-    
-            <Button className="cart_btn" onClick={cart}>
-              <svg
-                className="carticon"
-                xmlns="http://www.w3.org/2000/svg"
-                width="30"
-                height="60"
-                color="white"
-                class="bi bi-cart3"
-                viewBox="0 4 16 16"
-              >
-                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-              </svg>
-            </Button>
 
-<Button className="heart_btn" onClick={wishlist}>
+          <Button className="cart_btn" onClick={cart}>
+            <svg
+              className="carticon"
+              xmlns="http://www.w3.org/2000/svg"
+              width="30"
+              height="60"
+              color="white"
+              class="bi bi-cart3"
+              viewBox="0 4 16 16"
+            >
+              <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+            </svg>
+          </Button>
+
+          <Button className="heart_btn" onClick={wishlist}>
 
             <svg
               className="hearticon"
@@ -288,7 +292,7 @@ function CustomerHome() {
         <Button className="salebtn" onClick={sell}>
           Sell now
         </Button>{" "}
-        <Button className="salebtn2">Bid now</Button>{" "}
+        <Button className="salebtn2" onClick={bid}>Bid now</Button>{" "}
         <Container>
           <Carousel
             className="slideshow"
