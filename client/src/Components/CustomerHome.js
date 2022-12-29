@@ -59,7 +59,7 @@ function MyVerticallyCenteredModal(props) {
 }
 
 function sell() {
-  window.location.href = "Sell";
+  window.location.href = "Home/Sell";
 }
 
 function CustomerHome() {
@@ -94,10 +94,19 @@ function CustomerHome() {
         setOrderid(res.data.id);
       })
       .catch((err) => console.log(err));
+
+    axios
+      .get(`http://localhost:5000/usersellbooks`)
+      .then((res) => {
+        // console.log(res.data);
+        setsellBooks(res.data);
+      })
+      .catch((err) => console.log(err));
   }, [id]);
   const [user, setUser] = useState([]);
   const [show, setShow] = useState(false);
   const [books, setBooks] = useState([]);
+  const [sellbooks, setsellBooks] = useState([]);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -108,9 +117,8 @@ function CustomerHome() {
   function wishlist() {
     window.location.href = "/home/wishlists";
   }
-  function cart(){
-    window.location.href ="/home/cart";
-
+  function cart() {
+    window.location.href = "/home/cart";
   }
   const handleSelect = (selectedIndex, e) => {
     setIndex(selectedIndex);
@@ -122,12 +130,9 @@ function CustomerHome() {
     axios
       .post(`http://localhost:5000/addWishlist`, { user_id, book_id })
       .then((res) => {
+        console.log(res.data.book_id);
 
-        console.log(res.data.book_id)
-      
-        window.location.href ="/home/wishlists";
-        
-
+        window.location.href = "/home/wishlists";
       })
       .catch((err) => console.log(err));
   }
@@ -161,23 +166,22 @@ function CustomerHome() {
               </Navbar.Collapse>
             </Container>
           </Navbar>
-    
-            <Button className="cart_btn" onClick={cart}>
-              <svg
-                className="carticon"
-                xmlns="http://www.w3.org/2000/svg"
-                width="30"
-                height="60"
-                color="white"
-                class="bi bi-cart3"
-                viewBox="0 4 16 16"
-              >
-                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-              </svg>
-            </Button>
 
-<Button className="heart_btn" onClick={wishlist}>
+          <Button className="cart_btn" onClick={cart}>
+            <svg
+              className="carticon"
+              xmlns="http://www.w3.org/2000/svg"
+              width="30"
+              height="60"
+              color="white"
+              class="bi bi-cart3"
+              viewBox="0 4 16 16"
+            >
+              <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+            </svg>
+          </Button>
 
+          <Button className="heart_btn" onClick={wishlist}>
             <svg
               className="hearticon"
               xmlns="http://www.w3.org/2000/svg"
@@ -314,50 +318,80 @@ function CustomerHome() {
           </Carousel>
         </Container>
       </Row>
+      <Container>
+        <Row>
+          <h1 className="featuredbooks mb-5">Stores' Books</h1>
+        </Row>
 
-      <Row>
-        <h1 className="featuredbooks mb-5">Latest Books</h1>
-      </Row>
-
-      <div className="container mt-4">
-        <div className="row">
-          {books.map((book) => (
-            <div className="col-lg-4 col-md-6 col-12" key={book.id}>
-              <div>
-                <Card className="course-card">
-                  <Card.Img
-                    variant="top"
-                    src={book.image}
-                    class="kadyImage"
-                  ></Card.Img>
-                  <Card.Body>
-                    <Card.Title>{book.title}</Card.Title>
-                    <p>{book.description}</p>
-                    <div>
-                      <Link to={`book/${book.id}`}>
-                        <Button variant="success" className="mr-3">
-                          View
-                        </Button>
-                      </Link>
-                      <Link>
-                        <Button
-                          variant="success"
-                          className="ml-3"
-                          onClick={() => addwishlist(book.id)}
-                        >
-                          {" "}
-                          Add to Wishlist
-                        </Button>
-                      </Link>
-                    </div>
-                  </Card.Body>
-                </Card>
+        <div className="container mt-4">
+          <div className="row">
+            {books.map((book) => (
+              <div className="col-lg-4 col-md-6 col-12" key={book.id}>
+                <div>
+                  <Card className="course-card">
+                    <Card.Img
+                      variant="top"
+                      src={book.image}
+                      class="kadyImage"
+                    ></Card.Img>
+                    <Card.Body>
+                      <Card.Title>{book.title}</Card.Title>
+                      <p>{book.description}</p>
+                      <div>
+                        <Link to={`book/${book.id}`}>
+                          <Button className="xx1">View</Button>
+                        </Link>
+                        <Link>
+                          <Button
+                            className="xx2"
+                            onClick={() => addwishlist(book.id)}
+                          >
+                            {" "}
+                            Add to Wishlist
+                          </Button>
+                        </Link>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>{" "}
-        {/* ./row*/}
-      </div>
+            ))}
+          </div>{" "}
+        </div>
+      </Container>
+
+      <Container>
+        <Row>
+          <h1 className="featuredbooks mb-5">Users' Books</h1>
+        </Row>
+
+        <div className="container mt-4">
+          <div className="row">
+            {sellbooks.map((sellbook) => (
+              <div className="col-lg-4 col-md-6 col-12" key={sellbook.id}>
+                <div>
+                  <Card className="course-card">
+                    <Card.Img
+                      variant="top"
+                      src={sellbook.image}
+                      class="kadyImage"
+                    ></Card.Img>
+                    <Card.Body>
+                      <Card.Title>{sellbook.title}</Card.Title>
+                      <p>{sellbook.description}</p>
+                      <div>
+                        <Link to={`book/${sellbook.id}`}>
+                          <Button className="xx1">View</Button>
+                        </Link>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </div>
+              </div>
+            ))}
+          </div>{" "}
+        </div>
+      </Container>
     </Fragment>
   );
 }

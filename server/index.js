@@ -286,6 +286,17 @@ app.get("/books", async (req, res) => {
   }
 });
 
+app.get("/usersellbooks", async (req, res) => {
+  try {
+    const getBooks = await pool.query(
+      'SELECT * FROM book WHERE book.user_id in (select id from "user" where type =2) and status = 0'
+    );
+    res.json(getBooks.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 app.post("/bookinfo", async (req, res) => {
   try {
     const { book_id } = req.body;
@@ -324,7 +335,6 @@ app.post("/bookinfo/quantity", async (req, res) => {
 });
 app.post("/addbook", async (req, res) => {
   try {
-  
     var {
       title,
       genre_id,
@@ -336,18 +346,16 @@ app.post("/addbook", async (req, res) => {
       description,
       image,
       user_id,
-      count
+      count,
     } = req.body;
-    console.log(
-      language_id
-    );
+    console.log(language_id);
     //checking for nulls in gernre,isbn,language_id
     //front enter enters user couut with 1 but bookstores count with anything
     //front end will not let other users (superadmin-admin-driver) go into the my books page
     if (genre_id == -1) genre_id = "null";
     if (isbn == -1) isbn = "null";
     if (language_id == -1) language_id = "null";
-      console.log(    `INSERT INTO book (title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,user_id,count,status) values
+    console.log(`INSERT INTO book (title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,user_id,count,status) values
       ('${title}',${genre_id},'${isbn}' ,'${author_name}', ${language_id} ,${purshace_price},${version},'${description}' ,'${image}',${user_id},${count},0) RETURNING *;`);
     book = await pool.query(
       `INSERT INTO book (title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,user_id,count,status) values
@@ -575,7 +583,7 @@ app.get("/orders/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const viewOrder = await pool.query(
-      "select book_id,quantity,title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image from order_item,book where book_id=book.id and order_id=$1;",
+      "select order_item.id,book_id,quantity,title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image from order_item,book where book_id=book.id and order_id=$1;",
       [id]
     ); //return order items to user
     res.json(viewOrder.rows);
@@ -1140,6 +1148,16 @@ app.get("/pendingOrders/:id", async (req, res) => {
       [id]
     );
     res.json(viewPendingOrder.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.post("/deleteOrderItem", async (req, res) => {
+  try {
+    const { id } = req.body;
+    const order = await pool.query(`delete  from "order_item" where id=${id} `);
+    res.json("deleted");
   } catch (err) {
     console.error(err.message);
   }
