@@ -1151,13 +1151,20 @@ app.post("/addbidbook", async (req, res) => {
     console.log(book.rows[0]);
     //book_id => book.rows[0].id
     //validate ending_time front end
-    const { ending_time } = req.body
+
+    const { ending_time } = req.body;
+    console.log(ending_time);
+    const ending_time2= new Date(ending_time);
+    console.log(ending_time2); 
     //const x = new Date(ending_time); 
     const starting_time = new Date();
-
-    newBid = pool.query('INSERT INTO bid_item (user_id,starting_time,ending_time,book_id) VALUES ($1,$2,$3,$4)', [-1, starting_time, ending_time, book.rows[0].id])
+    console.log(starting_time.toISOString());
+    console.log();
+console.log(`INSERT INTO bid_item (user_id,starting_time,ending_time,book_id) VALUES (null,'${starting_time.toISOString()}','${ending_time2.toISOString()}',${book.rows[0].id});`);
+    newBid =await pool.query(`INSERT INTO bid_item (user_id,starting_time,ending_time,book_id) VALUES (null,'${starting_time.toISOString()}','${ending_time2.toISOString()}',${book.rows[0].id});`)
     res.json(newBid.rows[0]);
-  } catch (err) {
+  } 
+  catch (err) {
     console.error(err.message);
   }
 });
@@ -1166,10 +1173,26 @@ app.post("/addbidonbook", async (req, res) => {
   try {
     //validate front end on purchase price before come here
     const { user_id, book_id, purshace_price } = req.body;
-    updatePurchasePrice = pool.query('UPDATE book SET purchase_price = $1 WHERE user_id = $2', [purshace_price, user_id])
-    console.log(updatePurchasePrice.rows[0]);
-    placeBid = pool.query('UPDATE bid_item SET user_id = $1 WHERE book_id = $2', [user_id, book_id])
-    res.json(placeBid.rows[0]);
+    console.log( user_id, book_id, purshace_price);
+
+    updatePurchasePrice = await pool.query('UPDATE book SET purchase_price = $1 WHERE id = $2 returning *;', [purshace_price, book_id])
+    console.log(updatePurchasePrice.rows);
+    
+    placeBid = await pool.query('UPDATE bid_item SET user_id = $1 WHERE book_id = $2 returning *', [user_id, book_id])
+    log(placeBid.rows);
+    res.json(updatePurchasePrice.rows[0]);
+
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+app.post("/myBid", async (req, res) => {
+  try {
+    const { user_id } = req.body;
+    console.log(`select * from book where status=3 and user_id=${user_id}`);
+    myBidBooks =await pool.query(`select book_id,title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,count,status,starting_time,ending_time,bid_item.id as bid_id from book,bid_item where status=3 and book.user_id=${user_id} and bid_item.book_id=book.id;`)
+    console.log(myBidBooks.rows);
+    res.json(myBidBooks.rows);
 
 
   } catch (err) {
@@ -1181,7 +1204,15 @@ app.post("/bidfinished", async (req, res) => {
   try {
     //validate front end on end time before come here
     const { book_id } = req.body;
-    finishedBid = pool.query('UPDATE bid_item SET status = 4 WHERE book_id = $1', [book_id])
+    const finishedBid =await pool.query('UPDATE book SET status = 4 WHERE id = $1 returning *', [book_id])
+    console.log(finishedBid.rows[0]);
+    const bidItem =await pool.query(`select * from bid_item where book_id=${book_id}`)
+    const winner=await pool.query(`select * from "user" where id =${bidItem.rows[0].user_id} `)
+    const date=new Date();
+    const sendNotificationUser = await pool.query(
+      `INSERT INTO notification (user_id,read,text,date) VALUES ($1,0,'you have won the bid on book${finishedBid.rows[0].title} heres the owners email to contact him  ${winner.rows[0].email} ',$2) RETURNING *`,
+      [winner.rows[0].id, date]
+    );
     res.json(finishedBid.rows[0]);
 
 
@@ -1196,6 +1227,17 @@ app.get("/bidbooks", async (req, res) => {
       'SELECT * FROM book WHERE book.user_id in (select id from "user" where type =2) and status = 3'
     );
     res.json(getBidBooks.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+app.post("/bid_item_data", async (req, res) => {
+  try {
+    const {book_id}=req.body;
+    const getBidBooks = await pool.query(
+      `select * from bid_item where book_id=${book_id};`
+    );
+    res.json(getBidBooks.rows[0]);
   } catch (err) {
     console.error(err.message);
   }

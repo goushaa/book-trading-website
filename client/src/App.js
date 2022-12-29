@@ -20,6 +20,7 @@ import StorePage from "./Pages/StorePage";
 import ViewAccount from "./Pages/ViewAccount";
 import DriverPage from "./Pages/DriverPage";
 import Wishlist from "./Components/Wishlist";
+import Biditem from "./Components/Biditem";
 import WishlistPage from "./Pages/WishlistPage";
 import ViewWishListItemPage from "./Pages/ViewWishListItemPage";
 import AddBooktoCartPage from "./Pages/AddBooktoCartPage";
@@ -31,6 +32,7 @@ import BiddingPage from "./Pages/BiddingPage";
 import ViewRepliesPage from "./Pages/ViewRepliesPage";
 
 
+
 function App() {
   return (
     <Fragment>
@@ -40,6 +42,8 @@ function App() {
         <Route path="/Sell&Bid" element={<SellandBidding />}></Route>
         <Route path="/LogIn" element={<LogIn />}></Route>
         <Route path="/SignUp" element={<SignUp />}></Route>
+        <Route path="/home/bidItem/:book_id" element={<Biditem />}></Route>
+        
 
         <Route path="/Home" element={<CustomerHomePage />}></Route>
         <Route path="/Home/wishlists" element={<WishlistPage />}></Route>

@@ -88,7 +88,7 @@ CREATE TABLE "bid_item" (
       ,
   CONSTRAINT "FK_bid_item.book_id"
     FOREIGN KEY ("book_id")
-      REFERENCES "user"("id")
+      REFERENCES "book"("id")
        ON UPDATE CASCADE
       ON DELETE CASCADE 
 );
