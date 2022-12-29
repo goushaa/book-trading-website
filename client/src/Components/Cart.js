@@ -93,36 +93,51 @@ useEffect(()=>{
     }
     return (
 
-        <div>
-            <div className="container mt-4">
-                <div className='row'>
-                    {
-                        orderItems.map(orderItem => {
-                            return (
-                                <div className="cards">
-                                    <div className="col-2">
-                                        <Card className="course-card">
-                                            <Card.Img variant="top" src={orderItem.image}></Card.Img>
-                                            <Card.Body>
-                                                <Card.Title>{orderItem.title}</Card.Title>
-                                                {orderItem.quantity}
 
-                                            </Card.Body>
-                                        </Card>
-                                    </div>
-                                </div>
-                            )
-                        })
-                    }
-                </div> {/* ./row*/}
-            </div>
+    if (totalPrice == price) {
+      setOrderCoupon("");
+    }
+    axios
+      .post(`http://localhost:5000/makeOrder`, { code, order_id, price })
+      .then((res) => {
+        //setOrderItem(res.data);
+        console.log(res.data);
+        if (res.data !== "empty cart" || res.data !== "wrong coupon") {
+          window.location.href = "/home";
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+  return (
+    <Fragment>
+      <Navbar bg="dark" variant="dark" expand="lg">
+        <Container>
+          <Navbar.Brand href="/home">
+            <h2>Checkout</h2>
+          </Navbar.Brand>
 
-            <Form>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Label>
-                        <h5>Enter Your Coupon here..</h5>
-                    </Form.Label>
-                    <Container className="c1">
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="me-auto"></Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+      <Container>
+        <div className="container mt-4">
+          <div className="row">
+            {orderItems.map((orderItem) => {
+              return (
+                <div className="col-lg-4 col-md-6 col-12" key={orderItem.id}>
+                  <div className="cards">
+                    <Card className="course-card">
+                      <Card.Img
+                        variant="top"
+                        src={orderItem.image}
+                        class="kadyImage"
+                      ></Card.Img>
+                      <Card.Body>
+                        <Card.Title>{orderItem.title}</Card.Title>
+
                         <Row>
                             <Col>
                                 <Form.Control

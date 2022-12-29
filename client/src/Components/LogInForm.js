@@ -58,10 +58,13 @@ function LogInForm() {
             navigate(`/home/`, { state: response.data });
           } else if (response.data.type == 3) {
             //stores
-            navigate(`/store`);
+
+            navigate(`/store/`);
           } else if (response.data.type == 4) {
             //driver
-            navigate(`/driver`, { state: response.data });
+            navigate(`/driver/`, { state: response.data });
+            window.location.reload();
+
           }
         }
       })

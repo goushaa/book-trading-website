@@ -67,6 +67,12 @@ useEffect(() => {
     }).catch((err) => console.log(err));
     
   }
+
+    function logOUT() {
+    localStorage.clear();
+    window.location.href = "/";
+  }
+
   
   return (
     <Fragment>
@@ -82,6 +88,12 @@ useEffect(() => {
             </Col>
             </Row>
           </Navbar.Brand>
+<Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="me-auto">
+              <Nav.Item></Nav.Item>
+            </Nav>
+          </Navbar.Collapse>
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">

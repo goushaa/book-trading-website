@@ -107,7 +107,7 @@ function AccountInfo() {
     <Fragment>
       <Navbar bg="dark" variant="dark">
         <Container>
-         
+
           <Navbar.Brand href="/home">
           <Row>
           <Col>
@@ -116,6 +116,7 @@ function AccountInfo() {
         <Col>Account
         </Col>
         </Row>
+
           </Navbar.Brand>
          
           <Navbar.Collapse className="justify-content-end">

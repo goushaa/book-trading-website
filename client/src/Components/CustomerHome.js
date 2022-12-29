@@ -278,7 +278,9 @@ function CustomerHome() {
                 Create a business account
               </Button>{" "}
               <Button className="leftmenu2btn3">Add your store</Button>{" "}
+              <Link to={`/driversignup`}>
               <Button className="leftmenu2btn4">Sign up to deliver</Button>{" "}
+              </Link>
               <p className="order_icon">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
