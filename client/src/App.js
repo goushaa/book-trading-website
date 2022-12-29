@@ -45,7 +45,7 @@ function App() {
           path="/Home/wishlists/:book_id"
           element={<ViewWishListItemPage />}
         ></Route>
-        <Route path="/driver/:id" element={<DriverPage />}></Route>
+        <Route path="/driver" element={<DriverPage />}></Route>
         <Route path="/Admin" element={<Admin />}></Route>
         <Route path="/Home/Sell" element={<Sell />}></Route>
         <Route path="/Promotions" element={<Promotions />}></Route>
