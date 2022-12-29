@@ -6,9 +6,13 @@ import Combobox from "react-widgets/Combobox";
 
 function TestAddbook() {
 
+    if(localStorage.length==0)
+    window.location.href = "/";
+    const userData = JSON.parse(localStorage.getItem("user"));
+    if(userData.type!=3)
+    window.location.href = "/login";
+    const [id,setID] =useState(userData.id) ;
 
-    let { id } = useParams()
-    console.log(id);
     const [genres, setGenres] = useState([]);
     const [languages, setLanguages] = useState([]);
     const [cities, setCities] = useState([]); //should be used in other page (wrote in here for practice)
@@ -168,7 +172,7 @@ function TestAddbook() {
 
                 <Form.Group className="mb-3" controlId="formBasicPassword" onChange={changeISBN}>
                     <Form.Label>ISBN</Form.Label>
-                    <Form.Control type="text" placeholder="Enter book isbn" />
+                    <Form.Control type="number" placeholder="Enter book isbn" />
                 </Form.Group>
 
                 <Form.Group className="mb-3" onChange={changeURL}>

@@ -7,6 +7,12 @@ import Navbar from "react-bootstrap/Navbar";
 import "../CSS/Style.css";
 
 function AdminViewOrders() {
+  if(localStorage.length==0)
+  window.location.href = "/";
+  const userData = JSON.parse(localStorage.getItem("user"));
+  if(userData.type!=1&&userData.type!=4)
+  window.location.href = "/login";
+  const [admin_id,setID] =useState(userData.id) ;
   let { id } = useParams();
   console.log(id);
   useEffect(() => {

@@ -17,6 +17,12 @@ import "../CSS/Style.css";
 import axios from "axios";
 
 function AdminForm() {
+  if(localStorage.length==0)
+  window.location.href = "/";
+  const userData = JSON.parse(localStorage.getItem("user"));
+  if(userData.type!=1&&userData.type!=0)
+  window.location.href = "/login";
+  const [id,setID] =useState(userData.id) ;
   useEffect(() => {
     axios
       .get("http://localhost:5000/drivers")
@@ -57,6 +63,13 @@ function AdminForm() {
       .get("http://localhost:5000/wishlists_stats")
       .then((res) => {
         setwishlist(res.data);
+      })
+      .catch((err) => console.log(err));
+
+      axios
+      .get("http://localhost:5000/adminViewTickets")
+      .then((res) => {
+        setticket(res.data);
         console.log(res.data);
       })
       .catch((err) => console.log(err));
@@ -65,8 +78,8 @@ function AdminForm() {
   const [show, setShow] = useState(false);
 
   const [code, setCode] = useState("");
-  const [discount, setDiscount] = useState("");
-  const [maximum_use, setMaximumUse] = useState("");
+  const [discount, setDiscount] = useState(0);
+  const [maximum_use, setMaximumUse] = useState(0);
   const [is_relative, setIsRelative] = useState("0");
   const [viewUserWishlists, setwishlist] = useState([]);
   const [customers, setCustomers] = useState([]);
@@ -78,15 +91,33 @@ function AdminForm() {
   const [order_id, setOrderID] = useState(0);
   const [driver_user_id, setDriverID] = useState(0);
   const [book, setbook] = useState([]);
-
+  const [tickets, setticket] = useState([]);
+  const [adminReply, setreply] = useState('');
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  useEffect(()=>{
+    axios
+    .post(
+      `http://localhost:5000/AdminGiveOrderToDriver`,
+      {
+        driver_ssn: driver_ssn,
+        order_id: order_id,
+        driver_user_id: driver_user_id,
+      }
+    )
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => console.log(err));
+  },[driver_user_id])
 
   function changeCoupon(e) {
     setCode(e.target.value);
   }
 
   function changeDiscount(e) {
+    console.log(e.target.value);
     setDiscount(e.target.value);
   }
 
@@ -105,6 +136,7 @@ function AdminForm() {
 
   function addCoupon(e) {
     //needed validations
+    if(code==""||discount<1||maximum_use<1)return;
 
     axios
       .post("http://localhost:5000/addCoupon", {
@@ -114,7 +146,6 @@ function AdminForm() {
         is_relative,
       })
       .then((res) => {
-        console.log(res.data);
         window.location.reload();
         if (res.data == -1) {
           console.log(`${code} IS ALREADY IN THE SYSTEM`);
@@ -124,7 +155,19 @@ function AdminForm() {
       })
       .catch((err) => console.log(err));
   }
-
+  function changereply(e)
+  {
+    setreply(e.target.value);
+  }
+  function addreply(id)
+  {
+    axios
+       .post(`http://localhost:5000/ticketReply`,{adminReply,id})
+       .then((res) => {
+       })
+       window.location.reload()
+       .catch((err) => console.log(err));
+  }
   return (
     <Fragment>
       <Navbar bg="dark" variant="dark" expand="lg">
@@ -178,7 +221,7 @@ function AdminForm() {
                 <Form.Group className="mb-3 " controlId="couponform">
                   <Form.Control
                     className="form-control w-75"
-                    type="string"
+                    type="number"
                     maxLength={6}
                     placeholder="Enter Discount"
                     onChange={changeDiscount}
@@ -187,7 +230,7 @@ function AdminForm() {
                 <Form.Group className="mb-3 " controlId="couponform">
                   <Form.Control
                     className="form-control w-75"
-                    type="string"
+                    type="number"
                     maxLength={6}
                     placeholder="Enter Maximum Use"
                     onChange={changeMaximumUse}
@@ -439,19 +482,7 @@ function AdminForm() {
                             })
                             .catch((err) => console.log(err));
                           //console.log(driver_ssn, pendingOrder.id, driver_id_sui);
-                          axios
-                            .post(
-                              `http://localhost:5000/AdminGiveOrderToDriver`,
-                              {
-                                driver_ssn: driver_ssn,
-                                order_id: pendingOrder.id,
-                                driver_user_id: driver_user_id,
-                              }
-                            )
-                            .then((res) => {
-                              console.log(res.data);
-                            })
-                            .catch((err) => console.log(err));
+                       
                         }}
                       >
                         {" "}
@@ -481,7 +512,50 @@ function AdminForm() {
                   </tr>
                 ))}
               </tbody>
+
+
             </table>
+          </Tab>
+          <Tab eventKey="Tickets" title="Tickets">
+            <h1>Tickets</h1>
+
+            <table class="table">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">#ticket_id</th>
+                  <th scope="col">Ticket</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {tickets.map((ticket) => (
+                  <tr>
+                    <td>
+                      {ticket.id}
+                    </td>
+                    <td>
+                      <Row>
+                      {ticket.user_complaint}
+                      </Row>
+                      <Row className="mt-3">
+                        <Col>
+                      <Form.Control className="w-150" onChange={changereply} placeholder="Add Reply"></Form.Control>
+                      </Col>
+                      <Col>
+                      <Button variant="success" onClick={()=>addreply(ticket.id)}>Reply</Button>
+                      </Col>
+                      </Row>
+                    </td>
+                    <td key={ticket.id}>
+                     
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+
+            </table>
+
+
           </Tab>
         </Tabs>
       </Container>
