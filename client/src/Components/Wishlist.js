@@ -39,7 +39,7 @@ function deletewishlist(book_id)
       .catch((err) => console.log(err));
     }
     function viewBook (book_id){
-      window.location.href="/home/book/"+book_id;
+      window.location.href="/home/wishlists/"+book_id;
     }
      
   return (

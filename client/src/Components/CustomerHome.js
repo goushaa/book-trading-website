@@ -21,6 +21,24 @@ import axios from "axios";
 import "../CSS/Style.css";
 
 function MyVerticallyCenteredModal(props) {
+  if (localStorage.length == 0) window.location.href = "/";
+  const userData = JSON.parse(localStorage.getItem("user"));
+  if (userData.type != 2) window.location.href = "/login";
+  const [id, setID] = useState(userData.id);
+  const [complaint, setcom] = useState('');
+  function addticket(e)
+  {
+   let user_id = id;
+   axios
+       .post(`http://localhost:5000/addTicket`,{user_id,complaint})
+       .then((res) => {
+       })
+       .catch((err) => console.log(err));
+  }
+  function changecomp(e)
+  {
+    setcom(e.target.value);
+  }
   return (
     <Modal
       {...props}
@@ -42,12 +60,16 @@ function MyVerticallyCenteredModal(props) {
                 className="prom_text"
                 type="string"
                 placeholder="Add Ticket"
+                onChange={changecomp}
               />
             </Container>
           </Form.Group>
 
-          <Button variant="dark" type="submit">
-            Comment
+          <Button variant="dark" type="submit" onClick={addticket}>
+            Add
+          </Button>
+          <Button variant="success" type="submit" href="http://localhost:3000/home/viewReplies" >
+            View Your Tickets
           </Button>
         </Form>
       </Modal.Body>
@@ -61,6 +83,7 @@ function MyVerticallyCenteredModal(props) {
 function sell() {
   window.location.href = "Sell";
 }
+ 
 
 function bid() {
   window.location.href = "/Home/Bidding";
@@ -93,8 +116,6 @@ function CustomerHome() {
     axios
       .post(`http://localhost:5000/userOrder`, { id })
       .then((res) => {
-        console.log(id);
-        console.log(res.data);
         setOrderid(res.data.id);
       })
       .catch((err) => console.log(err));

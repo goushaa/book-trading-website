@@ -28,6 +28,8 @@ import AdminViewOrderPage from "./Pages/AdminViewPendingOrdersPage";
 import DriverViewOrdersPage from "./Pages/DriverViewOrdersPage";
 import Sell from "./Pages/SellPage";
 import BiddingPage from "./Pages/BiddingPage";
+import ViewRepliesPage from "./Pages/ViewRepliesPage";
+
 
 function App() {
   return (
@@ -43,13 +45,14 @@ function App() {
         <Route path="/Home/wishlists" element={<WishlistPage />}></Route>
 
         <Route
-          path="/Home/:id/wishlists/:book_id"
+          path="/Home/wishlists/:book_id"
           element={<ViewWishListItemPage />}
         ></Route>
-        <Route path="/driver/:id" element={<DriverPage />}></Route>
+        <Route path="/driver" element={<DriverPage />}></Route>
         <Route path="/Admin" element={<Admin />}></Route>
         <Route path="/Home/Sell" element={<Sell />}></Route>
         <Route path="/Home/Bidding" element={<BiddingPage />}></Route>
+        <Route path="/Home/viewReplies" element={<ViewRepliesPage />}></Route>
         <Route path="/Promotions" element={<Promotions />}></Route>
         <Route path="/addBook" element={<TestAddbook />}></Route>
         <Route path="/driversignup" element={<DriverSignupPage />}></Route>
