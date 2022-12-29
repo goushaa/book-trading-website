@@ -24,9 +24,9 @@ function TestAddbook() {
     const [language_id, setLanguage] = useState(1);
     const [purshace_price, setPrice] = useState(15);
     const [version, setVersion] = useState(1);
-    const [description, setDescription] = useState('hi');
+    const [description, setDescription] = useState('');
+    const [count, setQuantity] = useState('');
     const [image, setImage] = useState('');
-    const count = 1 //to be changed if store
     const user_id = id //to be passed between pages
     const [base64, settingBase64] = useState('')
     useEffect(() => {
@@ -73,6 +73,9 @@ function TestAddbook() {
     function changeDescription(e) {
         setDescription(e.target.value);
     }
+    function changeQuantity(e) {
+        setQuantity(e.target.value);
+    }
 
     function changeURL(e) {
         var file = e.target.files[0];
@@ -99,6 +102,7 @@ function TestAddbook() {
             "mimeType": "multipart/form-data",
             "contentType": false,
             "data": form
+           
         };
 
         let imgbb = await axios(settings);
@@ -111,6 +115,7 @@ function TestAddbook() {
             console.log('win'); //add book with image upload (has some bugs)    
         console.log(res.data); //add book with image upload (has some bugs)
         }).catch(err => console.log(err))
+        window.location.reload();
     }
 
 
@@ -142,7 +147,12 @@ function TestAddbook() {
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Book Version</Form.Label>
-                    <Form.Control type="number" min="0" placeholder="Enter book version" onChange={changeVersion} />
+                    <Form.Control type="number" min="1" placeholder="Enter book version" onChange={changeVersion} />
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                    <Form.Label>Quantity</Form.Label>
+                    <Form.Control type="number" min="1" placeholder="Enter Quantity" onChange={changeQuantity} />
                 </Form.Group>
 
 

@@ -6,8 +6,11 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Navbar from "react-bootstrap/Navbar";
 import axios from "axios";
+// import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
 import { useNavigate } from "react-router-dom";
 import "../CSS/prom_bg.css";
+import "../CSS/Style.css";
 
 function SignUpForm() {
   useEffect(() => {
@@ -64,7 +67,9 @@ function SignUpForm() {
   function changeUser(e) {
     setUser(e.target.value);
   }
-
+  function signDriver(){
+    window.location.href="/driversignup"
+  }
   function SignUp(e) {
     console.log(city_name);
 
@@ -139,7 +144,18 @@ function SignUpForm() {
       <Navbar bg="dark" variant="dark">
         <Container>
           <Navbar.Brand>Online Book Store</Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="me-auto">
+              <Nav.Item>
+                <Button className="adminlogoutbtn" onClick={signDriver}>
+                  signUp as a driver
+                </Button>
+              </Nav.Item>
+            </Nav>
+          </Navbar.Collapse>
         </Container>
+   
       </Navbar>
       <Container className="signup">
         <Row>

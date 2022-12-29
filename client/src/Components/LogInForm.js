@@ -64,10 +64,10 @@ function LogInForm() {
           }
           else if (response.data.type == 3) {
             //stores
-            navigate(`/store/${response.data.id}`);
+            navigate(`/store/`);
           } else if (response.data.type == 4) {
             //driver
-            navigate(`/driver/${response.data.id}`, { state: response.data });
+            navigate(`/driver/`, { state: response.data });
             window.location.reload();
           }
         }

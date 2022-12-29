@@ -109,7 +109,7 @@ function Cart() {
     <Fragment>
       <Navbar bg="dark" variant="dark" expand="lg">
         <Container>
-          <Navbar.Brand href="/">
+          <Navbar.Brand href="/home">
             <h2>Checkout</h2>
           </Navbar.Brand>
 
