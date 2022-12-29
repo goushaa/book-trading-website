@@ -25,18 +25,15 @@ function MyVerticallyCenteredModal(props) {
   const userData = JSON.parse(localStorage.getItem("user"));
   if (userData.type != 2) window.location.href = "/login";
   const [id, setID] = useState(userData.id);
-  const [complaint, setcom] = useState('');
-  function addticket(e)
-  {
-   let user_id = id;
-   axios
-       .post(`http://localhost:5000/addTicket`,{user_id,complaint})
-       .then((res) => {
-       })
-       .catch((err) => console.log(err));
+  const [complaint, setcom] = useState("");
+  function addticket(e) {
+    let user_id = id;
+    axios
+      .post(`http://localhost:5000/addTicket`, { user_id, complaint })
+      .then((res) => {})
+      .catch((err) => console.log(err));
   }
-  function changecomp(e)
-  {
+  function changecomp(e) {
     setcom(e.target.value);
   }
   return (
@@ -47,13 +44,15 @@ function MyVerticallyCenteredModal(props) {
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">Tickets</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">
+          Tickets & Feedback
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>
-              <h5>Add your Ticket</h5>
+              <h5>Add your Ticket or Feedback</h5>
             </Form.Label>
             <Container className="c1">
               <Form.Control
@@ -68,7 +67,11 @@ function MyVerticallyCenteredModal(props) {
           <Button variant="dark" type="submit" onClick={addticket}>
             Add
           </Button>
-          <Button variant="success" type="submit" href="http://localhost:3000/home/viewReplies" >
+          <Button
+            variant="success"
+            type="submit"
+            href="http://localhost:3000/home/viewReplies"
+          >
             View Your Tickets
           </Button>
         </Form>
@@ -83,7 +86,6 @@ function MyVerticallyCenteredModal(props) {
 function sell() {
   window.location.href = "Home/Sell";
 }
- 
 
 function bid() {
   window.location.href = "/Home/Bidding";
@@ -144,7 +146,6 @@ function CustomerHome() {
   }
   function cart() {
     window.location.href = "/home/cart";
-
   }
   const handleSelect = (selectedIndex, e) => {
     setIndex(selectedIndex);
@@ -158,13 +159,9 @@ function CustomerHome() {
       .then((res) => {
         console.log(res.data.book_id);
 
-
-        console.log(res.data.book_id)
+        console.log(res.data.book_id);
 
         window.location.href = "/home/wishlists";
-
-
-
       })
       .catch((err) => console.log(err));
   }
@@ -213,9 +210,7 @@ function CustomerHome() {
             </svg>
           </Button>
 
-
-          <Button className="heart_btn" onClick={wishlist}>
-
+          <Button className="heart_btn" onClick={wishlist}></Button>
 
           <Button className="heart_btn" onClick={wishlist}>
             <svg
@@ -309,7 +304,7 @@ function CustomerHome() {
                 className="leftmenu2btn6"
                 onClick={() => setModalShow(true)}
               >
-                Tickets
+                Tickets & Feedback
               </Button>{" "}
               <MyVerticallyCenteredModal
                 show={modalShow}
@@ -328,7 +323,9 @@ function CustomerHome() {
         <Button className="salebtn" onClick={sell}>
           Sell now
         </Button>{" "}
-        <Button className="salebtn2" onClick={bid}>Bid now</Button>{" "}
+        <Button className="salebtn2" onClick={bid}>
+          Bid now
+        </Button>{" "}
         <Container>
           <Carousel
             className="slideshow"

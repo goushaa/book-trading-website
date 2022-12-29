@@ -50,7 +50,7 @@
   top: 30%;
   left: 8.5%;
   text-align: center;
-  color: rgb(77, 17, 17);
+  color: rgb(88, 1, 1);
   font-size: 70px;
   font-weight: 600;
   font-style: bold;
@@ -336,11 +336,11 @@
 
 .menu2 .leftmenu2btn6 {
   position: absolute;
-  transform: translate(60%, 125%);
+  transform: translate(35%, 125%);
   background-color: transparent;
   font-weight: 400;
   color: rgb(0, 0, 0);
-  width: 150px;
+  width: 70%;
   font-size: 25px;
   border: none;
   cursor: pointer;
@@ -715,6 +715,32 @@
   color: rgb(237, 237, 237);
   width: 45%;
   font-size: 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 15px;
+}
+
+.superadminlogoutbtn {
+  position: absolute;
+  transform: translate(-100%, -50%);
+  background-color: rgb(255, 255, 255);
+  font-weight: 400;
+  color: rgb(0, 0, 0);
+  width: 120px;
+  font-size: 17px;
+  border: none;
+  cursor: pointer;
+  border-radius: 15px;
+}
+
+.superadminbtn {
+  position: absolute;
+  transform: translate(0%, -700%);
+  background-color: rgb(19, 6, 71);
+  font-weight: 800;
+  color: rgb(255, 255, 255);
+  width: 15%;
+  font-size: 27px;
   border: none;
   cursor: pointer;
   border-radius: 15px;

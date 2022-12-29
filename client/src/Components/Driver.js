@@ -10,12 +10,10 @@ import Button from "react-bootstrap/Button";
 import { useParams, Link } from "react-router-dom";
 
 function Driver() {
-  if(localStorage.length==0)
-  window.location.href = "/";
+  if (localStorage.length == 0) window.location.href = "/";
   const userData = JSON.parse(localStorage.getItem("user"));
-  if(userData.type!=4)
-  window.location.href = "/login";
-  const [id,setID] =useState(userData.id) ;
+  if (userData.type != 4) window.location.href = "/login";
+  const [id, setID] = useState(userData.id);
   const [ssn, setssn] = useState(0);
   const [Orders, setOrders] = useState([]);
   const [status, setstatus] = useState([]);

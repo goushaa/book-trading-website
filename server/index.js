@@ -72,7 +72,7 @@ app.post("/signup", async (req, res) => {
       //creats user to link it later to driver
       const sign = await pool.query(
         'INSERT INTO "user" ' +
-        "(first_name,last_name,address,city_id,user_name,password,email,type) values ($1,$2,$3,$4,$5,$6,$7,$8) returning *",
+          "(first_name,last_name,address,city_id,user_name,password,email,type) values ($1,$2,$3,$4,$5,$6,$7,$8) returning *",
         [first, last, address, city_id, user_name, password, email, type]
       );
       console.log(sign.rows[0].id);
@@ -86,7 +86,7 @@ app.post("/signup", async (req, res) => {
     else {
       const sign = await pool.query(
         'INSERT INTO "user" ' +
-        "(first_name,last_name,address,city_id,user_name,password,email,type) values ($1,$2,$3,$4,$5,$6,$7,$8) returning *",
+          "(first_name,last_name,address,city_id,user_name,password,email,type) values ($1,$2,$3,$4,$5,$6,$7,$8) returning *",
         [first, last, address, city_id, user_name, password, email, type]
       );
       res.json(sign.rows[0]);
@@ -347,7 +347,6 @@ app.post("/bookinfo/quantity", async (req, res) => {
 
 app.post("/addbook", async (req, res) => {
   try {
-
     var {
       title,
       genre_id,
@@ -379,9 +378,6 @@ app.post("/addbook", async (req, res) => {
     console.error(err.message);
   }
 });
-
-
-
 
 //stores delete books app.delete
 app.post("/deletebook", async (req, res) => {
@@ -503,8 +499,8 @@ app.post("/makeOrder", async (req, res) => {
     console.log(date);
     const makeOrder = await pool.query(
       'UPDATE "order" SET status=1,order_date = $1,price =' +
-      price +
-      " WHERE id=$2 RETURNING *",
+        price +
+        " WHERE id=$2 RETURNING *",
       [date, order_id]
     );
     //res.json(makeOrder.rows[0]);
@@ -549,14 +545,14 @@ app.post("/AdminGiveOrderToDriver", async (req, res) => {
     console.log(date);
     const sendNotificationDriver = await pool.query(
       "INSERT INTO notification (user_id,read,text,date) VALUES ($1,0,'You have been assigned order #" +
-      order_id +
-      " ',$2) RETURNING *",
+        order_id +
+        " ',$2) RETURNING *",
       [driver_user_id, date]
     );
     const sendNotificationUser = await pool.query(
       "INSERT INTO notification (user_id,read,text,date) VALUES ($1,0,'Your order #" +
-      order_id +
-      " has been assigned to a driver',$2) RETURNING *",
+        order_id +
+        " has been assigned to a driver',$2) RETURNING *",
       [giveOrder.rows[0].user_id, date]
     );
     console.log(sendNotificationDriver.rows[0]);
@@ -789,7 +785,9 @@ app.get("/coupons", async (req, res) => {
 app.get("/coupons/:code", async (req, res) => {
   try {
     const { code } = req.params;
-    const getCoupon = await pool.query(`SELECT * FROM Coupons where code='${code}';`);
+    const getCoupon = await pool.query(
+      `SELECT * FROM Coupons where code='${code}';`
+    );
     res.json(getCoupon.rows);
     //front end should loop on all coupons and display them
   } catch (err) {
@@ -1094,12 +1092,14 @@ app.post("/ticketReply", async (req, res) => {
   }
 });
 
-
 app.get("/userViewTickets/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    const userViewTickets = await pool.query("SELECT * FROM ticket WHERE user_id = $1", [id]);
+    const userViewTickets = await pool.query(
+      "SELECT * FROM ticket WHERE user_id = $1",
+      [id]
+    );
     res.json(userViewTickets.rows);
     //front end should display one driver when click on him
   } catch (err) {
@@ -1109,7 +1109,9 @@ app.get("/userViewTickets/:id", async (req, res) => {
 
 app.get("/adminViewTickets", async (req, res) => {
   try {
-    const adminViewTickets = await pool.query("SELECT * FROM ticket WHERE replied = 0");
+    const adminViewTickets = await pool.query(
+      "SELECT * FROM ticket WHERE replied = 0"
+    );
     res.json(adminViewTickets.rows);
     //front end should display one driver when click on him
   } catch (err) {
@@ -1121,7 +1123,6 @@ app.get("/adminViewTickets", async (req, res) => {
 
 app.post("/addbidbook", async (req, res) => {
   try {
-
     var {
       title,
       genre_id,
@@ -1133,11 +1134,9 @@ app.post("/addbidbook", async (req, res) => {
       description,
       image,
       user_id,
-      count
+      count,
     } = req.body;
-    console.log(
-      language_id
-    );
+    console.log(language_id);
 
     if (genre_id == -1) genre_id = "null";
     if (isbn == -1) isbn = "null";
@@ -1151,11 +1150,14 @@ app.post("/addbidbook", async (req, res) => {
     console.log(book.rows[0]);
     //book_id => book.rows[0].id
     //validate ending_time front end
-    const { ending_time } = req.body
-    //const x = new Date(ending_time); 
+    const { ending_time } = req.body;
+    //const x = new Date(ending_time);
     const starting_time = new Date();
 
-    newBid = pool.query('INSERT INTO bid_item (user_id,starting_time,ending_time,book_id) VALUES ($1,$2,$3,$4)', [-1, starting_time, ending_time, book.rows[0].id])
+    newBid = pool.query(
+      "INSERT INTO bid_item (user_id,starting_time,ending_time,book_id) VALUES ($1,$2,$3,$4)",
+      [-1, starting_time, ending_time, book.rows[0].id]
+    );
     res.json(newBid.rows[0]);
   } catch (err) {
     console.error(err.message);
@@ -1166,12 +1168,16 @@ app.post("/addbidonbook", async (req, res) => {
   try {
     //validate front end on purchase price before come here
     const { user_id, book_id, purshace_price } = req.body;
-    updatePurchasePrice = pool.query('UPDATE book SET purchase_price = $1 WHERE user_id = $2', [purshace_price, user_id])
+    updatePurchasePrice = pool.query(
+      "UPDATE book SET purchase_price = $1 WHERE user_id = $2",
+      [purshace_price, user_id]
+    );
     console.log(updatePurchasePrice.rows[0]);
-    placeBid = pool.query('UPDATE bid_item SET user_id = $1 WHERE book_id = $2', [user_id, book_id])
+    placeBid = pool.query(
+      "UPDATE bid_item SET user_id = $1 WHERE book_id = $2",
+      [user_id, book_id]
+    );
     res.json(placeBid.rows[0]);
-
-
   } catch (err) {
     console.error(err.message);
   }
@@ -1181,10 +1187,11 @@ app.post("/bidfinished", async (req, res) => {
   try {
     //validate front end on end time before come here
     const { book_id } = req.body;
-    finishedBid = pool.query('UPDATE bid_item SET status = 4 WHERE book_id = $1', [book_id])
+    finishedBid = pool.query(
+      "UPDATE bid_item SET status = 4 WHERE book_id = $1",
+      [book_id]
+    );
     res.json(finishedBid.rows[0]);
-
-
   } catch (err) {
     console.error(err.message);
   }
@@ -1200,7 +1207,6 @@ app.get("/bidbooks", async (req, res) => {
     console.error(err.message);
   }
 });
-
 
 //************************utilities*******************************/
 app.get("/cities", async (req, res) => {
@@ -1294,6 +1300,125 @@ app.post("/deleteOrderItem", async (req, res) => {
     const { id } = req.body;
     const order = await pool.query(`delete  from "order_item" where id=${id} `);
     res.json("deleted");
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/adminCount", async (req, res) => {
+  try {
+    const adminCount = await pool.query(
+      'SELECT COUNT(*) FROM "user" WHERE type = 1 '
+    );
+    res.json(adminCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/customerCount", async (req, res) => {
+  try {
+    const customerCount = await pool.query(
+      'SELECT COUNT(*) FROM "user" WHERE type = 2 '
+    );
+    res.json(customerCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/storeCount", async (req, res) => {
+  try {
+    const storeCount = await pool.query(
+      'SELECT COUNT(*) FROM "user" WHERE type = 3 '
+    );
+    res.json(storeCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/driverCount", async (req, res) => {
+  try {
+    const driverCount = await pool.query(
+      'SELECT COUNT(*) FROM "user" WHERE type = 4 '
+    );
+    res.json(driverCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/totalusersCount", async (req, res) => {
+  try {
+    const totalusersCount = await pool.query('SELECT COUNT(*) FROM "user"');
+    res.json(totalusersCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/storebooks", async (req, res) => {
+  try {
+    const booksperstoreCount = await pool.query(
+      'SELECT COUNT(*) FROM "user" u,book b WHERE b.user_id = u.id AND u.type = 3'
+    );
+    res.json(booksperstoreCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/userbidsellbooks", async (req, res) => {
+  try {
+    const couponsCount = await pool.query(
+      'SELECT COUNT(*) FROM "user" u,book b WHERE b.user_id = u.id AND u.type = 2'
+    );
+    res.json(couponsCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/ordersnotsubmitted", async (req, res) => {
+  try {
+    const ordersnotsubmittedCount = await pool.query(
+      'SELECT COUNT(*) FROM "order" WHERE status= 0'
+    );
+    res.json(ordersnotsubmittedCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/orderstobeassignedtodriver", async (req, res) => {
+  try {
+    const orderstobeassignedtodriveCount = await pool.query(
+      'SELECT COUNT(*) FROM "order" WHERE status= 1'
+    );
+    res.json(orderstobeassignedtodriveCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/ordersdelivering", async (req, res) => {
+  try {
+    const ordersdeliveringCount = await pool.query(
+      'SELECT COUNT(*) FROM "order" WHERE status= 2'
+    );
+    res.json(ordersdeliveringCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/ordersdelivered", async (req, res) => {
+  try {
+    const ordersdeliveredCount = await pool.query(
+      'SELECT COUNT(*) FROM "order" WHERE status= 3'
+    );
+    res.json(ordersdeliveredCount.rows[0].count);
   } catch (err) {
     console.error(err.message);
   }
