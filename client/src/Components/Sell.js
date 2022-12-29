@@ -146,104 +146,104 @@ function Sell() {
         </Container>
       </Navbar>
       <Container>
-        <div>
-          <Form>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Title</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter title"
-                onChange={changeTitle}
-              />
-            </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter description"
-                onChange={changeDescription}
-              />
-            </Form.Group>
+        <Form>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>Title</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter title"
+              onChange={changeTitle}
+            />
+          </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Author Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter author name"
-                onChange={changeAuthor}
-              />
-            </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Label>Description</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter description"
+              onChange={changeDescription}
+            />
+          </Form.Group>
 
-            <Form.Group className="mb-3" controlId="purchaseClear">
-              <Form.Label>Purchase Price</Form.Label>
-              <Form.Control
-                type="number"
-                min="0"
-                placeholder="Enter the price this book will be sold at"
-                onChange={changePrice}
-              />
-            </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Label>Author Name</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter author name"
+              onChange={changeAuthor}
+            />
+          </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Book Version</Form.Label>
-              <Form.Control
-                type="number"
-                min="0"
-                placeholder="Enter book version"
-                onChange={changeVersion}
-              />
-            </Form.Group>
+          <Form.Group className="mb-3" controlId="purchaseClear">
+            <Form.Label>Purchase Price</Form.Label>
+            <Form.Control
+              type="number"
+              min="0"
+              placeholder="Enter the price this book will be sold at"
+              onChange={changePrice}
+            />
+          </Form.Group>
 
-            <Form.Group
-              className="mb-3"
-              controlId="formBasicPassword"
-              onChange={changeGenre}
-            >
-              <Form.Label>Genre</Form.Label>
-              <select className="form-control">
-                {genres.map((genre) => (
-                  <option value={genre.id}>{genre.name} </option>
-                ))}
-              </select>
-            </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Label>Book Version</Form.Label>
+            <Form.Control
+              type="number"
+              min="0"
+              placeholder="Enter book version"
+              onChange={changeVersion}
+            />
+          </Form.Group>
 
-            <Form.Group
-              className="mb-3"
-              controlId="formBasicPassword"
-              onChange={changeLanguage}
-            >
-              <Form.Label>Language</Form.Label>
-              <select className="form-control">
-                {languages.map((language) => (
-                  <option value={language.id}>{language.name} </option>
-                ))}
-              </select>
-            </Form.Group>
+          <Form.Group
+            className="mb-3"
+            controlId="formBasicPassword"
+            onChange={changeGenre}
+          >
+            <Form.Label>Genre</Form.Label>
+            <select className="form-control">
+              {genres.map((genre) => (
+                <option value={genre.id}>{genre.name} </option>
+              ))}
+            </select>
+          </Form.Group>
 
-            <Form.Group
-              className="mb-3"
-              controlId="formBasicPassword"
-              onChange={changeISBN}
-            >
-              <Form.Label>ISBN</Form.Label>
-              <Form.Control type="text" placeholder="Enter book isbn" />
-            </Form.Group>
+          <Form.Group
+            className="mb-3"
+            controlId="formBasicPassword"
+            onChange={changeLanguage}
+          >
+            <Form.Label>Language</Form.Label>
+            <select className="form-control">
+              {languages.map((language) => (
+                <option value={language.id}>{language.name} </option>
+              ))}
+            </select>
+          </Form.Group>
 
-            <Form.Group className="mb-3" onChange={changeURL}>
-              <Form.Label>Book Image</Form.Label>
-              <Form.Control
-                type="file"
-                id="imageInput"
-                placeholder="Enter Image"
-              />
-            </Form.Group>
+          <Form.Group
+            className="mb-3"
+            controlId="formBasicPassword"
+            onChange={changeISBN}
+          >
+            <Form.Label>ISBN</Form.Label>
+            <Form.Control type="number" placeholder="Enter book isbn" />
+          </Form.Group>
 
-            <Button variant="dark" onClick={tryImage}>
-              Sell Book
-            </Button>
-          </Form>
-        </div>
+          <Form.Group className="mb-3" onChange={changeURL}>
+            <Form.Label>Book Image</Form.Label>
+            <Form.Control
+              type="file"
+              id="imageInput"
+              placeholder="Enter Image"
+            />
+          </Form.Group>
+
+          <Button variant="dark" onClick={tryImage}>
+            Sell Book
+          </Button>
+        </Form>
+
       </Container>
     </Fragment>
   );
