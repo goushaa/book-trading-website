@@ -10,7 +10,12 @@ import Button from "react-bootstrap/Button";
 import { useParams, Link } from "react-router-dom";
 
 function Driver() {
-  let { id } = useParams();
+  if(localStorage.length==0)
+  window.location.href = "/";
+  const userData = JSON.parse(localStorage.getItem("user"));
+  if(userData.type!=4)
+  window.location.href = "/login";
+  const [id,setID] =useState(userData.id) ;
   const [ssn, setssn] = useState(0);
   const [Orders, setOrders] = useState([]);
   const [status, setstatus] = useState([]);
@@ -54,6 +59,7 @@ function Driver() {
       .post(`http://localhost:5000/deliverOrder`, { order_id })
       .then((res) => {
         console.log(res.data);
+        window.location.reload();
       })
       .catch((err) => console.log(err));
   }
