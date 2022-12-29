@@ -127,11 +127,19 @@ function CustomerHome() {
         setsellBooks(res.data);
       })
       .catch((err) => console.log(err));
+      axios
+      .get(`http://localhost:5000/bidbooks`)
+      .then((res) => {
+        // console.log(res.data);
+        setbidBooks(res.data);
+      })
+      .catch((err) => console.log(err));
   }, [id]);
   const [user, setUser] = useState([]);
   const [show, setShow] = useState(false);
   const [books, setBooks] = useState([]);
   const [sellbooks, setsellBooks] = useState([]);
+  const [bidbooks, setbidBooks] = useState([]);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -214,7 +222,6 @@ function CustomerHome() {
           </Button>
 
 
-          <Button className="heart_btn" onClick={wishlist}>
 
 
           <Button className="heart_btn" onClick={wishlist}>
@@ -417,6 +424,38 @@ function CustomerHome() {
                       <p>{sellbook.description}</p>
                       <div>
                         <Link to={`book/${sellbook.id}`}>
+                          <Button className="xx1">View</Button>
+                        </Link>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </div>
+              </div>
+            ))}
+          </div>{" "}
+        </div>
+      </Container>
+      <Container>
+        <Row>
+          <h1 className="featuredbooks mb-5">bid Books</h1>
+        </Row>
+
+        <div className="container mt-4">
+          <div className="row">
+            {bidbooks.map((bidbooks) => (
+              <div className="col-lg-4 col-md-6 col-12" key={bidbooks.id}>
+                <div>
+                  <Card className="course-card">
+                    <Card.Img
+                      variant="top"
+                      src={bidbooks.image}
+                      class="kadyImage"
+                    ></Card.Img>
+                    <Card.Body>
+                      <Card.Title>{bidbooks.title}</Card.Title>
+                      <p>{bidbooks.description}</p>
+                      <div>
+                        <Link to={`bidItem/${bidbooks.id}`}>
                           <Button className="xx1">View</Button>
                         </Link>
                       </div>

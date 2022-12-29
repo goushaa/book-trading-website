@@ -27,6 +27,8 @@ function AdminForm() {
     axios
       .get("http://localhost:5000/drivers")
       .then((res) => {
+        console.log(res.data[0].id);
+        setDriverSSN(res.data[0].ssn)
         setDrivers(res.data);
       })
       .catch((err) => console.log(err));
@@ -107,6 +109,7 @@ function AdminForm() {
       }
     )
     .then((res) => {
+      window.location.reload();
       console.log(res.data);
     })
     .catch((err) => console.log(err));
@@ -137,6 +140,7 @@ function AdminForm() {
   function addCoupon(e) {
     //needed validations
     if(code==""||discount<1||maximum_use<1)return;
+    if(is_relative==1&&discount>99)return;
 
     axios
       .post("http://localhost:5000/addCoupon", {
