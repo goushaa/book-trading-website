@@ -78,7 +78,6 @@ CREATE TABLE "bid_item" (
   "user_id" int,
   "starting_time" timestamp,
   "ending_time" timestamp,
-  "current_time" float NOT NULL,
   "book_id" int ,
   primary key("id"),
   CONSTRAINT "FK_bid_item.user_id"
@@ -94,24 +93,7 @@ CREATE TABLE "bid_item" (
       ON DELETE CASCADE 
 );
 
-CREATE TABLE "bid" (
-  "id" serial,
-  "user_id" int NOT NULL,
-  "bid_item_id" int NOT NULL,
-  "price" float NOT NULL,
-  "status" int NOT NULL,
-  primary key("id"),
-  CONSTRAINT "FK_bid.user_id"
-    FOREIGN KEY ("user_id")
-      REFERENCES "user"("id")
-       ON UPDATE CASCADE
-      ON DELETE SET NULL,
-  CONSTRAINT "FK_bid.bid_item_id"
-    FOREIGN KEY ("bid_item_id")
-      REFERENCES "bid_item"("id")
-       ON UPDATE CASCADE
-      ON DELETE CASCADE
-);
+
 
 CREATE TABLE "notification" (
   "id" serial,
