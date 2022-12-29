@@ -1068,7 +1068,27 @@ app.post("/ticketReply", async (req, res) => {
     console.error(err.message);
   }
 });
-
+app.get("/userViewTickets/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+  
+      const userViewTickets = await pool.query("SELECT * FROM ticket WHERE user_id = $1", [id]);
+      res.json(userViewTickets.rows);
+      //front end should display one driver when click on him
+    } catch (err) {
+      console.error(err.message);
+    }
+  });
+  
+  app.get("/adminViewTickets", async (req, res) => {
+    try {
+      const adminViewTickets = await pool.query("SELECT * FROM ticket WHERE replied = 0");
+      res.json(adminViewTickets.rows);
+      //front end should display one driver when click on him
+    } catch (err) {
+      console.error(err.message);
+    }
+  });
 //************************utilities*******************************/
 app.get("/cities", async (req, res) => {
   try {
