@@ -25,18 +25,15 @@ function MyVerticallyCenteredModal(props) {
   const userData = JSON.parse(localStorage.getItem("user"));
   if (userData.type != 2) window.location.href = "/login";
   const [id, setID] = useState(userData.id);
-  const [complaint, setcom] = useState('');
-  function addticket(e)
-  {
-   let user_id = id;
-   axios
-       .post(`http://localhost:5000/addTicket`,{user_id,complaint})
-       .then((res) => {
-       })
-       .catch((err) => console.log(err));
+  const [complaint, setcom] = useState("");
+  function addticket(e) {
+    let user_id = id;
+    axios
+      .post(`http://localhost:5000/addTicket`, { user_id, complaint })
+      .then((res) => {})
+      .catch((err) => console.log(err));
   }
-  function changecomp(e)
-  {
+  function changecomp(e) {
     setcom(e.target.value);
   }
   return (
@@ -47,13 +44,15 @@ function MyVerticallyCenteredModal(props) {
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">Tickets</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">
+          Tickets & Feedback
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>
-              <h5>Add your Ticket</h5>
+              <h5>Add your Ticket or Feedback</h5>
             </Form.Label>
             <Container className="c1">
               <Form.Control
@@ -68,7 +67,11 @@ function MyVerticallyCenteredModal(props) {
           <Button variant="dark" type="submit" onClick={addticket}>
             Add
           </Button>
-          <Button variant="success" type="submit" href="http://localhost:3000/home/viewReplies" >
+          <Button
+            variant="success"
+            type="submit"
+            href="http://localhost:3000/home/viewReplies"
+          >
             View Your Tickets
           </Button>
         </Form>
@@ -83,7 +86,6 @@ function MyVerticallyCenteredModal(props) {
 function sell() {
   window.location.href = "Sell";
 }
- 
 
 function CustomerHome() {
   if (localStorage.length == 0) window.location.href = "/";
@@ -129,8 +131,9 @@ function CustomerHome() {
   function wishlist() {
     window.location.href = "/home/wishlists";
   }
-  function cart(){
-    window.location.href ="/home/cart";
+
+  function cart() {
+    window.location.href = "/home/cart";
 
   }
   const handleSelect = (selectedIndex, e) => {
@@ -143,6 +146,7 @@ function CustomerHome() {
     axios
       .post(`http://localhost:5000/addWishlist`, { user_id, book_id })
       .then((res) => {
+
 
         console.log(res.data.book_id)
       
@@ -197,7 +201,23 @@ function CustomerHome() {
               </svg>
             </Button>
 
-<Button className="heart_btn" onClick={wishlist}>
+
+          <Button className="cart_btn" onClick={cart}>
+            <svg
+              className="carticon"
+              xmlns="http://www.w3.org/2000/svg"
+              width="30"
+              height="60"
+              color="white"
+              class="bi bi-cart3"
+              viewBox="0 4 16 16"
+            >
+              <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+            </svg>
+          </Button>
+
+          <Button className="heart_btn" onClick={wishlist}></Button>
+
 
             <svg
               className="hearticon"
@@ -290,7 +310,7 @@ function CustomerHome() {
                 className="leftmenu2btn6"
                 onClick={() => setModalShow(true)}
               >
-                Tickets
+                Tickets & Feedback
               </Button>{" "}
               <MyVerticallyCenteredModal
                 show={modalShow}
@@ -309,7 +329,11 @@ function CustomerHome() {
         <Button className="salebtn" onClick={sell}>
           Sell now
         </Button>{" "}
-        <Button className="salebtn2">Bid now</Button>{" "}
+
+        <Button className="salebtn2" onClick={bid}>
+          Bid now
+        </Button>{" "}
+
         <Container>
           <Carousel
             className="slideshow"

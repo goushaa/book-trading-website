@@ -348,7 +348,7 @@ app.post("/bookinfo/quantity", async (req, res) => {
 });
 app.post("/addbook", async (req, res) => {
   try {
-  
+
     var {
       title,
       genre_id,
@@ -382,6 +382,7 @@ app.post("/addbook", async (req, res) => {
     console.error(err.message);
   }
 });
+
 //stores delete books app.delete
 app.post("/deletebook", async (req, res) => {
   try {
@@ -788,7 +789,9 @@ app.get("/coupons", async (req, res) => {
 app.get("/coupons/:code", async (req, res) => {
   try {
     const { code } = req.params;
-    const getCoupon = await pool.query(`SELECT * FROM Coupons where code='${code}';`);
+    const getCoupon = await pool.query(
+      `SELECT * FROM Coupons where code='${code}';`
+    );
     res.json(getCoupon.rows);
     //front end should loop on all coupons and display them
   } catch (err) {
@@ -1092,12 +1095,16 @@ app.post("/ticketReply", async (req, res) => {
     console.error(err.message);
   }
 });
+
 app.get("/userViewTickets/:id", async (req, res) => {
 
   try {
     const { id } = req.params;
 
-    const userViewTickets = await pool.query("SELECT * FROM ticket WHERE user_id = $1", [id]);
+    const userViewTickets = await pool.query(
+      "SELECT * FROM ticket WHERE user_id = $1",
+      [id]
+    );
     res.json(userViewTickets.rows);
     //front end should display one driver when click on him
   } catch (err) {
@@ -1107,7 +1114,9 @@ app.get("/userViewTickets/:id", async (req, res) => {
 
 app.get("/adminViewTickets", async (req, res) => {
   try {
-    const adminViewTickets = await pool.query("SELECT * FROM ticket WHERE replied = 0");
+    const adminViewTickets = await pool.query(
+      "SELECT * FROM ticket WHERE replied = 0"
+    );
     res.json(adminViewTickets.rows);
     //front end should display one driver when click on him
   } catch (err) {
@@ -1119,7 +1128,6 @@ app.get("/adminViewTickets", async (req, res) => {
 
 app.post("/addbidbook", async (req, res) => {
   try {
-
     var {
       title,
       genre_id,
@@ -1131,11 +1139,9 @@ app.post("/addbidbook", async (req, res) => {
       description,
       image,
       user_id,
-      count
+      count,
     } = req.body;
-    console.log(
-      language_id
-    );
+    console.log(language_id);
 
     if (genre_id == -1) genre_id = "null";
     if (isbn == -1) isbn = "null";
@@ -1150,6 +1156,7 @@ app.post("/addbidbook", async (req, res) => {
     //book_id => book.rows[0].id
     //validate ending_time front end
 
+
     const { ending_time } = req.body;
     console.log(ending_time);
     const ending_time2= new Date(ending_time);
@@ -1160,6 +1167,7 @@ app.post("/addbidbook", async (req, res) => {
     console.log();
 console.log(`INSERT INTO bid_item (user_id,starting_time,ending_time,book_id) VALUES (null,'${starting_time.toISOString()}','${ending_time2.toISOString()}',${book.rows[0].id});`);
     newBid =await pool.query(`INSERT INTO bid_item (user_id,starting_time,ending_time,book_id) VALUES (null,'${starting_time.toISOString()}','${ending_time2.toISOString()}',${book.rows[0].id});`)
+
     res.json(newBid.rows[0]);
   } 
   catch (err) {
@@ -1171,6 +1179,7 @@ app.post("/addbidonbook", async (req, res) => {
   try {
     //validate front end on purchase price before come here
     const { user_id, book_id, purshace_price } = req.body;
+
     console.log( user_id, book_id, purshace_price);
 
     updatePurchasePrice = await pool.query('UPDATE book SET purchase_price = $1 WHERE id = $2 returning *;', [purshace_price, book_id])
@@ -1202,6 +1211,7 @@ app.post("/bidfinished", async (req, res) => {
   try {
     //validate front end on end time before come here
     const { book_id } = req.body;
+
     const finishedBid =await pool.query('UPDATE book SET status = 4 WHERE id = $1 returning *', [book_id])
     console.log(finishedBid.rows[0]);
     const bidItem =await pool.query(`select * from bid_item where book_id=${book_id}`)
@@ -1217,6 +1227,7 @@ app.post("/bidfinished", async (req, res) => {
     );
     res.json(finishedBid.rows[0]);
 console.log('please work :(');
+
 
   } catch (err) {
     console.error(err.message);
@@ -1244,7 +1255,6 @@ app.post("/bid_item_data", async (req, res) => {
     console.error(err.message);
   }
 });
-
 
 //************************utilities*******************************/
 app.get("/cities", async (req, res) => {
@@ -1332,3 +1342,134 @@ app.get("/pendingOrders/:id", async (req, res) => {
     console.error(err.message);
   }
 });
+
+
+app.post("/deleteOrderItem", async (req, res) => {
+  try {
+    const { id } = req.body;
+    const order = await pool.query(`delete  from "order_item" where id=${id} `);
+    res.json("deleted");
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/adminCount", async (req, res) => {
+  try {
+    const adminCount = await pool.query(
+      'SELECT COUNT(*) FROM "user" WHERE type = 1 '
+    );
+    res.json(adminCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/customerCount", async (req, res) => {
+  try {
+    const customerCount = await pool.query(
+      'SELECT COUNT(*) FROM "user" WHERE type = 2 '
+    );
+    res.json(customerCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/storeCount", async (req, res) => {
+  try {
+    const storeCount = await pool.query(
+      'SELECT COUNT(*) FROM "user" WHERE type = 3 '
+    );
+    res.json(storeCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/driverCount", async (req, res) => {
+  try {
+    const driverCount = await pool.query(
+      'SELECT COUNT(*) FROM "user" WHERE type = 4 '
+    );
+    res.json(driverCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/totalusersCount", async (req, res) => {
+  try {
+    const totalusersCount = await pool.query('SELECT COUNT(*) FROM "user"');
+    res.json(totalusersCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/storebooks", async (req, res) => {
+  try {
+    const booksperstoreCount = await pool.query(
+      'SELECT COUNT(*) FROM "user" u,book b WHERE b.user_id = u.id AND u.type = 3'
+    );
+    res.json(booksperstoreCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/userbidsellbooks", async (req, res) => {
+  try {
+    const couponsCount = await pool.query(
+      'SELECT COUNT(*) FROM "user" u,book b WHERE b.user_id = u.id AND u.type = 2'
+    );
+    res.json(couponsCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/ordersnotsubmitted", async (req, res) => {
+  try {
+    const ordersnotsubmittedCount = await pool.query(
+      'SELECT COUNT(*) FROM "order" WHERE status= 0'
+    );
+    res.json(ordersnotsubmittedCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/orderstobeassignedtodriver", async (req, res) => {
+  try {
+    const orderstobeassignedtodriveCount = await pool.query(
+      'SELECT COUNT(*) FROM "order" WHERE status= 1'
+    );
+    res.json(orderstobeassignedtodriveCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/ordersdelivering", async (req, res) => {
+  try {
+    const ordersdeliveringCount = await pool.query(
+      'SELECT COUNT(*) FROM "order" WHERE status= 2'
+    );
+    res.json(ordersdeliveringCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/ordersdelivered", async (req, res) => {
+  try {
+    const ordersdeliveredCount = await pool.query(
+      'SELECT COUNT(*) FROM "order" WHERE status= 3'
+    );
+    res.json(ordersdeliveredCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
