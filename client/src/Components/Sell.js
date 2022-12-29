@@ -239,7 +239,7 @@ function Sell() {
             onChange={changeISBN}
           >
             <Form.Label>ISBN</Form.Label>
-            <Form.Control type="text" placeholder="Enter book isbn" />
+            <Form.Control type="number" placeholder="Enter book isbn" />
           </Form.Group>
 
           <Form.Group className="mb-3" onChange={changeURL}>

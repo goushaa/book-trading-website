@@ -289,7 +289,7 @@ app.get("/books", async (req, res) => {
 app.get("/usersellbooks", async (req, res) => {
   try {
     const getBooks = await pool.query(
-      'SELECT * FROM book WHERE book.user_id in (select id from "user" where type =2) and status = 0'
+      'SELECT * FROM book WHERE book.user_id in (select id from "user" where type =2) and status = 0 and count>0'
     );
     res.json(getBooks.rows);
   } catch (err) {
@@ -1207,6 +1207,10 @@ app.post("/bidfinished", async (req, res) => {
     const finishedBid =await pool.query('UPDATE book SET status = 4 WHERE id = $1 returning *', [book_id])
     console.log(finishedBid.rows[0]);
     const bidItem =await pool.query(`select * from bid_item where book_id=${book_id}`)
+    if(bidItem.rows[0].user_id==null){
+      res.json('no user purshaed')
+      return
+    }
     const winner=await pool.query(`select * from "user" where id =${bidItem.rows[0].user_id} `)
     const date=new Date();
     const sendNotificationUser = await pool.query(
@@ -1214,7 +1218,7 @@ app.post("/bidfinished", async (req, res) => {
       [winner.rows[0].id, date]
     );
     res.json(finishedBid.rows[0]);
-
+console.log('please work :(');
 
   } catch (err) {
     console.error(err.message);
