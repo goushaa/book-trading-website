@@ -19,47 +19,57 @@ import Card from "react-bootstrap/Card";
 import { useParams } from "react-router-dom";
 
 function StoresUI() {
-  if(localStorage.length==0)
-  window.location.href = "/";
+  if (localStorage.length == 0) window.location.href = "/";
   const userData = JSON.parse(localStorage.getItem("user"));
-  if(userData.type!='3')
-  window.location.href = "/login";
-  const [id,setID] =useState(userData.id) ;
-
+  if (userData.type != "3") window.location.href = "/login";
+  const [id, setID] = useState(userData.id);
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/userbooks/${id}`).then((res) => {
-      setBook(res.data);
-    }).catch((err) => console.log(err));
+    axios
+      .get(`http://localhost:5000/userbooks/${id}`)
+      .then((res) => {
+        setBook(res.data);
+      })
+      .catch((err) => console.log(err));
 
-    axios.get(`http://localhost:5000/wishlists_stats/${id}`).then((res) => {
-      console.log(res.data);
-      setWishlists(res.data);
-    }).catch((err) => console.log(err));
-
+    axios
+      .get(`http://localhost:5000/wishlists_stats/${id}`)
+      .then((res) => {
+        console.log(res.data);
+        setWishlists(res.data);
+      })
+      .catch((err) => console.log(err));
   }, [id]);
-  const [book, setBook] = useState([])
-  const [wishlists, setWishlists] = useState([])
-
-  function deletebook(id)
-  {
-    axios.post(`http://localhost:5000/deletebook`,{id}).then((res) => {
-      window.location.reload();
-    }).catch((err) => console.log(err));
+  const [book, setBook] = useState([]);
+  const [wishlists, setWishlists] = useState([]);
+  function logOUT() {
+    localStorage.clear();
+    window.location.href = "/";
+  }
+  function deletebook(id) {
+    axios
+      .post(`http://localhost:5000/deletebook`, { id })
+      .then((res) => {
+        window.location.reload();
+      })
+      .catch((err) => console.log(err));
   }
   return (
     <Fragment>
       <Navbar bg="dark" variant="dark" expand="lg">
         <Container>
           <Navbar.Brand href="/">
-            <h3>Online Book Store</h3>
-            <h5>Store</h5>
+            <h2>Store</h2>
           </Navbar.Brand>
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Item></Nav.Item>
+              <Nav.Item>
+                <Button className="storelogoutbtn" onClick={logOUT}>
+                  Log Out
+                </Button>
+              </Nav.Item>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -78,28 +88,35 @@ function StoresUI() {
           <Tab eventKey="viewbooks" title="View Books">
             <h1>View books</h1>
             <div className="container mg-t">
-              <div className='row'>
-                {
-                  book.map(book => {
-                    return (
-                      <div className="col-lg-4 col-md-6 col-12" key={book.id}>
-                        <div>
-                          <Card className="course-card">
-                            <Card.Img variant="top" src={book.image}></Card.Img>
-                            <Card.Body>
-                              <Card.Title>{book.title}</Card.Title>
-                              <p>{book.description}</p>
-<Button variant="success" onClick={()=>deletebook(book.id)} >Delete</Button>
-                            </Card.Body>
-                          </Card>
-                        </div>
+              <div className="row">
+                {book.map((book) => {
+                  return (
+                    <div className="col-lg-4 col-md-6 col-12" key={book.id}>
+                      <div>
+                        <Card className="course-card">
+                          <Card.Img
+                            variant="top"
+                            src={book.image}
+                            class="kadyImage"
+                          ></Card.Img>
+                          <Card.Body>
+                            <Card.Title>{book.title}</Card.Title>
+                            <p>{book.description}</p>
+                            <Button
+                              variant="success"
+                              onClick={() => deletebook(book.id)}
+                            >
+                              Delete
+                            </Button>
+                          </Card.Body>
+                        </Card>
                       </div>
-                    )
-                  })
-                }
-              </div> {/* ./row*/}
+                    </div>
+                  );
+                })}
+              </div>{" "}
+              {/* ./row*/}
             </div>
-
           </Tab>
           <Tab eventKey="ViewWishlist" title="View Customers' Wishlists">
             <h1>View Wishlists</h1>
@@ -115,24 +132,14 @@ function StoresUI() {
               <tbody>
                 {wishlists.map((wishlist) => (
                   <tr>
-                    <td>
-                      {wishlist.title}
-                    </td>
-                    <td>
-                      {wishlist.countUsers}{" "}
-                    </td>
-                    <td>
-                      {wishlist.status}{" "}
-                    </td>
-                    <td>
-                      {wishlist.isbn}{" "}
-                    </td>
+                    <td>{wishlist.title}</td>
+                    <td>{wishlist.countUsers} </td>
+                    <td>{wishlist.status} </td>
+                    <td>{wishlist.isbn} </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-
-
           </Tab>
         </Tabs>
       </Container>
