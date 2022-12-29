@@ -10,12 +10,10 @@ import Button from "react-bootstrap/Button";
 import { useParams, Link } from "react-router-dom";
 
 function Driver() {
-  if(localStorage.length==0)
-  window.location.href = "/";
+  if (localStorage.length == 0) window.location.href = "/";
   const userData = JSON.parse(localStorage.getItem("user"));
-  if(userData.type!=4)
-  window.location.href = "/login";
-  const [id,setID] =useState(userData.id) ;
+  if (userData.type != 4) window.location.href = "/login";
+  const [id, setID] = useState(userData.id);
   const [ssn, setssn] = useState(0);
   const [Orders, setOrders] = useState([]);
   const [status, setstatus] = useState([]);
@@ -54,11 +52,6 @@ function Driver() {
       .catch((err) => console.log(err));
   }, [Orders]);
 
-  function logOUT() {
-    localStorage.clear();
-    window.location.href = "/";
-  }
-
   function delivered(order_id) {
     axios
       .post(`http://localhost:5000/deliverOrder`, { order_id })
@@ -73,17 +66,13 @@ function Driver() {
       <Navbar bg="dark" variant="dark" expand="lg">
         <Container>
           <Navbar.Brand href="/">
-            <h2>Driver</h2>
+            <h3>Driver</h3>
           </Navbar.Brand>
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Item>
-                <Button className="driverlogoutbtn" onClick={logOUT}>
-                  Log Out
-                </Button>
-              </Nav.Item>
+              <Nav.Item></Nav.Item>
             </Nav>
           </Navbar.Collapse>
         </Container>

@@ -67,10 +67,12 @@ useEffect(() => {
     }).catch((err) => console.log(err));
     
   }
+
     function logOUT() {
     localStorage.clear();
     window.location.href = "/";
   }
+
   
   return (
     <Fragment>
@@ -89,11 +91,7 @@ useEffect(() => {
 <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Item>
-                <Button className="storelogoutbtn" onClick={logOUT}>
-                  Log Out
-                </Button>
-              </Nav.Item>
+              <Nav.Item></Nav.Item>
             </Nav>
           </Navbar.Collapse>
 

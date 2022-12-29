@@ -91,52 +91,15 @@ function SignUpForm() {
         email,
         type,
       })
-      .then((res) => {
-        console.log(res.data);
-        if (res.data == "email already in use") {
+      .then((response) => {
+        console.log(response.data);
+        if (response.data == "email already in use") {
           return;
         } else {
-          return;
+          window.location.href = "/LogIn";
         }
       })
       .catch((err) => console.log(err));
-  }
-
-  function SubmitForm() {
-    axios
-      .post("http://localhost:5000/signup", {
-        email,
-        password,
-      })
-      .then(function (response) {
-        console.log(response.data);
-        if (response.data == -1) {
-          window.location.reload();
-        } else {
-          console.log(response.data);
-          if (response.data.type == 0) {
-            //superadmin
-            navigate("/superadmin");
-          } else if (response.data.type == 1) {
-            //admin
-            navigate("/admin");
-          } else if (response.data.type == 2) {
-            //user
-            //console.log(response.data);
-            navigate(`/home/${response.data.id}`, { state: response.data });
-          } else if (response.data.type == 3) {
-            //stores
-            navigate(`/store/${response.data.id}`, { state: response.data });
-          } else if (response.data.type == 4) {
-            //driver
-            navigate(`/driver/${response.data.id}`, { state: response.data });
-            window.location.reload();
-          }
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
   }
 
   return (
@@ -231,7 +194,7 @@ function SignUpForm() {
                 <option value="2">Customer</option>
                 <option value="3">Store</option>
               </Form.Select>
-              <Button className variant="dark" onClick={(SignUp, SubmitForm)}>
+              <Button className variant="dark" onClick={SignUp}>
                 {" "}
                 Sign up{" "}
               </Button>

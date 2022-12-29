@@ -10,20 +10,17 @@ import { useNavigate } from "react-router-dom";
 import "../CSS/prom_bg.css";
 
 function LogInForm() {
-
-  if(localStorage.length!=0){
-
+  if (localStorage.length != 0) {
     const userData = JSON.parse(localStorage.getItem("user"));
-    if(userData.type==0)    window.location.href = "/superadmin";
-    else if(userData.type==1)     window.location.href = "/admin";
-    else if(userData.type==2)     window.location.href = "/home";
-    else if(userData.type==3)     window.location.href = "/store";
-    else if(userData.type==4)     window.location.href = "/driver";
+    if (userData.type == 0) window.location.href = "/superadmin";
+    else if (userData.type == 1) window.location.href = "/admin";
+    else if (userData.type == 2) window.location.href = "/home";
+    else if (userData.type == 3) window.location.href = "/store";
+    else if (userData.type == 4) window.location.href = "/driver";
   }
 
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
 
@@ -44,11 +41,9 @@ function LogInForm() {
       .then(function (response) {
         console.log(response.data);
         if (response.data == -1) {
-
           //window.location.reload();
-        }
-        else {
-          localStorage.setItem("user",JSON.stringify(response.data));
+        } else {
+          localStorage.setItem("user", JSON.stringify(response.data));
 
           console.log(response.data);
           if (response.data.type == 0) {
@@ -61,14 +56,15 @@ function LogInForm() {
             //user
             //console.log(response.data);
             navigate(`/home/`, { state: response.data });
-          }
-          else if (response.data.type == 3) {
+          } else if (response.data.type == 3) {
             //stores
+
             navigate(`/store/`);
           } else if (response.data.type == 4) {
             //driver
             navigate(`/driver/`, { state: response.data });
             window.location.reload();
+
           }
         }
       })
