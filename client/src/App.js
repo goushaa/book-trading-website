@@ -20,6 +20,7 @@ import StorePage from "./Pages/StorePage";
 import ViewAccount from "./Pages/ViewAccount";
 import DriverPage from "./Pages/DriverPage";
 import Wishlist from "./Components/Wishlist";
+import Biditem from "./Components/Biditem";
 import WishlistPage from "./Pages/WishlistPage";
 import ViewWishListItemPage from "./Pages/ViewWishListItemPage";
 import AddBooktoCartPage from "./Pages/AddBooktoCartPage";
@@ -27,7 +28,11 @@ import CartPage from "./Pages/CartPage";
 import AdminViewOrderPage from "./Pages/AdminViewPendingOrdersPage";
 import DriverViewOrdersPage from "./Pages/DriverViewOrdersPage";
 import Sell from "./Pages/SellPage";
+import BiddingPage from "./Pages/BiddingPage";
 import ViewRepliesPage from "./Pages/ViewRepliesPage";
+
+
+
 function App() {
   return (
     <Fragment>
@@ -37,6 +42,8 @@ function App() {
         <Route path="/Sell&Bid" element={<SellandBidding />}></Route>
         <Route path="/LogIn" element={<LogIn />}></Route>
         <Route path="/SignUp" element={<SignUp />}></Route>
+        <Route path="/home/bidItem/:book_id" element={<Biditem />}></Route>
+        
 
         <Route path="/Home" element={<CustomerHomePage />}></Route>
         <Route path="/Home/wishlists" element={<WishlistPage />}></Route>
@@ -48,6 +55,7 @@ function App() {
         <Route path="/driver" element={<DriverPage />}></Route>
         <Route path="/Admin" element={<Admin />}></Route>
         <Route path="/Home/Sell" element={<Sell />}></Route>
+        <Route path="/Home/Bidding" element={<BiddingPage />}></Route>
         <Route path="/Home/viewReplies" element={<ViewRepliesPage />}></Route>
         <Route path="/Promotions" element={<Promotions />}></Route>
         <Route path="/addBook" element={<TestAddbook />}></Route>
@@ -57,6 +65,7 @@ function App() {
         <Route path="/stores/:id" element={<AdminViewStorePage />}></Route>
         <Route path="/drivers/:ssn" element={<AdminViewDriverPage />}></Route>
         <Route path="/coupons/:code" element={<AdminViewCouponPage />}></Route>
+
         <Route
           path="/pendingorders/:id"
           element={<AdminViewOrderPage />}
@@ -68,6 +77,7 @@ function App() {
         <Route path="/store" element={<StorePage />}></Route>
 
         <Route path="/home/ViewAccount" element={<ViewAccount />}></Route>
+
         <Route
           path="/home/book/:book_id"
           element={<AddBooktoCartPage />}

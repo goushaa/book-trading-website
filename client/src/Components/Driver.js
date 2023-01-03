@@ -54,6 +54,10 @@ function Driver() {
       .catch((err) => console.log(err));
   }, [Orders]);
 
+  function logOUT() {
+    localStorage.clear();
+    window.location.href = "/";
+  }
   function delivered(order_id) {
     axios
       .post(`http://localhost:5000/deliverOrder`, { order_id })
@@ -74,7 +78,11 @@ function Driver() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Item></Nav.Item>
+            <Nav.Item>
+                <Button className="driverlogoutbtn" onClick={logOUT}>
+                  Log Out
+                </Button>
+              </Nav.Item>
             </Nav>
           </Navbar.Collapse>
         </Container>

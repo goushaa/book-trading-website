@@ -25,7 +25,7 @@ function TestAddbook() {
     const [purshace_price, setPrice] = useState(15);
     const [version, setVersion] = useState(1);
     const [description, setDescription] = useState('');
-    const [count, setQuantity] = useState('');
+    const [count, setQuantity] = useState(1);
     const [image, setImage] = useState('');
     const user_id = id //to be passed between pages
     const [base64, settingBase64] = useState('')
@@ -90,7 +90,7 @@ function TestAddbook() {
 
 
     async function tryImage(e) {
-
+        if(title==''||description==''||author_name=='')return;
         var file = document.getElementById('imageInput');
         var form = new FormData();
         form.append("image", file.files[0])
@@ -109,6 +109,7 @@ function TestAddbook() {
         if (imgbb.data.data.display_url == '') {
             imgbb = await axios(settings);
         }
+        
         console.log( title, genre_id, isbn, author_name, language_id, purshace_price, version, description,  imgbb.data.data.display_url, user_id, count);
         //setImage(imgbb.data.data.display_url);
         axios.post('http://localhost:5000/addbook', {  title, genre_id, isbn, author_name, language_id, purshace_price, version, description, image: imgbb.data.data.display_url, user_id, count }).then(res => {

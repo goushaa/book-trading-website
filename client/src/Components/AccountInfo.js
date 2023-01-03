@@ -37,7 +37,7 @@ function AccountInfo() {
 
 
   const [city_name, setCity] = useState("Giza");
-  const [city_id, setCityID] = useState(1);
+  const [city_id, setCityID] = useState(-1);
   const [cities, setCities] = useState([]);
   const [viewUser, setUser] = useState([]);
 

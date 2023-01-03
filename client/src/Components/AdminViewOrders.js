@@ -10,7 +10,7 @@ function AdminViewOrders() {
   if(localStorage.length==0)
   window.location.href = "/";
   const userData = JSON.parse(localStorage.getItem("user"));
-  if(userData.type!=1&&userData.type!=4)
+  if(userData.type!=1&&userData.type!=4&&userData.type!=0)
   window.location.href = "/login";
   const [admin_id,setID] =useState(userData.id) ;
   let { id } = useParams();

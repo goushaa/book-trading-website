@@ -43,6 +43,10 @@ function StoresUI() {
     }).catch((err) => console.log(err));
 
   }, [id]);
+  function logOUT() {
+    localStorage.clear();
+    window.location.href = "/";
+  }
 
   useEffect(() => {
     axios.get(`http://localhost:5000/genrenamefromgenreid/${genre_id}`).then((res) => {
@@ -86,7 +90,12 @@ useEffect(() => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Item></Nav.Item>
+            
+            <Nav.Item>
+                <Button className="storelogoutbtn" onClick={logOUT}>
+                  Log Out
+                </Button>
+              </Nav.Item>
             </Nav>
           </Navbar.Collapse>
         </Container>

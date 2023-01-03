@@ -72,7 +72,7 @@ app.post("/signup", async (req, res) => {
       //creats user to link it later to driver
       const sign = await pool.query(
         'INSERT INTO "user" ' +
-          "(first_name,last_name,address,city_id,user_name,password,email,type) values ($1,$2,$3,$4,$5,$6,$7,$8) returning *",
+        "(first_name,last_name,address,city_id,user_name,password,email,type) values ($1,$2,$3,$4,$5,$6,$7,$8) returning *",
         [first, last, address, city_id, user_name, password, email, type]
       );
       console.log(sign.rows[0].id);
@@ -86,7 +86,7 @@ app.post("/signup", async (req, res) => {
     else {
       const sign = await pool.query(
         'INSERT INTO "user" ' +
-          "(first_name,last_name,address,city_id,user_name,password,email,type) values ($1,$2,$3,$4,$5,$6,$7,$8) returning *",
+        "(first_name,last_name,address,city_id,user_name,password,email,type) values ($1,$2,$3,$4,$5,$6,$7,$8) returning *",
         [first, last, address, city_id, user_name, password, email, type]
       );
       res.json(sign.rows[0]);
@@ -286,7 +286,6 @@ app.get("/books", async (req, res) => {
   }
 });
 
-
 app.get("/usersellbooks", async (req, res) => {
   try {
     const getBooks = await pool.query(
@@ -308,7 +307,6 @@ app.get("/usersellbooks", async (req, res) => {
     console.error(err.message);
   }
 });
-
 
 app.post("/bookinfo", async (req, res) => {
   try {
@@ -346,9 +344,10 @@ app.post("/bookinfo/quantity", async (req, res) => {
     console.error(err.message);
   }
 });
+
 app.post("/addbook", async (req, res) => {
   try {
-  
+
     var {
       title,
       genre_id,
@@ -360,18 +359,21 @@ app.post("/addbook", async (req, res) => {
       description,
       image,
       user_id,
-      count
+      count,
     } = req.body;
-    console.log(
-      language_id
-    );
+
+    if(title==""||author_name==""||description==""){
+    res.json(-1);
+      return;
+    }
+    console.log(language_id);
     //checking for nulls in gernre,isbn,language_id
     //front enter enters user couut with 1 but bookstores count with anything
     //front end will not let other users (superadmin-admin-driver) go into the my books page
     if (genre_id == -1) genre_id = "null";
     if (isbn == -1) isbn = "null";
     if (language_id == -1) language_id = "null";
-      console.log(    `INSERT INTO book (title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,user_id,count,status) values
+    console.log(`INSERT INTO book (title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,user_id,count,status) values
       ('${title}',${genre_id},'${isbn}' ,'${author_name}', ${language_id} ,${purshace_price},${version},'${description}' ,'${image}',${user_id},${count},0) RETURNING *;`);
     book = await pool.query(
       `INSERT INTO book (title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image,user_id,count,status) values
@@ -382,6 +384,10 @@ app.post("/addbook", async (req, res) => {
     console.error(err.message);
   }
 });
+
+
+
+
 //stores delete books app.delete
 app.post("/deletebook", async (req, res) => {
   try {
@@ -502,8 +508,8 @@ app.post("/makeOrder", async (req, res) => {
     console.log(date);
     const makeOrder = await pool.query(
       'UPDATE "order" SET status=1,order_date = $1,price =' +
-        price +
-        " WHERE id=$2 RETURNING *",
+      price +
+      " WHERE id=$2 RETURNING *",
       [date, order_id]
     );
     //res.json(makeOrder.rows[0]);
@@ -548,14 +554,14 @@ app.post("/AdminGiveOrderToDriver", async (req, res) => {
     console.log(date);
     const sendNotificationDriver = await pool.query(
       "INSERT INTO notification (user_id,read,text,date) VALUES ($1,0,'You have been assigned order #" +
-        order_id +
-        " ',$2) RETURNING *",
+      order_id +
+      " ',$2) RETURNING *",
       [driver_user_id, date]
     );
     const sendNotificationUser = await pool.query(
       "INSERT INTO notification (user_id,read,text,date) VALUES ($1,0,'Your order #" +
-        order_id +
-        " has been assigned to a driver',$2) RETURNING *",
+      order_id +
+      " has been assigned to a driver',$2) RETURNING *",
       [giveOrder.rows[0].user_id, date]
     );
     console.log(sendNotificationDriver.rows[0]);
@@ -599,7 +605,7 @@ app.get("/orders/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const viewOrder = await pool.query(
-      "select book_id,quantity,title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image from order_item,book where book_id=book.id and order_id=$1;",
+      "select order_item.id,book_id,quantity,title,genre_id,isbn,author_name,language_id,purchase_price,version,description,image from order_item,book where book_id=book.id and order_id=$1;",
       [id]
     ); //return order items to user
     res.json(viewOrder.rows);
@@ -1081,6 +1087,10 @@ app.post("/addTicket", async (req, res) => {
 app.post("/ticketReply", async (req, res) => {
   try {
     const { adminReply, id } = req.body;
+    if(adminReply==''){
+      res.json(-1);
+      return;
+    }
 
     const replyTicket = await pool.query(
       "UPDATE ticket SET admin_reply=$1,replied = 1,reply_time=$2 WHERE id =$3 returning *;",
@@ -1092,8 +1102,9 @@ app.post("/ticketReply", async (req, res) => {
     console.error(err.message);
   }
 });
-app.get("/userViewTickets/:id", async (req, res) => {
 
+
+app.get("/userViewTickets/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -1328,6 +1339,136 @@ app.get("/pendingOrders/:id", async (req, res) => {
       [id]
     );
     res.json(viewPendingOrder.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.post("/deleteOrderItem", async (req, res) => {
+  try {
+    const { id } = req.body;
+    const order = await pool.query(`delete  from "order_item" where id=${id} `);
+    res.json("deleted");
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+
+app.get("/adminCount", async (req, res) => {
+  try {
+    const adminCount = await pool.query(
+      'SELECT COUNT(*) FROM "user" WHERE type = 1 '
+    );
+    res.json(adminCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/customerCount", async (req, res) => {
+  try {
+    const customerCount = await pool.query(
+      'SELECT COUNT(*) FROM "user" WHERE type = 2 '
+    );
+    res.json(customerCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/storeCount", async (req, res) => {
+  try {
+    const storeCount = await pool.query(
+      'SELECT COUNT(*) FROM "user" WHERE type = 3 '
+    );
+    res.json(storeCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/driverCount", async (req, res) => {
+  try {
+    const driverCount = await pool.query(
+      'SELECT COUNT(*) FROM "user" WHERE type = 4 '
+    );
+    res.json(driverCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/totalusersCount", async (req, res) => {
+  try {
+    const totalusersCount = await pool.query('SELECT COUNT(*) FROM "user"');
+    res.json(totalusersCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/storebooks", async (req, res) => {
+  try {
+    const booksperstoreCount = await pool.query(
+      'SELECT COUNT(*) FROM "user" u,book b WHERE b.user_id = u.id AND u.type = 3'
+    );
+    res.json(booksperstoreCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/userbidsellbooks", async (req, res) => {
+  try {
+    const couponsCount = await pool.query(
+      'SELECT COUNT(*) FROM "user" u,book b WHERE b.user_id = u.id AND u.type = 2'
+    );
+    res.json(couponsCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/ordersnotsubmitted", async (req, res) => {
+  try {
+    const ordersnotsubmittedCount = await pool.query(
+      'SELECT COUNT(*) FROM "order" WHERE status= 0'
+    );
+    res.json(ordersnotsubmittedCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/orderstobeassignedtodriver", async (req, res) => {
+  try {
+    const orderstobeassignedtodriveCount = await pool.query(
+      'SELECT COUNT(*) FROM "order" WHERE status= 1'
+    );
+    res.json(orderstobeassignedtodriveCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/ordersdelivering", async (req, res) => {
+  try {
+    const ordersdeliveringCount = await pool.query(
+      'SELECT COUNT(*) FROM "order" WHERE status= 2'
+    );
+    res.json(ordersdeliveringCount.rows[0].count);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.get("/ordersdelivered", async (req, res) => {
+  try {
+    const ordersdeliveredCount = await pool.query(
+      'SELECT COUNT(*) FROM "order" WHERE status= 3'
+    );
+    res.json(ordersdeliveredCount.rows[0].count);
   } catch (err) {
     console.error(err.message);
   }

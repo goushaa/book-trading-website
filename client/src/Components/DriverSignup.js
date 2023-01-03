@@ -97,6 +97,7 @@ function DriverSignup() {
                 else if (res.data == 'driver license already in use') {
                     return;
                 }
+                window.location.href="/login"
             }
         ).catch(err => console.log(err));
     }

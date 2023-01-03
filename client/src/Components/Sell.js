@@ -10,22 +10,23 @@ import "../CSS/Style.css";
 function Sell() {
   const id = JSON.parse(localStorage.getItem("user")).id;
   console.log(id);
+
   const [genres, setGenres] = useState([]);
   const [languages, setLanguages] = useState([]);
   const [cities, setCities] = useState([]); //should be used in other page (wrote in here for practice)
   //title, genre_id, isbn, author_name, language_id, purshace_price, version, description, image, user_id, count
-  const [title, setTitle] = useState("");
-  const [genre_id, setGenre] = useState("");
-  const [isbn, setISBN] = useState("");
-  const [author_name, setAuthor] = useState("");
-  const [language_id, setLanguage] = useState("");
-  const [purshace_price, setPrice] = useState("");
-  const [version, setVersion] = useState("");
-  const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
-  const count = 1; //to be changed if store
-  const user_id = id; //to be passed between pages
-  const [base64, settingBase64] = useState("");
+  const [title, setTitle] = useState('');
+  const [genre_id, setGenre] = useState(1);
+  const [isbn, setISBN] = useState(1);
+  const [author_name, setAuthor] = useState('');
+  const [language_id, setLanguage] = useState(1);
+  const [purshace_price, setPrice] = useState(15);
+  const [version, setVersion] = useState(1);
+  const [description, setDescription] = useState('');
+  const [count, setQuantity] = useState(1);
+  const [image, setImage] = useState('');
+  const user_id = id //to be passed between pages
+  const [base64, settingBase64] = useState('')
   useEffect(() => {
     axios
       .get("http://localhost:5000/genres")
@@ -89,6 +90,7 @@ function Sell() {
     reader.readAsDataURL(file);
   }
 
+  
   async function tryImage(e) {
     var file = document.getElementById("imageInput");
     var form = new FormData();
@@ -123,6 +125,7 @@ function Sell() {
         count,
       })
       .then((res) => {
+        window.location.href="/home";
         console.log(res.data); //add book with image upload (has some bugs)
       })
       .catch((err) => console.log(err));
